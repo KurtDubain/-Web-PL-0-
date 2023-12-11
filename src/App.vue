@@ -1,11 +1,15 @@
 <template>
   <div class="common-layout">
     <el-container>
-      <el-header>Header</el-header>
+      <el-header><navBS></navBS></el-header>
       <el-container>
-        <el-aside width="200px">Aside</el-aside>
+        <el-aside width="200px">
+          <asideBS></asideBS>
+        </el-aside>
         <el-container>
-          <el-main>Main</el-main>
+          <el-main>
+            <homeBS></homeBS>
+          </el-main>
           
         </el-container>
       </el-container>
@@ -19,11 +23,17 @@
 
 <script>
 import footerBS from './components/footerBS.vue'
+import navBS from './components/navBS.vue'
+import asideBS from './components/asideBS.vue'
+import homeBS from './page/homeBS.vue'
 
 export default {
   name: 'App',
   components: {
-    footerBS
+    footerBS,
+    navBS,
+    asideBS,
+    homeBS
   }
 }
 </script>
