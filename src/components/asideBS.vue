@@ -7,6 +7,8 @@
         <button @click="deleteFile">删除</button>
     </div>
 
+    <el-divider />
+    
     <div class="file-list">
         <div v-for="(file,index) in files"
             :key="index"
@@ -65,9 +67,9 @@ export default {
 
 <style scoped>
 .sidebar {
-  width: 200px;
-  height: 100%;
-  background-color: #f0f0f0;
+  width: 180px;
+  height: 100vh;
+  background-color: #444444e8;
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -99,6 +101,6 @@ export default {
 }
 
 .unsaved {
-  color: red;
+  color: rgba(231, 251, 52, 0.843);
 }
 </style>
