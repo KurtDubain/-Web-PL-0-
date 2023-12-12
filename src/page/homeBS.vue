@@ -7,9 +7,15 @@
   <el-divider/>
 
   <div class="workspace">
-    <CodeEditorBS></CodeEditorBS>
-    <CompilerBS></CompilerBS>
-    <DebuggerBS></DebuggerBS>
+    <div class="left-panel">
+      <CodeEditorBS></CodeEditorBS>
+    </div>
+    
+    <div class="right-panel">
+      <CompilerBS></CompilerBS>
+      <DebuggerBS></DebuggerBS>
+    </div>
+    
   </div>
 </template>
 
@@ -36,6 +42,8 @@ export default {
   padding: 10px;
   overflow-y: auto; /* 添加滚动条，以适应内容溢出时的滚动 */
   height: 95vh;
+  display: flex;
+  
 }
 .workheader{
   /* padding: 0px; */
@@ -55,5 +63,13 @@ export default {
   height: 0;
   /* color: rgb(108, 37, 37); */
   border-top:rgba(51, 51, 51, 0.687)
+}
+.left-panel{
+  flex: 1;
+}
+.right-panel{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 </style>

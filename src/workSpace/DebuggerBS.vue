@@ -28,6 +28,8 @@
     padding: 15px;
     background-color: #333;
     color: #fff;
+    /* width: 100%; */
+    height: 50%;
   }
   
   .debugger-options {
@@ -48,13 +50,14 @@
   
   .debugger-output {
     margin-top: 10px;
+    /* width: 100%; */
   }
   
   .debugger-output pre {
     white-space: pre-wrap;
     background-color: #222;
     padding: 10px;
-    max-height: 200px;
+    height: 200px;
     overflow-y: auto;
     border: 1px solid #444;
   }

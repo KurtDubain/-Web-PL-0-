@@ -28,10 +28,13 @@
     padding: 15px;
     background-color: #444;
     color: #fff;
+    /* width: 100%; */
+    height: 50%;
   }
   
   .compiler-options {
     margin-bottom: 10px;
+
   }
   
   .compiler-options label {
@@ -48,15 +51,17 @@
   
   .compiler-output {
     margin-top: 10px;
+    
   }
   
   .compiler-output pre {
     white-space: pre-wrap;
     background-color: #333;
     padding: 10px;
-    max-height: 200px;
+    height: 200px;
     overflow-y: auto;
     border: 1px solid #555;
+    
   }
   </style>
   

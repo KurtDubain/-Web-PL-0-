@@ -19,27 +19,27 @@
         <template #title>分类</template>
         <router-link to="/" style="text-decoration:none">
             <el-menu-item index="1-1" >
-            首页
+            工具
             </el-menu-item>
         </router-link>
         <router-link to="/pyhcials" style="text-decoration:none">
             <el-menu-item index="1-2">
-            体育
+            搜索
             </el-menu-item>
         </router-link>
         <router-link to="/technology" style="text-decoration:none">
             <el-menu-item index="1-3">
-            技术
+            导出
             </el-menu-item>
         </router-link>
         <router-link to="/community" style="text-decoration:none">
             <el-menu-item index="1-4">
-            社区
+            导入
             </el-menu-item>
         </router-link>
         </el-sub-menu>
         <router-link to="/chatMaker" style="text-decoration:none">
-        <el-menu-item index="2">留言板</el-menu-item>
+        <el-menu-item index="2">帮助</el-menu-item>
         </router-link>
         <div class="flex-grow" />
 
