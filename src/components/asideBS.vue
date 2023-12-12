@@ -1,3 +1,4 @@
+<!-- 侧边工具组件 -->
 <template>
   <div class="sidebar">
     <div class="toolbar">
