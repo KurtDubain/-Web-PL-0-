@@ -20,7 +20,9 @@
   </template>
   
   <script>
-  export default {};
+  export default {
+    name:'CompilerBS'
+  };
   </script>
   
   <style scoped>

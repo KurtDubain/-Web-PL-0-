@@ -30,9 +30,9 @@ export default{
   <style lang="scss" scoped>
 
 .footer-container {
-    background-color: #f2f2f2;
+    background-color: #373737;
     padding: 20px 0;
-    color: #888;
+    color: rgb(195, 195, 195);
   }
   
   .footer-content {

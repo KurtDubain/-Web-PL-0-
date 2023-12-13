@@ -42,6 +42,7 @@ export default {
 
 *{
   transition: 0.5s;
+  /* background-color: black; */
 }
 .el-main {
   padding: 0;

@@ -14,7 +14,7 @@
         <div v-for="(file,index) in files"
             :key="index"
             @click="selectFile(index)"
-            :class="{'selected':selectedIndex===index,'unsaved':file.unsaved}"
+            :class="{'selected':selectedIndex===index}"
         >
             <img src='file-icon.png' alt="file Icon" class="file-icon" />
             {{ file.name }}
@@ -30,8 +30,8 @@ export default {
     name:"asideBS",
     setup(){
         let files = ref([ 
-            { name: 'File1', unsaved: false },
-            { name: 'File2', unsaved: true },
+            { name: 'File1'},
+            { name: 'File2'},
         ])
         let selectedIndex = ref(null)
 
@@ -50,7 +50,8 @@ export default {
         }
 
         const selectFile = (index)=>{
-            selectedIndex = index
+            selectedIndex.value = index
+            console.log(selectedIndex.value)
         }
 
         return {
@@ -66,14 +67,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style >
 .sidebar {
   width: 180px;
   height: 100vh;
   background-color: #444444e8;
   padding: 10px;
+  /* margin-bottom: 1px; */
   display: flex;
   flex-direction: column;
+  border-bottom: #444444e8 2px solid;
 }
 
 .toolbar {
@@ -98,10 +101,14 @@ export default {
 }
 
 .selected {
-  background-color: #ddd;
+  background-color: rgb(194, 194, 194);
 }
 
 .unsaved {
   color: rgba(231, 251, 52, 0.843);
+}
+
+.el-divider--horizontal{
+  border-top:1px rgba(122, 122, 122, 0.687) solid
 }
 </style>

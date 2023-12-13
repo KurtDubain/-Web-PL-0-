@@ -35,6 +35,9 @@ export default {
 </script>
 
 <style scoped>
+*{
+  overflow: hidden;
+}
 .workspace {
   flex: 1;
   background-color: #333; /* 设置为暗色背景，可以根据需要调整颜色 */

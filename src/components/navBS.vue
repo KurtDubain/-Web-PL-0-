@@ -85,4 +85,7 @@ export default {
     .flex-grow{
         flex-grow:1
     }
+    .el-menu--horizontal.el-menu{
+        border-bottom: solid 1px #000000;
+    }
 </style>

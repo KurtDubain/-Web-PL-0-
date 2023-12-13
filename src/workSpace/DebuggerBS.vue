@@ -20,7 +20,10 @@
   </template>
   
   <script>
-  export default {};
+  export default {
+    name:'DebuggerBS',
+    
+  };
   </script>
   
   <style scoped>

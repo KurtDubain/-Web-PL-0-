@@ -9,20 +9,27 @@
   </template>
   
   <script>
+
+import {ref} from 'vue'
+
   export default {
-    data() {
+    name:"CodeEditorBS",
+    setup(){
+      let code = ref(`// 输入你要编辑的代码`)
+
+      const handleInput = ()=>{
+
+      }
+      const handleScroll = ()=>{
+
+      }
       return {
-        code: `// 在这里输入您的代码`,
-      };
+        code,
+        handleInput,
+        handleScroll
+      }
     },
-    methods: {
-      handleInput() {
-        // 处理输入事件，可根据需要执行相关逻辑
-      },
-      handleScroll() {
-        // 处理滚动事件，可根据需要执行相关逻辑
-      },
-    },
+  
   };
   </script>
   
@@ -31,6 +38,7 @@
     width: 100%;
     height: 100%;
     padding-right: 15px;
+    overflow: auto;
   }
   
   .code-editor textarea {
