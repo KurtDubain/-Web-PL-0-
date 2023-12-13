@@ -16,7 +16,8 @@
             @click="selectFile(index)"
             :class="{'selected':selectedIndex===index}"
         >
-            <img src='file-icon.png' alt="file Icon" class="file-icon" />
+            <!-- <img src='file-icon.png' alt="file Icon" class="file-icon" /> -->
+            <el-icon :size="30"><Document /></el-icon>
             {{ file.name }}
         </div>
     </div>
