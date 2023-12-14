@@ -27,6 +27,7 @@
 <script>
 import {computed} from 'vue'
 import {useStore} from 'vuex'
+import eventBus from '@/utils/eventBus.js'
 
 export default {
     name:"asideBS",
@@ -52,9 +53,11 @@ export default {
               // })
               store.commit('files/addFile',{name:selectedFile.name,content:fileContent})
               // selectedIndex.value = files.value.length-1
+              eventBus.emit('changeFile')
               // store.commit('files/')
             }
           })
+          
         }
 
         const exportFile = ()=>{
@@ -71,16 +74,32 @@ export default {
             }
         }
         const newFile =()=>{
-
+          let newName = 'newFile.pl0'
+          let count = 1
+          while(files.value.some(file=>file.name===newName)){
+            newName = `newFile(${count}).pl0`
+            count++
+          }
+          store.commit('files/addFile',{name:newName,content:'// 请输入代码'})
+          eventBus.emit('changeFile')
         }
         const deleteFile = ()=>{
-
+          const selectedFile = files.value[selectedIndex.value]
+          if(selectedFile){
+            const confirmDelete = window.confirm(`确定要删除文件${selectedFile.name}吗`)
+            if(confirmDelete){
+              store.commit('files/deleteFile',selectedIndex.value)
+              store.commit('files/selectFile',files.value.length-1)
+              eventBus.emit('changeFile')
+            }
+          }
         }
 
         const selectFile = (index)=>{
             // selectedIndex.value = index
             // console.log(selectedIndex.value)
             store.commit('files/selectFile',index)
+            eventBus.emit('changeFile')
         }
 
         const readFile = (file)=>{

@@ -12,6 +12,7 @@
 
 import {ref, computed} from 'vue'
 import { useStore } from 'vuex'
+import eventBus from '@/utils/eventBus';
 
   export default {
     name:"CodeEditorBS",
@@ -21,7 +22,11 @@ import { useStore } from 'vuex'
       
       let code = computed(()=>store.getters['files/selectedFile'])
 
-      editorCode.value = code.value
+      // editorCode.value = code.value
+
+      eventBus.on('changeFile',()=>{
+        editorCode.value = code.value.content
+      })
 
       const handleInput = ()=>{
         const selectedFile = store.getters['files/selectedFile']
@@ -35,6 +40,8 @@ import { useStore } from 'vuex'
       const handleScroll = ()=>{
 
       }
+
+      
       return {
         editorCode,
         handleInput,
@@ -90,6 +97,11 @@ import { useStore } from 'vuex'
   
   .code-editor textarea::-webkit-scrollbar-track {
     background-color: #333;
+  }
+
+  .keyword{
+    color:aqua;
+    font-weight: bold;
   }
   </style>
   
