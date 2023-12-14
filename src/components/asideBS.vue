@@ -25,23 +25,50 @@
 </template>
 
 <script>
-import {ref} from 'vue'
+import {computed} from 'vue'
+import {useStore} from 'vuex'
 
 export default {
     name:"asideBS",
     setup(){
-        let files = ref([ 
-            { name: 'File1'},
-            { name: 'File2'},
-        ])
-        let selectedIndex = ref(null)
+        const store = useStore()
+        let files = computed(()=>store.getters['files/allFiles'])
+        let selectedIndex = computed(()=>store.getters['files/getIndex'])
 
-        const importFile = ()=>{
 
+        const importFile = async ()=>{
+          const fileInput = document.createElement('input')
+          fileInput.type = 'file'
+          // fileInput.accept = ''
+          fileInput.click()
+
+          fileInput.addEventListener('change',async(event)=>{
+            const selectedFile = event.target.files[0]
+            if(selectedFile){
+              const fileContent = await readFile(selectedFile)
+              // files.value.push({
+              //   name:selectedFile.name,
+              //   content:fileContent
+              // })
+              store.commit('files/addFile',{name:selectedFile.name,content:fileContent})
+              // selectedIndex.value = files.value.length-1
+              // store.commit('files/')
+            }
+          })
         }
 
         const exportFile = ()=>{
-
+          const selectedFile = files.value[selectedIndex.value];
+            if (selectedFile) {
+                // 创建一个Blob对象
+                const blob = new Blob([selectedFile.content], { type: 'text/plain' });
+                // 创建一个a标签
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = selectedFile.name;
+                // 模拟点击a标签进行下载
+                a.click();
+            }
         }
         const newFile =()=>{
 
@@ -51,8 +78,22 @@ export default {
         }
 
         const selectFile = (index)=>{
-            selectedIndex.value = index
-            console.log(selectedIndex.value)
+            // selectedIndex.value = index
+            // console.log(selectedIndex.value)
+            store.commit('files/selectFile',index)
+        }
+
+        const readFile = (file)=>{
+          return new Promise((resolve,reject)=>{
+            const reader = new FileReader()
+            reader.onload = (event)=>{
+              resolve(event.target.result)
+            }
+            reader.onerror = (error)=>{
+              reject(error)
+            }
+            reader.readAsText(file)
+          })
         }
 
         return {

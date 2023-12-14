@@ -1,7 +1,7 @@
 <template>
     <div class="code-editor">
       <textarea
-        v-model="code"
+        v-model="editorCode"
         @input="handleInput"
         @scroll="handleScroll"
       ></textarea>
@@ -10,21 +10,33 @@
   
   <script>
 
-import {ref} from 'vue'
+import {ref, computed} from 'vue'
+import { useStore } from 'vuex'
 
   export default {
     name:"CodeEditorBS",
     setup(){
-      let code = ref(`// 输入你要编辑的代码`)
+      const store = useStore()
+      let editorCode = ref('')
+      
+      let code = computed(()=>store.getters['files/selectedFile'])
+
+      editorCode.value = code.value
 
       const handleInput = ()=>{
-
+        const selectedFile = store.getters['files/selectedFile']
+        if(selectedFile){
+          store.commit('files/updateFileContent',{
+            index:store.state.files.selectedFileIndex,
+            content:editorCode.value
+          })
+        }
       }
       const handleScroll = ()=>{
 
       }
       return {
-        code,
+        editorCode,
         handleInput,
         handleScroll
       }
