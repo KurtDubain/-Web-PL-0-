@@ -1,7 +1,7 @@
 <!-- 工作台组件 -->
 <template>
   <div class="workheader">
-    文件标题
+    {{pageTitle}}
   </div>
 
   <el-divider/>
@@ -23,6 +23,8 @@
 import CodeEditorBS from '@/workSpace/CodeEditorBS.vue'
 import CompilerBS from '@/workSpace/CompilerBS.vue'
 import DebuggerBS from '@/workSpace/DebuggerBS.vue'
+import {useStore} from 'vuex'
+import { computed } from 'vue'
 
 export default {
     name:"homeBS",
@@ -30,6 +32,16 @@ export default {
       CodeEditorBS,
       CompilerBS,
       DebuggerBS
+    },
+    setup(){
+      const store = useStore()
+      let pageTitle = computed(()=>{
+        const selectedFile = store.getters['files/selectedFile']
+        return selectedFile? selectedFile.name:'未选中文件'
+      })
+      return {
+        pageTitle
+      }
     }
 }
 </script>

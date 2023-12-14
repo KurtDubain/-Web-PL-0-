@@ -2,10 +2,22 @@
 <template>
   <div class="sidebar">
     <div class="toolbar">
-        <button @click="importFile">导入</button>
-        <button @click="exportFile">导出</button>
-        <button @click="newFile">新建</button>
-        <button @click="deleteFile">删除</button>
+      <div @click="importFile" class="toolbar-item">
+        <el-icon :size="30" :color="'#b3b3b3'"><Folder /></el-icon>
+        导入
+      </div>
+      <div @click="exportFile" class="toolbar-item">
+        <el-icon :size="30" :color="'#b3b3b3'"><DocumentChecked /></el-icon>
+        导出
+      </div>
+      <div @click="newFile" class="toolbar-item">
+        <el-icon :size="30" :color="'#b3b3b3'"><DocumentAdd /></el-icon>
+        新建
+      </div>
+      <div @click="deleteFile" class="toolbar-item">
+        <el-icon :size="30" :color="'#b3b3b3'"><DocumentDelete /></el-icon>
+        删除
+      </div>
     </div>
 
     <el-divider />
@@ -141,7 +153,26 @@ export default {
 }
 
 .toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 10px;
+  padding: 10px;
+  background-color: #23272c; 
+  color: #b3b3b3; /* 文本颜色 */
+  border-radius: 10px;
+}
+
+.toolbar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.toolbar-item:hover {
+  color: #ffffff; /* 悬停时文本颜色 */
+  transition: 0.5s;
 }
 
 .file-list {
@@ -163,6 +194,7 @@ export default {
 
 .selected {
   background-color: rgb(194, 194, 194);
+  border-radius: 10px;
 }
 
 .unsaved {
