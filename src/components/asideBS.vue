@@ -204,4 +204,11 @@ export default {
 .el-divider--horizontal{
   border-top:1px rgba(122, 122, 122, 0.687) solid
 }
+.el-icon:hover{
+  color: #ffffff;
+  /* transition: 0.5s; */
+}
+.el-icon{
+  transition: 0s;
+}
 </style>

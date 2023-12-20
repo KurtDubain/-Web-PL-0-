@@ -1,21 +1,28 @@
 <template>
     <div class="code-editor">
-      <textarea
+      <codemirror
         v-model="editorCode"
         @input="handleInput"
         @scroll="handleScroll"
-      ></textarea>
+        :options="editorOptions"
+      ></codemirror>
     </div>
   </template>
   
   <script>
 
-import {ref, computed} from 'vue'
+import {ref, computed, watch} from 'vue'
 import { useStore } from 'vuex'
 import eventBus from '@/utils/eventBus';
+import VueCodemirror from 'vue-codemirror'
+
+
 
   export default {
     name:"CodeEditorBS",
+    components:{
+      codemirror:VueCodemirror.Codemirror
+    },
     setup(){
       const store = useStore()
       let editorCode = ref('')
@@ -30,7 +37,7 @@ import eventBus from '@/utils/eventBus';
 
       const handleInput = ()=>{
         const selectedFile = store.getters['files/selectedFile']
-        if(selectedFile){
+        if(selectedFile&&editorCode.value !== selectedFile.content){
           store.commit('files/updateFileContent',{
             index:store.state.files.selectedFileIndex,
             content:editorCode.value
@@ -41,23 +48,36 @@ import eventBus from '@/utils/eventBus';
 
       }
 
+      watch(code, (newValue) => {
+        editorCode.value = newValue.content;
+      });
+
+      const editorOptions = {
+        mode:'pascal',
+        theme:'barf',
+        lineNumbers:true
+      }
+
       
       return {
         editorCode,
         handleInput,
-        handleScroll
+        handleScroll,
+        editorOptions
       }
     },
   
   };
   </script>
   
-  <style scoped>
+  <style>
   .code-editor {
     width: 100%;
     height: 100%;
     padding-right: 15px;
     overflow: auto;
+    display:flex;
+    flex-direction: column;
   }
   
   .code-editor textarea {
@@ -102,6 +122,39 @@ import eventBus from '@/utils/eventBus';
   .keyword{
     color:aqua;
     font-weight: bold;
+  }
+
+  .code-editor{
+    transition: none;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+  }
+  .codemirror{
+    /* height: 100%; */
+    flex: 1;
+  }
+  .CodeMirror::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .CodeMirror::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 5px;
+  }
+
+  .CodeMirror::-webkit-scrollbar-track {
+    background-color: #333;
+  }
+
+  .ͼ2 .cm-activeLineGutter{
+    background-color: #878787;
+  }
+  .ͼ2 .cm-gutters{
+    background-color: #bbbbbb;
+  }
+  .ͼ1 .cm-scroller{
+    height: 95vh;
   }
   </style>
   
