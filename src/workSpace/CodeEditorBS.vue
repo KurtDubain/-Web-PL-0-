@@ -17,7 +17,6 @@ import eventBus from '@/utils/eventBus';
 import VueCodemirror from 'vue-codemirror'
 
 
-
   export default {
     name:"CodeEditorBS",
     components:{
@@ -51,14 +50,23 @@ import VueCodemirror from 'vue-codemirror'
       watch(code, (newValue) => {
         editorCode.value = newValue.content;
       });
+      const customPascalMode = {
+        token: /\b(?:PROGRAM|BEGIN|END|IF|THEN|ELSE|WHILE|DO)\b/,
+        cmOptions: {
+          indentUnit: 2,
+        },
+      };
 
       const editorOptions = {
-        mode:'pascal',
+        mode:'text/x-pascal',
         theme:'barf',
-        lineNumbers:true
+        lineNumbers:true,
+        styleActiveLine: true,
+        matchBrackets: true,
       }
 
-      
+      Object.assign(editorOptions, customPascalMode.cmOptions);
+
       return {
         editorCode,
         handleInput,
@@ -146,7 +154,10 @@ import VueCodemirror from 'vue-codemirror'
   .CodeMirror::-webkit-scrollbar-track {
     background-color: #333;
   }
-
+  .cm-s-barf .cm-keyword {
+    color: rgb(202, 132, 41);
+    font-weight: bold;
+  }
   .ͼ2 .cm-activeLineGutter{
     background-color: #878787;
   }
