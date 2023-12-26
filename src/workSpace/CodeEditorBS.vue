@@ -15,7 +15,7 @@ import {ref, computed, watch} from 'vue'
 import { useStore } from 'vuex'
 import eventBus from '@/utils/eventBus';
 import VueCodemirror from 'vue-codemirror'
-
+import '@/utils/Pascal'
 
   export default {
     name:"CodeEditorBS",
@@ -58,7 +58,7 @@ import VueCodemirror from 'vue-codemirror'
       };
 
       const editorOptions = {
-        mode:'text/x-pascal',
+        mode:'pascal',
         theme:'barf',
         lineNumbers:true,
         styleActiveLine: true,
@@ -167,5 +167,30 @@ import VueCodemirror from 'vue-codemirror'
   .ͼ1 .cm-scroller{
     height: 95vh;
   }
+  /* Pascal 关键字样式 */
+.cm-s-barf .cm-keyword {
+  color: #569cd6; /* Pascal 关键字颜色 */
+  font-weight: bold;
+}
+
+/* Pascal 注释样式 */
+.cm-s-barf .cm-comment {
+  color: #6a9955; /* 注释颜色 */
+}
+
+/* Pascal 字符串样式 */
+.cm-s-barf .cm-string {
+  color: #d69d85; /* 字符串颜色 */
+}
+
+/* Pascal 数字样式 */
+.cm-s-barf .cm-number {
+  color: #b5cea8; /* 数字颜色 */
+}
+
+/* 激活行样式 */
+.cm-s-barf .CodeMirror-activeline-background {
+  background: #333;
+}
   </style>
   
