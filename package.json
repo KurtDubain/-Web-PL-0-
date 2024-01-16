@@ -8,6 +8,9 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@codemirror/basic-setup": "^0.20.0",
+    "@codemirror/state": "^6.4.0",
+    "@codemirror/view": "^6.23.0",
     "@element-plus/icons-vue": "^2.3.1",
     "core-js": "^3.8.3",
     "element-plus": "^2.4.3",

@@ -15,8 +15,11 @@ import {ref, computed, watch} from 'vue'
 import { useStore } from 'vuex'
 import eventBus from '@/utils/eventBus';
 import VueCodemirror from 'vue-codemirror'
-import '@/utils/Pascal'
-
+// import { EditorState } from '@codemirror/state';
+import {setupPL0Language} from "@/utils/Pascal"
+// import { basicSetup } from '@codemirror/basic-setup';
+// import { EditorView } from '@codemirror/view';
+// import {setupPascalLanguage} from "codemirror"
   export default {
     name:"CodeEditorBS",
     components:{
@@ -24,6 +27,7 @@ import '@/utils/Pascal'
     },
     setup(){
       const store = useStore()
+      const pascalLanguage = setupPL0Language();
       let editorCode = ref('')
       
       let code = computed(()=>store.getters['files/selectedFile'])
@@ -46,26 +50,31 @@ import '@/utils/Pascal'
       const handleScroll = ()=>{
 
       }
+      // const editorOptions = {
+      //   state: EditorState.create({
+      //     doc: editorCode.value,
+      //     extensions: [
+      //       // basicSetup,
+      //       pascalLanguage.language,
+      //     ],
+      //   }),
+      // };
+      const editorOptions = {
+      mode: {
+        name: 'pl0', // 设置语言模式为 'pl0'
+        ...pascalLanguage.language,
+      },
+      theme: 'base16-light',
+      lineNumbers: true,
+      styleActiveLine: true,
+      matchBrackets: true,
+    };
+
+
 
       watch(code, (newValue) => {
         editorCode.value = newValue.content;
       });
-      const customPascalMode = {
-        token: /\b(?:PROGRAM|BEGIN|END|IF|THEN|ELSE|WHILE|DO)\b/,
-        cmOptions: {
-          indentUnit: 2,
-        },
-      };
-
-      const editorOptions = {
-        mode:'pascal',
-        theme:'barf',
-        lineNumbers:true,
-        styleActiveLine: true,
-        matchBrackets: true,
-      }
-
-      Object.assign(editorOptions, customPascalMode.cmOptions);
 
       return {
         editorCode,
@@ -168,7 +177,7 @@ import '@/utils/Pascal'
     height: 95vh;
   }
   /* Pascal 关键字样式 */
-.cm-s-barf .cm-keyword {
+.CodeMirror .cm-s-barf .cm-keyword {
   color: #569cd6; /* Pascal 关键字颜色 */
   font-weight: bold;
 }
