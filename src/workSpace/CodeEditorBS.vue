@@ -1,43 +1,48 @@
 <template>
     <div class="code-editor">
-      <codemirror
-        v-model="editorCode"
-        @input="handleInput"
-        @scroll="handleScroll"
-        :options="editorOptions"
-      ></codemirror>
+      <div id="code-textarea" ref="editorCode" @input="handleInput" style="height:300px"></div>
     </div>
   </template>
   
   <script>
 
-import {ref, computed, watch} from 'vue'
+import {ref, computed, watch, onMounted,nextTick} from 'vue'
 import { useStore } from 'vuex'
 import eventBus from '@/utils/eventBus';
-import VueCodemirror from 'vue-codemirror'
-// import { EditorState } from '@codemirror/state';
-import {setupPL0Language} from "@/utils/Pascal"
-// import { basicSetup } from '@codemirror/basic-setup';
-// import { EditorView } from '@codemirror/view';
-// import {setupPascalLanguage} from "codemirror"
+import * as monaco from 'monaco-editor'
   export default {
     name:"CodeEditorBS",
-    components:{
-      codemirror:VueCodemirror.Codemirror
-    },
     setup(){
+      // 初始化Vuex
       const store = useStore()
-      const pascalLanguage = setupPL0Language();
-      let editorCode = ref('')
-      
+      // PL0语言配置
+      // Codemirror配置
+      // 初始化所选中的文件的内容
       let code = computed(()=>store.getters['files/selectedFile'])
+      let editorCode = ref(null)
+      
+      const initEditor = async()=>{
+        await nextTick(); // Wait for the next DOM update
+        editorCode.value = monaco.editor.create(editorCode.value, {
+          value: code.value,
+          language: 'pascal',
+          theme: 'vs-dark'
+        });
+        // editorCode.value.onDidChangeModelContent(() => {
+        //   code.value = editorCode.value.getValue();
+        // });
+      }
+      onMounted(()=>{
+        initEditor()
+      })
+
 
       // editorCode.value = code.value
-
+      // 当切换文件的时候，更新code内容
       eventBus.on('changeFile',()=>{
         editorCode.value = code.value.content
       })
-
+      // 当输入操作的时候，同步更新当前选中文件的code
       const handleInput = ()=>{
         const selectedFile = store.getters['files/selectedFile']
         if(selectedFile&&editorCode.value !== selectedFile.content){
@@ -46,41 +51,21 @@ import {setupPL0Language} from "@/utils/Pascal"
             content:editorCode.value
           })
         }
+        console.log(111)
       }
       const handleScroll = ()=>{
 
       }
-      // const editorOptions = {
-      //   state: EditorState.create({
-      //     doc: editorCode.value,
-      //     extensions: [
-      //       // basicSetup,
-      //       pascalLanguage.language,
-      //     ],
-      //   }),
-      // };
-      const editorOptions = {
-      mode: {
-        name: 'pl0', // 设置语言模式为 'pl0'
-        ...pascalLanguage.language,
-      },
-      theme: 'base16-light',
-      lineNumbers: true,
-      styleActiveLine: true,
-      matchBrackets: true,
-    };
 
-
-
+      // 当文本中的代码更新的时候，同步更新对应文件内容中的代码
       watch(code, (newValue) => {
         editorCode.value = newValue.content;
       });
 
       return {
-        editorCode,
         handleInput,
-        handleScroll,
-        editorOptions
+        editorCode,
+        handleScroll,      
       }
     },
   
@@ -93,113 +78,19 @@ import {setupPL0Language} from "@/utils/Pascal"
     height: 100%;
     padding-right: 15px;
     overflow: auto;
-    display:flex;
-    flex-direction: column;
   }
   
-  .code-editor textarea {
-    width: 100%;
-    height: 100%;
-    resize: none;
-    border: none;
-    padding: 10px;
-    font-family: "Courier New", monospace;
-    font-size: 1rem;
-    color: #fff;
-    background-color: #1e1e1e;
-    outline: none;
-  }
-  
-  /* 行号显示 */
-  .code-editor textarea::before {
-    content: counter(line-numbering);
-    counter-increment: line-numbering;
-    display: inline-block;
-    padding: 0 10px;
-    text-align: right;
-    user-select: none;
-    opacity: 0.5;
-    margin-right: 10px;
-  }
-  
-  /* 滚动条样式 */
-  .code-editor textarea::-webkit-scrollbar {
-    width: 10px;
-  }
-  
-  .code-editor textarea::-webkit-scrollbar-thumb {
-    background-color: #555;
-    border-radius: 5px;
-  }
-  
-  .code-editor textarea::-webkit-scrollbar-track {
-    background-color: #333;
-  }
-
-  .keyword{
-    color:aqua;
-    font-weight: bold;
-  }
-
   .code-editor{
     transition: none;
-    width: 100%;
-    height: 100%;
+    width: 20rem;
+    height: 20rem;
     overflow: auto;
+    z-index: 999;
   }
   .codemirror{
     /* height: 100%; */
     flex: 1;
   }
-  .CodeMirror::-webkit-scrollbar {
-    width: 10px;
-  }
 
-  .CodeMirror::-webkit-scrollbar-thumb {
-    background-color: #555;
-    border-radius: 5px;
-  }
-
-  .CodeMirror::-webkit-scrollbar-track {
-    background-color: #333;
-  }
-  .cm-s-barf .cm-keyword {
-    color: rgb(202, 132, 41);
-    font-weight: bold;
-  }
-  .ͼ2 .cm-activeLineGutter{
-    background-color: #878787;
-  }
-  .ͼ2 .cm-gutters{
-    background-color: #bbbbbb;
-  }
-  .ͼ1 .cm-scroller{
-    height: 95vh;
-  }
-  /* Pascal 关键字样式 */
-.CodeMirror .cm-s-barf .cm-keyword {
-  color: #569cd6; /* Pascal 关键字颜色 */
-  font-weight: bold;
-}
-
-/* Pascal 注释样式 */
-.cm-s-barf .cm-comment {
-  color: #6a9955; /* 注释颜色 */
-}
-
-/* Pascal 字符串样式 */
-.cm-s-barf .cm-string {
-  color: #d69d85; /* 字符串颜色 */
-}
-
-/* Pascal 数字样式 */
-.cm-s-barf .cm-number {
-  color: #b5cea8; /* 数字颜色 */
-}
-
-/* 激活行样式 */
-.cm-s-barf .CodeMirror-activeline-background {
-  background: #333;
-}
   </style>
   
