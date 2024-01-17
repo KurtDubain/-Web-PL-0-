@@ -1,12 +1,12 @@
 <template>
     <div class="code-editor">
-      <div id="code-textarea" ref="editorCode" @input="handleInput"></div>
+      <div id="code-textarea" ref="editorCode" @input="handleInput" ></div>
     </div>
   </template>
   
   <script>
 
-import {ref, computed, watch, onMounted,nextTick} from 'vue'
+import {ref, computed, onMounted,nextTick, toRaw} from 'vue'
 import { useStore } from 'vuex'
 import eventBus from '@/utils/eventBus';
 import * as monaco from 'monaco-editor'
@@ -21,17 +21,19 @@ import {pascalLanguageConfig,pascalCompletionProvider} from '@/utils/Pascal'
       // 初始化所选中的文件的内容
       let code = computed(()=>store.getters['files/selectedFile'])
       let editorCode = ref(null)
+      let editorCodeContent = ref(null)
       
       const initEditor = async()=>{
         await nextTick(); // Wait for the next DOM update
-        editorCode.value = monaco.editor.create(editorCode.value, {
-          value: code.value,
+        
+        editorCodeContent.value = monaco.editor.create(editorCode.value, {
+          value: code.value?code.value.content:'',
           language: 'pascal',
           theme: 'vs-dark'
         });
-        editorCode.value.onDidChangeModelContent(() => {
-          code.value = editorCode.value.getValue();
-        });
+        editorCodeContent.value.onDidChangeModelContent(()=>{
+          code.value.content = toRaw(editorCodeContent.value).getValue()
+        })
         monaco.languages.register({id:'pascal'})
         monaco.languages.setMonarchTokensProvider('pascal',pascalLanguageConfig)
         monaco.languages.registerCompletionItemProvider('pascal',pascalCompletionProvider)
@@ -45,32 +47,30 @@ import {pascalLanguageConfig,pascalCompletionProvider} from '@/utils/Pascal'
       // editorCode.value = code.value
       // 当切换文件的时候，更新code内容
       eventBus.on('changeFile',()=>{
-        editorCode.value = code.value.content
+        // editorCode.value = code.value.content
+        toRaw(editorCodeContent.value).setValue(code.value.content);
       })
       // 当输入操作的时候，同步更新当前选中文件的code
-      const handleInput = ()=>{
-        const selectedFile = store.getters['files/selectedFile']
-        if(selectedFile&&editorCode.value !== selectedFile.content){
-          store.commit('files/updateFileContent',{
-            index:store.state.files.selectedFileIndex,
-            content:editorCode.value
-          })
-        }
-        console.log(111)
-      }
-      const handleScroll = ()=>{
-
-      }
+      // const handleInput = ()=>{
+      //   const selectedFile = store.getters['files/selectedFile']
+      //   if(selectedFile&&editorCode.value !== selectedFile.content){
+      //     store.commit('files/updateFileContent',{
+      //       index:store.state.files.selectedFileIndex,
+      //       content:editorCode.value.getValue()
+      //     })
+      //   }
+      //   console.log(111)
+      // }
 
       // 当文本中的代码更新的时候，同步更新对应文件内容中的代码
-      watch(code, (newValue) => {
-        editorCode.value = newValue.content;
-      });
+      // watch(code, (newValue) => {
+      //   editorCode.value = newValue.content;
+      // });
 
       return {
-        handleInput,
+        // handleInput,
         editorCode,
-        handleScroll,      
+        // handleScroll,      
       }
     },
   
