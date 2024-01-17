@@ -1,6 +1,6 @@
 const state = {
-  files:[],
-  selectedFileIndex:null
+  files:[],//用于存储代码文件
+  selectedFileIndex:null//当前选中的文件
 }
 
 const mutations = {

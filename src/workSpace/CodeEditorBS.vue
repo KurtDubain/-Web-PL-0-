@@ -20,8 +20,8 @@ import {pascalLanguageConfig,pascalCompletionProvider} from '@/utils/Pascal'
       // Codemirror配置
       // 初始化所选中的文件的内容
       let code = computed(()=>store.getters['files/selectedFile'])
-      let editorCode = ref(null)
-      let editorCodeContent = ref(null)
+      let editorCode = ref(null)//编辑器容器
+      let editorCodeContent = ref(null)//编辑器实例
       
       const initEditor = async()=>{
         await nextTick(); // Wait for the next DOM update
@@ -31,6 +31,7 @@ import {pascalLanguageConfig,pascalCompletionProvider} from '@/utils/Pascal'
           language: 'pascal',
           theme: 'vs-dark'
         });
+        //编辑代码的时候，同步修改所选中文件的内容
         editorCodeContent.value.onDidChangeModelContent(()=>{
           code.value.content = toRaw(editorCodeContent.value).getValue()
         })
@@ -50,22 +51,6 @@ import {pascalLanguageConfig,pascalCompletionProvider} from '@/utils/Pascal'
         // editorCode.value = code.value.content
         toRaw(editorCodeContent.value).setValue(code.value.content);
       })
-      // 当输入操作的时候，同步更新当前选中文件的code
-      // const handleInput = ()=>{
-      //   const selectedFile = store.getters['files/selectedFile']
-      //   if(selectedFile&&editorCode.value !== selectedFile.content){
-      //     store.commit('files/updateFileContent',{
-      //       index:store.state.files.selectedFileIndex,
-      //       content:editorCode.value.getValue()
-      //     })
-      //   }
-      //   console.log(111)
-      // }
-
-      // 当文本中的代码更新的时候，同步更新对应文件内容中的代码
-      // watch(code, (newValue) => {
-      //   editorCode.value = newValue.content;
-      // });
 
       return {
         // handleInput,
