@@ -1,6 +1,6 @@
 <template>
     <div class="code-editor">
-      <div id="code-textarea" ref="editorCode" @input="handleInput" style="height:300px"></div>
+      <div id="code-textarea" ref="editorCode" @input="handleInput"></div>
     </div>
   </template>
   
@@ -10,6 +10,7 @@ import {ref, computed, watch, onMounted,nextTick} from 'vue'
 import { useStore } from 'vuex'
 import eventBus from '@/utils/eventBus';
 import * as monaco from 'monaco-editor'
+import {pascalLanguageConfig,pascalCompletionProvider} from '@/utils/Pascal'
   export default {
     name:"CodeEditorBS",
     setup(){
@@ -28,10 +29,14 @@ import * as monaco from 'monaco-editor'
           language: 'pascal',
           theme: 'vs-dark'
         });
-        // editorCode.value.onDidChangeModelContent(() => {
-        //   code.value = editorCode.value.getValue();
-        // });
+        editorCode.value.onDidChangeModelContent(() => {
+          code.value = editorCode.value.getValue();
+        });
+        monaco.languages.register({id:'pascal'})
+        monaco.languages.setMonarchTokensProvider('pascal',pascalLanguageConfig)
+        monaco.languages.registerCompletionItemProvider('pascal',pascalCompletionProvider)
       }
+
       onMounted(()=>{
         initEditor()
       })
@@ -79,17 +84,13 @@ import * as monaco from 'monaco-editor'
     padding-right: 15px;
     overflow: auto;
   }
-  
-  .code-editor{
-    transition: none;
-    width: 20rem;
-    height: 20rem;
-    overflow: auto;
-    z-index: 999;
-  }
   .codemirror{
     /* height: 100%; */
     flex: 1;
+  }
+  #code-textarea{
+    height: 100%;
+    width: 100%;
   }
 
   </style>
