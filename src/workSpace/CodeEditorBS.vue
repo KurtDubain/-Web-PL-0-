@@ -31,17 +31,19 @@ import {pascalLanguageConfig,pascalCompletionProvider} from '@/utils/Pascal'
           language: 'pascal',
           theme: 'vs-dark'
         });
+        monaco.languages.register({id:'pascal'})
+        monaco.languages.setMonarchTokensProvider('pascal',pascalLanguageConfig)
+        monaco.languages.registerCompletionItemProvider('pascal',pascalCompletionProvider)
         //编辑代码的时候，同步修改所选中文件的内容
         editorCodeContent.value.onDidChangeModelContent(()=>{
           code.value.content = toRaw(editorCodeContent.value).getValue()
         })
-        monaco.languages.register({id:'pascal'})
-        monaco.languages.setMonarchTokensProvider('pascal',pascalLanguageConfig)
-        monaco.languages.registerCompletionItemProvider('pascal',pascalCompletionProvider)
+        
       }
 
-      onMounted(()=>{
-        initEditor()
+      onMounted(async()=>{
+        await nextTick()
+        await initEditor()
       })
 
 

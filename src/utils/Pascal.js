@@ -4,11 +4,11 @@ export const pascalLanguageConfig = {
   tokenPostfix: '.pascal',
 
   keywords: [
-    'if', 'then', 'else', 'begin', 'end', 'while', 'do', 'repeat', 'until', 'for', 'to', 'downto'
+    'function','int','const','var','if', 'then', 'else', 'begin', 'end', 'while', 'do', 'repeat', 'until', 'for', 'to', 'downto'
   ],
 
   operators: [
-    '+', '-', '*', '/', '=', '<', '>', '<=', '>=', '<>', ':=', ':'
+    '+', '-', '*', '/', '=', '<', '>', '<=', '>=', '<>', ':=', ':',
   ],
 
   // we include these common regular expressions
@@ -58,6 +58,7 @@ export const pascalLanguageConfig = {
       [/[^(*]+/, 'comment'],
       [/\*\)/, 'comment', '@pop'],
       [/\(\*/, 'comment']
+      
     ],
 
     string: [
@@ -78,7 +79,7 @@ export const pascalCompletionProvider = {
     const suggestions = [];
 
     // 添加关键字
-    const keywords = ['if', 'then', 'else', 'begin', 'end', 'while', 'do', 'repeat', 'until', 'for', 'to', 'downto'];
+    const keywords = ['function','int','const','var','if', 'then', 'else', 'begin', 'end', 'while', 'do', 'repeat', 'until', 'for', 'to', 'downto'];
     keywords.forEach(keyword => {
       suggestions.push({
         label: keyword,
