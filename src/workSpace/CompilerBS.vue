@@ -1,29 +1,51 @@
 <template>
-    <div class="compiler-styles">
-      <h3>编译器样式</h3>
-      <div class="compiler-options">
-        <label>编译选项：</label>
-        <select>
-          <option value="option1">选项1</option>
-          <option value="option2">选项2</option>
-          <option value="option3">选项3</option>
-        </select>
-      </div>
-      <button class="compile-button">编译</button>
-      <div class="compiler-output">
-        <h4>编译结果：</h4>
-        <pre>
-          <!-- 这里显示编译结果 -->
-        </pre>
-      </div>
+  <div class="compiler-styles">
+    <h3>编译器样式</h3>
+    <div class="compiler-options">
+      <label>编译选项：</label>
+      <select v-model="selectedOption">
+        <option value="option1">选项1</option>
+        <option value="option2">选项2</option>
+        <option value="option3">选项3</option>
+      </select>
     </div>
-  </template>
+    <button class="compile-button" @click="compileCode">编译</button>
+    <div class="compiler-output">
+      <h4>编译结果：</h4>
+      <pre>{{ compilerOutput }}</pre>
+    </div>
+  </div>
+</template>
   
-  <script>
-  export default {
-    name:'CompilerBS'
-  };
-  </script>
+<script>
+import { ref } from 'vue';
+
+export default {
+  name: 'CompilerBS',
+  setup() {
+    const selectedOption = ref('option1');
+    const compilerOutput = ref('');
+
+    const compileCode = async () => {
+      // 获取选中的编译选项
+      console.log('Selected Option:', selectedOption.value);
+
+      // 执行编译逻辑，可以调用编译器相关方法，或者将代码发送到后端进行编译
+      // 模拟异步编译
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // 更新编译结果的显示
+      compilerOutput.value = '编译结果示例：\n...';
+    };
+
+    return {
+      selectedOption,
+      compilerOutput,
+      compileCode,
+    };
+  },
+};
+</script>
   
   <style scoped>
   .compiler-styles {
