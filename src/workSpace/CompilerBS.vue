@@ -2,14 +2,17 @@
   <div class="compiler-styles">
     <h3>编译器样式</h3>
     <div class="compiler-options">
-      <label>编译选项：</label>
-      <select v-model="selectedOption">
-        <option value="option1">选项1</option>
-        <option value="option2">选项2</option>
-        <option value="option3">选项3</option>
-      </select>
+      <el-form>
+        <el-form-item label="编译选项">
+          <el-select v-model="selectedOption" placeholder="请选择">
+            <el-option label="选项1" value="option1"></el-option>
+            <el-option label="选项2" value="option2"></el-option>
+            <el-option label="选项3" value="option3"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
     </div>
-    <button class="compile-button" @click="compileCode">编译</button>
+    <el-button class="compile-button" @click="compileCode" type="primary">编译</el-button>
     <div class="compiler-output">
       <h4>编译结果：</h4>
       <pre>{{ compilerOutput }}</pre>
@@ -81,7 +84,7 @@ export default {
   .compiler-output pre {
     white-space: pre-wrap;
     background-color: #333;
-    padding: 10px;
+    /* padding: 10px; */
     height: 200px;
     overflow-y: auto;
     border: 1px solid #555;
