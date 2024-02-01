@@ -3,16 +3,21 @@
     <h3>编译器样式</h3>
     <div class="compiler-options">
       <el-form>
-        <el-form-item label="编译选项">
-          <el-select v-model="selectedOption" placeholder="请选择">
+        <el-form-item color="#fff" label="编译选项">
+          <!-- <el-select v-model="selectedOption" placeholder="请选择">
             <el-option label="选项1" value="option1"></el-option>
             <el-option label="选项2" value="option2"></el-option>
             <el-option label="选项3" value="option3"></el-option>
-          </el-select>
+          </el-select> -->
+          <el-checkbox v-model="options['LexicalAnalysis']" label="词法分析"></el-checkbox>
+          <el-checkbox v-model="options['SyntaxAnalysis']" label="语法分析"></el-checkbox>
+          <el-checkbox v-model="options['SemanticAnalysis']" label="语义分析"></el-checkbox>
+          <el-checkbox v-model="options['IntermediateCodeGeneration']" label="中间代码生成"></el-checkbox>
+          <el-checkbox v-model="options['TargetCodeGeneration']" label="目标代码生成"></el-checkbox>
         </el-form-item>
       </el-form>
     </div>
-    <el-button class="compile-button" @click="compileCode" type="primary">编译</el-button>
+    <el-button class="compile-button" @click="compileIt" type="primary">编译</el-button>
     <div class="compiler-output">
       <h4>编译结果：</h4>
       <pre>{{ compilerOutput }}</pre>
@@ -21,36 +26,45 @@
 </template>
   
 <script>
-import { ref } from 'vue';
-
+import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
+import { compileCode } from '../api/modules/compiler'
 export default {
   name: 'CompilerBS',
   setup() {
-    const selectedOption = ref('option1');
+    const store = useStore()
+    const options = ref({
+      'LexicalAnalysis':false,
+      'SyntaxAnalysis':false,
+      'SemanticAnalysis':false,
+      'IntermediateCodeGeneration':false,
+      'TargetCodeGeneration':false
+    });
+    // const code = ref('')
     const compilerOutput = ref('');
-
-    const compileCode = async () => {
-      // 获取选中的编译选项
-      console.log('Selected Option:', selectedOption.value);
-
-      // 执行编译逻辑，可以调用编译器相关方法，或者将代码发送到后端进行编译
-      // 模拟异步编译
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // 更新编译结果的显示
-      compilerOutput.value = '编译结果示例：\n...';
+    
+    const compileIt = async () => {
+      let code = computed(()=>store.getters['files/selectedFile'])
+      try{
+        const res = await compileCode({code:code.value.content,options:options.value})
+        console.log(res.data)
+        // 更新编译结果的显示
+        compilerOutput.value = `编译结果示例：\n...\n${res.result}`;
+      }catch(error){
+        console.error('编译异常',error)
+      }
     };
 
     return {
-      selectedOption,
+      options,
       compilerOutput,
-      compileCode,
+      compileIt,
     };
   },
 };
 </script>
   
-  <style scoped>
+  <style>
   .compiler-styles {
     padding: 15px;
     background-color: #444;
@@ -61,7 +75,7 @@ export default {
   
   .compiler-options {
     margin-bottom: 10px;
-
+    color: #fff;
   }
   
   .compiler-options label {
@@ -69,8 +83,8 @@ export default {
   }
   
   .compile-button {
-    background-color: #28a745;
-    color: #fff;
+    background-color: #0095f9;
+    color: rgb(255, 255, 255);
     padding: 5px 10px;
     border: none;
     cursor: pointer;
@@ -89,6 +103,12 @@ export default {
     overflow-y: auto;
     border: 1px solid #555;
     
+  }
+  .el-form-item__label{
+    color: aliceblue;
+  }
+  .checkbox{
+    color: rgba(240, 248, 255, 0.695);
   }
   </style>
   
