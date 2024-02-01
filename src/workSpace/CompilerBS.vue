@@ -20,7 +20,7 @@
     <el-button class="compile-button" @click="compileIt" type="primary">编译</el-button>
     <div class="compiler-output">
       <h4>编译结果：</h4>
-      <pre>{{ compilerOutput }}</pre>
+      <pre>{{ compilerOutput.join() }}</pre>
     </div>
   </div>
 </template>
@@ -41,15 +41,20 @@ export default {
       'TargetCodeGeneration':false
     });
     // const code = ref('')
-    const compilerOutput = ref('');
+    const compilerOutput = ref(['']);
     
     const compileIt = async () => {
       let code = computed(()=>store.getters['files/selectedFile'])
       try{
         const res = await compileCode({code:code.value.content,options:options.value})
-        console.log(res.data)
+        // console.log(res.data)
         // 更新编译结果的显示
-        compilerOutput.value = `编译结果示例：\n...\n${res.result}`;
+        compilerOutput.value.push(`编译结果示例：\n...\n`);
+        compilerOutput.value.push(`${options.value.LexicalAnalysis?`词法分析结果:\n${JSON.stringify(res.result.LexicalAnalysis)}`:'\n'}`)
+        compilerOutput.value.push(`${options.value.SyntaxAnalysis?`语法分析结果:\n${JSON.stringify(res.result.SyntaxAnalysis)}`:'\n'}`)
+        compilerOutput.value.push(`${options.value.SemanticAnalysis?`语义分析结果:\n${JSON.stringify(res.result.SemanticAnalysis)}`:'\n'}`)
+        compilerOutput.value.push(`${options.value.IntermediateCodeGeneration?`中间代码生成结果:\n${JSON.stringify(res.result.IntermediateCodeGeneration)}`:'\n'}`)
+        compilerOutput.value.push(`${options.value.TargetCodeGeneration?`目标代码生成结果:\n${JSON.stringify(res.result.TargetCodeGeneration)}`:'\n'}`)
       }catch(error){
         console.error('编译异常',error)
       }
