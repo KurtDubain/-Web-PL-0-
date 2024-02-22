@@ -1,7 +1,9 @@
 <template>
   <div class="common-layout">
     <el-container>
-      <el-header><navBS></navBS></el-header>
+      <el-header>
+        <navBS></navBS>
+      </el-header>
       <el-container>
         <el-aside width="200px">
           <asideBS></asideBS>
@@ -10,7 +12,7 @@
           <el-main>
             <homeBS></homeBS>
           </el-main>
-          
+
         </el-container>
       </el-container>
       <el-footer>
@@ -39,19 +41,19 @@ export default {
 </script>
 
 <style>
-
-*{
+* {
   transition: 0.5s;
   /* background-color: black; */
 }
+
 .el-main {
   padding: 0;
 }
+
 .el-header {
   padding: 0;
 }
+
 .el-footer {
   padding: 0;
-}
-
-</style>
+}</style>

@@ -3,140 +3,147 @@
   <div class="sidebar">
     <div class="toolbar">
       <div @click="importFile" class="toolbar-item">
-        <el-icon :size="30" :color="'#b3b3b3'"><Folder /></el-icon>
+        <el-icon :size="30" :color="'#b3b3b3'">
+          <Folder />
+        </el-icon>
         导入
       </div>
       <div @click="exportFile" class="toolbar-item">
-        <el-icon :size="30" :color="'#b3b3b3'"><DocumentChecked /></el-icon>
+        <el-icon :size="30" :color="'#b3b3b3'">
+          <DocumentChecked />
+        </el-icon>
         导出
       </div>
       <div @click="newFile" class="toolbar-item">
-        <el-icon :size="30" :color="'#b3b3b3'"><DocumentAdd /></el-icon>
+        <el-icon :size="30" :color="'#b3b3b3'">
+          <DocumentAdd />
+        </el-icon>
         新建
       </div>
       <div @click="deleteFile" class="toolbar-item">
-        <el-icon :size="30" :color="'#b3b3b3'"><DocumentDelete /></el-icon>
+        <el-icon :size="30" :color="'#b3b3b3'">
+          <DocumentDelete />
+        </el-icon>
         删除
       </div>
     </div>
 
     <el-divider />
-    
+
     <div class="file-list">
-        <div v-for="(file,index) in files"
-            :key="index"
-            @click="selectFile(index)"
-            :class="{'selected':selectedIndex===index}"
-        >
-            <!-- <img src='file-icon.png' alt="file Icon" class="file-icon" /> -->
-            <el-icon :size="30"><Document /></el-icon>
-            {{ file.name }}
-        </div>
+      <div v-for="(file, index) in files" :key="index" @click="selectFile(index)"
+        :class="{ 'selected': selectedIndex === index }">
+        <!-- <img src='file-icon.png' alt="file Icon" class="file-icon" /> -->
+        <el-icon :size="30">
+          <Document />
+        </el-icon>
+        {{ file.name }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import {computed} from 'vue'
-import {useStore} from 'vuex'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 import eventBus from '@/utils/eventBus.js'
 
 export default {
-    name:"asideBS",
-    setup(){
-        const store = useStore()
-        let files = computed(()=>store.getters['files/allFiles'])
-        let selectedIndex = computed(()=>store.getters['files/getIndex'])
+  name: "asideBS",
+  setup() {
+    const store = useStore()
+    let files = computed(() => store.getters['files/allFiles'])
+    let selectedIndex = computed(() => store.getters['files/getIndex'])
 
 
-        const importFile = async ()=>{
-          const fileInput = document.createElement('input')
-          fileInput.type = 'file'
-          // fileInput.accept = ''
-          fileInput.click()
+    const importFile = async () => {
+      const fileInput = document.createElement('input')
+      fileInput.type = 'file'
+      // fileInput.accept = ''
+      fileInput.click()
 
-          fileInput.addEventListener('change',async(event)=>{
-            const selectedFile = event.target.files[0]
-            if(selectedFile){
-              const fileContent = await readFile(selectedFile)
-              // files.value.push({
-              //   name:selectedFile.name,
-              //   content:fileContent
-              // })
-              store.commit('files/addFile',{name:selectedFile.name,content:fileContent})
-              // selectedIndex.value = files.value.length-1
-              eventBus.emit('changeFile')
-              // store.commit('files/')
-            }
-          })
-          
+      fileInput.addEventListener('change', async (event) => {
+        const selectedFile = event.target.files[0]
+        if (selectedFile) {
+          const fileContent = await readFile(selectedFile)
+          // files.value.push({
+          //   name:selectedFile.name,
+          //   content:fileContent
+          // })
+          store.commit('files/addFile', { name: selectedFile.name, content: fileContent })
+          // selectedIndex.value = files.value.length-1
+          eventBus.emit('changeFile')
+          // store.commit('files/')
         }
+      })
 
-        const exportFile = ()=>{
-          const selectedFile = files.value[selectedIndex.value];
-            if (selectedFile) {
-                // 创建一个Blob对象
-                const blob = new Blob([selectedFile.content], { type: 'text/plain' });
-                // 创建一个a标签
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = selectedFile.name;
-                // 模拟点击a标签进行下载
-                a.click();
-            }
-        }
-        const newFile =()=>{
-          let newName = 'newFile.pl0'
-          let count = 1
-          while(files.value.some(file=>file.name===newName)){
-            newName = `newFile(${count}).pl0`
-            count++
-          }
-          store.commit('files/addFile',{name:newName,content:'// 请输入代码'})
+    }
+
+    const exportFile = () => {
+      const selectedFile = files.value[selectedIndex.value];
+      if (selectedFile) {
+        // 创建一个Blob对象
+        const blob = new Blob([selectedFile.content], { type: 'text/plain' });
+        // 创建一个a标签
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = selectedFile.name;
+        // 模拟点击a标签进行下载
+        a.click();
+      }
+    }
+    const newFile = () => {
+      let newName = 'newFile.pl0'
+      let count = 1
+      while (files.value.some(file => file.name === newName)) {
+        newName = `newFile(${count}).pl0`
+        count++
+      }
+      store.commit('files/addFile', { name: newName, content: '// 请输入代码' })
+      eventBus.emit('changeFile')
+    }
+    const deleteFile = () => {
+      const selectedFile = files.value[selectedIndex.value]
+      if (selectedFile) {
+        const confirmDelete = window.confirm(`确定要删除文件${selectedFile.name}吗`)
+        if (confirmDelete) {
+          store.commit('files/deleteFile', selectedIndex.value)
+          store.commit('files/selectFile', files.value.length - 1)
           eventBus.emit('changeFile')
         }
-        const deleteFile = ()=>{
-          const selectedFile = files.value[selectedIndex.value]
-          if(selectedFile){
-            const confirmDelete = window.confirm(`确定要删除文件${selectedFile.name}吗`)
-            if(confirmDelete){
-              store.commit('files/deleteFile',selectedIndex.value)
-              store.commit('files/selectFile',files.value.length-1)
-              eventBus.emit('changeFile')
-            }
-          }
-        }
-
-        const selectFile = (index)=>{
-            // selectedIndex.value = index
-            // console.log(selectedIndex.value)
-            store.commit('files/selectFile',index)
-            eventBus.emit('changeFile')
-        }
-
-        const readFile = (file)=>{
-          return new Promise((resolve,reject)=>{
-            const reader = new FileReader()
-            reader.onload = (event)=>{
-              resolve(event.target.result)
-            }
-            reader.onerror = (error)=>{
-              reject(error)
-            }
-            reader.readAsText(file)
-          })
-        }
-
-        return {
-            files,
-            selectedIndex,
-            importFile,
-            exportFile,
-            newFile,
-            deleteFile,
-            selectFile
-        }
+      }
     }
+
+    const selectFile = (index) => {
+      // selectedIndex.value = index
+      // console.log(selectedIndex.value)
+      store.commit('files/selectFile', index)
+      eventBus.emit('changeFile')
+    }
+
+    const readFile = (file) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          resolve(event.target.result)
+        }
+        reader.onerror = (error) => {
+          reject(error)
+        }
+        reader.readAsText(file)
+      })
+    }
+
+    return {
+      files,
+      selectedIndex,
+      importFile,
+      exportFile,
+      newFile,
+      deleteFile,
+      selectFile
+    }
+  }
 }
 </script>
 
@@ -158,8 +165,9 @@ export default {
   align-items: center;
   margin-bottom: 10px;
   padding: 10px;
-  background-color: #23272c; 
-  color: #b3b3b3; /* 文本颜色 */
+  background-color: #23272c;
+  color: #b3b3b3;
+  /* 文本颜色 */
   border-radius: 10px;
 }
 
@@ -171,7 +179,8 @@ export default {
 }
 
 .toolbar-item:hover {
-  color: #ffffff; /* 悬停时文本颜色 */
+  color: #ffffff;
+  /* 悬停时文本颜色 */
   transition: 0.5s;
 }
 
@@ -201,14 +210,15 @@ export default {
   color: rgba(231, 251, 52, 0.843);
 }
 
-.el-divider--horizontal{
-  border-top:1px rgba(122, 122, 122, 0.687) solid
+.el-divider--horizontal {
+  border-top: 1px rgba(122, 122, 122, 0.687) solid
 }
-.el-icon:hover{
+
+.el-icon:hover {
   color: #ffffff;
   /* transition: 0.5s; */
 }
-.el-icon{
+
+.el-icon {
   transition: 0s;
-}
-</style>
+}</style>

@@ -1,24 +1,24 @@
 const state = {
-  files:[],//用于存储代码文件
-  selectedFileIndex:null//当前选中的文件
-}
+  files: [], //用于存储代码文件
+  selectedFileIndex: null, //当前选中的文件
+};
 
 const mutations = {
-  addFile(state,{name,content}){
-    const existingFile = state.files.find(file=>file.name===name)
-    if(existingFile){
-      const newName = `${name.split('.')[0]}_copy.pl0`
+  addFile(state, { name, content }) {
+    const existingFile = state.files.find((file) => file.name === name);
+    if (existingFile) {
+      const newName = `${name.split(".")[0]}_copy.pl0`;
       state.files.push({
-        name:newName,
-        content
-      })
-      state.selectedFileIndex = state.files.length-1
-    }else{
+        name: newName,
+        content,
+      });
+      state.selectedFileIndex = state.files.length - 1;
+    } else {
       state.files.push({
         name,
-        content
-      })
-      state.selectedFileIndex = state.files.length-1
+        content,
+      });
+      state.selectedFileIndex = state.files.length - 1;
     }
   },
   // 删除文件
@@ -36,11 +36,9 @@ const mutations = {
   updateFileContent(state, { index, content }) {
     state.files[index].content = content;
   },
-}
+};
 
-const actions = {
-
-}
+const actions = {};
 const getters = {
   // 获取当前选中的文件信息
   selectedFile(state) {
@@ -52,10 +50,10 @@ const getters = {
   allFiles(state) {
     return state.files;
   },
-  getIndex(state){
-    return state.selectedFileIndex
-  }
-}
+  getIndex(state) {
+    return state.selectedFileIndex;
+  },
+};
 export default {
   namespaced: true,
   state,
