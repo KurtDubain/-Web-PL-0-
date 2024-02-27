@@ -64,8 +64,22 @@
 </template>
 
 <script>
+import { useStore } from 'vuex';
 export default {
-    name: "navBS"
+    name: "navBS",
+    setup() {
+        const store = useStore()
+        const handleIsShowAside = () => {
+            store.commit('global/changeIsShowAside')
+        }
+        const handleIsShowDebugger = () => {
+            store.commit('global/changeIsShowDebugger')
+        }
+        return {
+            handleIsShowAside,
+            handleIsShowDebugger
+        }
+    },
 }
 </script>
 

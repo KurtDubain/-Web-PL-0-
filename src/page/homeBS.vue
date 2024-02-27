@@ -13,7 +13,7 @@
 
     <div class="right-panel">
       <CompilerBS></CompilerBS>
-      <DebuggerBS></DebuggerBS>
+      <DebuggerBS v-if="isShow"></DebuggerBS>
     </div>
 
   </div>
@@ -39,8 +39,12 @@ export default {
       const selectedFile = store.getters['files/selectedFile']
       return selectedFile ? selectedFile.name : '未选中文件'
     })
+    let isShow = computed(() => {
+      return store.getters['global/isShowDebugger']
+    })
     return {
-      pageTitle
+      pageTitle,
+      isShow
     }
   }
 }
@@ -95,4 +99,5 @@ export default {
   flex: 1;
   display: flex;
   flex-direction: column;
-}</style>
+}
+</style>
