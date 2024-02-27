@@ -103,9 +103,9 @@ export default {
         compilerOutput.value.push(
           `${
             options.value.TargetCodeGeneration
-              ? `目标代码生成结果:\n${JSON.stringify(
+              ? `目标代码生成结果:\n${
                   res.result.TargetCodeGeneration
-                )}`
+                }`
               : "\n"
           }`
         );
