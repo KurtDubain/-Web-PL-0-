@@ -16,12 +16,12 @@
                     </el-menu-item>
                 </router-link>
                 <router-link to="/pyhcials" style="text-decoration:none">
-                    <el-menu-item index="1-2">
+                    <el-menu-item @click="handleIsShowAside">
                         打开/隐藏侧边栏
                     </el-menu-item>
                 </router-link>
                 <router-link to="/technology" style="text-decoration:none">
-                    <el-menu-item index="1-3">
+                    <el-menu-item @click="handleIsShowAside">
                         打开/隐藏调试器
                     </el-menu-item>
                 </router-link>
