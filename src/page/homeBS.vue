@@ -12,8 +12,12 @@
     </div>
 
     <div class="right-panel">
-      <CompilerBS></CompilerBS>
-      <DebuggerBS v-if="isShow"></DebuggerBS>
+      <div>
+        <CompilerBS></CompilerBS>
+      </div>
+      <div v-if="isShow">
+        <DebuggerBS></DebuggerBS>
+      </div>
     </div>
 
   </div>
@@ -96,8 +100,15 @@ export default {
 }
 
 .right-panel {
-  flex: 1;
   display: flex;
+  flex: 1;
+  width: 100%;
+  height: 100%;
   flex-direction: column;
+  overflow: visible;
+}
+
+.right-panel div {
+  flex: 1;
 }
 </style>
