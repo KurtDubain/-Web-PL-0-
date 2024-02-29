@@ -21,7 +21,7 @@
                     </el-menu-item>
                 </router-link>
                 <router-link to="/technology" style="text-decoration:none">
-                    <el-menu-item @click="handleIsShowAside">
+                    <el-menu-item @click="handleIsShowDebugger">
                         打开/隐藏调试器
                     </el-menu-item>
                 </router-link>
