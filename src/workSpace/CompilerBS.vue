@@ -36,7 +36,7 @@ export default {
       'TargetCodeGeneration': false
     });
     // const code = ref('')
-    const compilerOutput = ref([]);
+    const compilerOutput = ref(['']);
 
     const compileIt = async () => {
       let code = computed(() => store.getters['files/selectedFile'])
@@ -107,7 +107,6 @@ export default {
   height: 60%;
   overflow-y: auto;
   border: 1px solid #555;
-  
 }
 
 .el-form-item__label {

@@ -27,7 +27,7 @@ import { ref } from "vue";
 export default {
   name: 'DebuggerBS',
   setup() {
-    const debuggerOutput = ref([]);
+    const debuggerOutput = ref(['']);
 
     return {
       debuggerOutput
