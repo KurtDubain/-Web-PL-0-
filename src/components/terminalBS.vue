@@ -1,23 +1,22 @@
 <template>
-    <div
-      class="terminal-window"
-      :style="{ width: width + 'px', height: height + 'px', transform: `translate(${x}px, ${y}px)` }"
-      @mousedown="onMouseDown"
-    >
-      <div class="terminal-header" @mousedown="startDrag">
-        <!-- 可以放置一些控制按钮 -->
-        Terminal
-      </div>
-      <div class="terminal-body">
-        <!-- 终端内容 -->
-      </div>
-      <div class="resize-handle" @mousedown="startResize"></div>
+  <div class="terminal-window"
+    :style="{ width: width + 'px', height: height + 'px', transform: `translate(${x}px, ${y}px)` }"
+    @mousedown="onMouseDown">
+    <div class="terminal-header" @mousedown="startDrag">
+      <!-- 可以放置一些控制按钮 -->
+      <div>Terminal</div>
+      <div class="btn close" @click="handleIsShowTerminal">×</div>
     </div>
-  </template>
+    <div class="terminal-body">
+      <!-- 终端内容 -->
+    </div>
+    <div class="resize-handle" @mousedown="startResize"></div>
+  </div>
+</template>
   
-  <script>
+<script>
 import { ref } from 'vue';
-
+import { useStore } from 'vuex';
 export default {
   name: 'terminalBS',
   setup() {
@@ -67,6 +66,10 @@ export default {
       document.removeEventListener('mousemove', doResize);
       document.removeEventListener('mouseup', stopResize);
     };
+    const store = useStore()
+    const handleIsShowTerminal = () => {
+      store.commit('global/changeIsShowTerminal')
+    }
 
     return {
       width,
@@ -74,41 +77,61 @@ export default {
       x,
       y,
       startDrag,
-      startResize
+      startResize,
+      handleIsShowTerminal
     };
   }
 }
 </script>
 
   
-  <style scoped>
-  .terminal-window {
-    position: absolute;
-    border: 1px solid #ccc;
-    user-select: none;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .terminal-header {
-    background: #eee;
-    padding: 5px;
-    cursor: move;
-  }
-  
-  .terminal-body {
-    flex-grow: 1;
-    background: #fff;
-  }
-  
-  .resize-handle {
-    width: 20px;
-    height: 20px;
-    background: red;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    cursor: se-resize;
-  }
-  </style>
+<style scoped>
+.terminal-window {
+  position: absolute;
+  top: 20vh;
+  left: 34vw;
+  border: 1px solid #ccc;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.terminal-header {
+  background: #bbb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: move;
+  color: black;
+  font-weight: bold;
+  border-bottom: 1px solid #333;
+}
+
+.terminal-header div {
+  padding: 5px 10px;
+}
+
+.btn {
+  cursor: pointer;
+  text-align: center;
+}
+
+.terminal-body {
+  flex-grow: 1;
+  background: #ddd;
+}
+
+.resize-handle {
+  width: 20px;
+  height: 20px;
+  background: red;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  cursor: se-resize;
+}
+</style>
   

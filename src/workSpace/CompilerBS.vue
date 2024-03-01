@@ -20,9 +20,8 @@
     </div>
   </div>
   <div v-show="showRun">
-    <terminalBS/>
+    <terminalBS />
   </div>
-  
 </template>
 
 <script>
@@ -31,51 +30,53 @@ import { useStore } from "vuex";
 import { compileCode } from "../api/modules/compiler";
 import terminalBS from "@/components/terminalBS.vue";
 export default {
-    name: "CompilerBS",
-    components:{
-      terminalBS
-    },
-    setup() {
-        const store = useStore();
-        const options = ref({
-            'LexicalAnalysis': false,
-            'SyntaxAnalysis': false,
-            'SemanticAnalysis': false,
-            'IntermediateCodeGeneration': false,
-            'TargetCodeGeneration': false
-        });
-        // const code = ref('')
-        const compilerOutput = ref(['']);
-        const showRun = ref(false)
-        const compileIt = async () => {
-            let code = computed(() => store.getters['files/selectedFile']);
-            try {
-                const res = await compileCode({ code: code.value.content, options: options.value });
-                // console.log(res.data)
-                // 更新编译结果的显示
-                compilerOutput.value.push(`编译结果示例：\n...\n`);
-                compilerOutput.value.push(`${options.value.LexicalAnalysis ? `词法分析结果:\n${JSON.stringify(res.result.LexicalAnalysis)}` : '\n'}`);
-                compilerOutput.value.push(`${options.value.SyntaxAnalysis ? `语法分析结果:\n${JSON.stringify(res.result.SyntaxAnalysis)}` : '\n'}`);
-                compilerOutput.value.push(`${options.value.SemanticAnalysis ? `语义分析结果:\n${JSON.stringify(res.result.SemanticAnalysis)}` : '\n'}`);
-                compilerOutput.value.push(`${options.value.IntermediateCodeGeneration ? `中间代码生成结果:\n${JSON.stringify(res.result.IntermediateCodeGeneration)}` : '\n'}`);
-                compilerOutput.value.push(`${options.value.TargetCodeGeneration ? `目标代码生成结果:\n${(res.result.TargetCodeGeneration)}` : '\n'}`);
-            }
-            catch (error) {
-                console.error('编译异常', error);
-            }
-        };
-        const runIt = ()=>{
-          showRun.value = true
-        }
+  name: "CompilerBS",
+  components: {
+    terminalBS
+  },
+  setup() {
+    const store = useStore();
+    const options = ref({
+      'LexicalAnalysis': false,
+      'SyntaxAnalysis': false,
+      'SemanticAnalysis': false,
+      'IntermediateCodeGeneration': false,
+      'TargetCodeGeneration': false
+    });
+    // const code = ref('')
+    const compilerOutput = ref(['']);
+    const showRun = computed(() => {
+      return store.getters['global/isShowTerminal']
+    })
+    const compileIt = async () => {
+      let code = computed(() => store.getters['files/selectedFile']);
+      try {
+        const res = await compileCode({ code: code.value.content, options: options.value });
+        // console.log(res.data)
+        // 更新编译结果的显示
+        compilerOutput.value.push(`编译结果示例：\n...\n`);
+        compilerOutput.value.push(`${options.value.LexicalAnalysis ? `词法分析结果:\n${JSON.stringify(res.result.LexicalAnalysis)}` : '\n'}`);
+        compilerOutput.value.push(`${options.value.SyntaxAnalysis ? `语法分析结果:\n${JSON.stringify(res.result.SyntaxAnalysis)}` : '\n'}`);
+        compilerOutput.value.push(`${options.value.SemanticAnalysis ? `语义分析结果:\n${JSON.stringify(res.result.SemanticAnalysis)}` : '\n'}`);
+        compilerOutput.value.push(`${options.value.IntermediateCodeGeneration ? `中间代码生成结果:\n${JSON.stringify(res.result.IntermediateCodeGeneration)}` : '\n'}`);
+        compilerOutput.value.push(`${options.value.TargetCodeGeneration ? `目标代码生成结果:\n${(res.result.TargetCodeGeneration)}` : '\n'}`);
+      }
+      catch (error) {
+        console.error('编译异常', error);
+      }
+    };
+    const runIt = () => {
+      store.commit('global/changeIsShowTerminal')
+    }
 
-        return {
-            options,
-            compilerOutput,
-            compileIt,
-            runIt,
-            showRun
-        };
-    },
+    return {
+      options,
+      compilerOutput,
+      compileIt,
+      runIt,
+      showRun
+    };
+  },
 };
 </script>
   
