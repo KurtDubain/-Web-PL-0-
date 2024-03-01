@@ -27,15 +27,17 @@ export default {
       await nextTick(); // Wait for the next DOM update
 
       editorCodeContent.value = monaco.editor.create(editorCode.value, {
-        value: code.value ? code.value.content : '',
+        value: code.value ? code.value.content : '请先新建文件~',
         language: 'pascal',
-        theme: 'vs-dark'
+        theme: 'vs-dark',
+        readOnly: true,
       });
       monaco.languages.register({ id: 'pascal' })
       monaco.languages.setMonarchTokensProvider('pascal', pascalLanguageConfig)
       monaco.languages.registerCompletionItemProvider('pascal', pascalCompletionProvider)
       //编辑代码的时候，同步修改所选中文件的内容
       editorCodeContent.value.onDidChangeModelContent(() => {
+        if (!code.value) return
         code.value.content = toRaw(editorCodeContent.value).getValue()
       })
 
@@ -51,7 +53,17 @@ export default {
     // 当切换文件的时候，更新code内容
     eventBus.on('changeFile', () => {
       // editorCode.value = code.value.content
-      toRaw(editorCodeContent.value).setValue(code.value.content);
+      editorCodeContent.value.updateOptions({
+        readOnly: false
+      });
+      if (code.value) {
+        toRaw(editorCodeContent.value).setValue(code.value.content);
+      } else {
+        toRaw(editorCodeContent.value).setValue('请先新建文件~');
+        editorCodeContent.value.updateOptions({
+          readOnly: true
+        });
+      }
     })
 
     return {
