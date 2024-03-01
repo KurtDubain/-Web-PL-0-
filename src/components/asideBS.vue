@@ -31,13 +31,13 @@
     <el-divider />
 
     <div class="file-list">
-      <div v-for="(file, index) in files" :key="index" @click="selectFile(index)"
+      <div v-for="(file, index) in files" :key="index" @click="selectFile(index)" class="list-item"
         :class="{ 'selected': selectedIndex === index }">
         <!-- <img src='file-icon.png' alt="file Icon" class="file-icon" /> -->
         <el-icon :size="30">
           <Document />
         </el-icon>
-        {{ file.name }}
+        <span>{{ file.name }}</span>
       </div>
     </div>
   </div>
@@ -188,6 +188,16 @@ export default {
   overflow-y: auto;
 }
 
+.list-item {
+  cursor: pointer;
+}
+
+.list-item span {
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .file-list div {
   display: flex;
   align-items: center;
@@ -221,4 +231,5 @@ export default {
 
 .el-icon {
   transition: 0s;
-}</style>
+}
+</style>
