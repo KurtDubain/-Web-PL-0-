@@ -66,16 +66,32 @@ export default {
         const selectedFile = event.target.files[0]
         if (selectedFile) {
           const fileContent = await readFile(selectedFile)
-          // files.value.push({
-          //   name:selectedFile.name,
-          //   content:fileContent
-          // })
-          store.commit('files/addFile', { name: selectedFile.name, content: fileContent })
-          // selectedIndex.value = files.value.length-1
+          console.log(selectedFile);
+          console.log(files);
+          let fileSplits = selectedFile.name.split('.')
+          let fSLength = fileSplits.length
+          if (fileSplits[fSLength - 1] !== 'pl0') {
+            window.alert('文件格式不正确，请导入pl0文件')
+            return;
+          }
+          let index = files.value.findIndex(file => file.name === selectedFile.name)
+          if (index !== -1 && files.value[index].content !== fileContent) {
+            const confirmCover = window.confirm(`文件${selectedFile.name}已存在，是否覆盖？`)
+            if (confirmCover) {
+              store.commit('files/updateFileContent', { index, content: fileContent })
+            }
+          } else if (index !== -1 && files.value[index].content == fileContent) {
+            window.alert('文件已存在，且内容一致，无需导入')
+            return;
+          } else {
+            store.commit('files/addFile', { name: selectedFile.name, content: fileContent })
+          }
           eventBus.emit('changeFile')
-          // store.commit('files/')
         }
       })
+      setTimeout(() => {
+        fileInput.remove()
+      }, 10000);
 
     }
 
