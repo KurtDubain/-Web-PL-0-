@@ -36,7 +36,7 @@ export default {
       'TargetCodeGeneration': false
     });
     // const code = ref('')
-    const compilerOutput = ref(['']);
+    const compilerOutput = ref([]);
 
     const compileIt = async () => {
       let code = computed(() => store.getters['files/selectedFile'])
@@ -68,10 +68,11 @@ export default {
 .compiler-styles {
   display: flex;
   flex-direction: column;
+  flex: 1;
   padding: 15px;
   background-color: #444;
   color: #fff;
-  /* width: 100%; */
+  overflow: visible !important;
   height: 100%;
 }
 
@@ -97,14 +98,13 @@ export default {
   display: flex;
   flex-direction: column;
   flex: 1;
+  height: 100%;
 }
 
 .compiler-output pre {
-  flex: 1;
   white-space: pre-wrap;
   background-color: #333;
-  /* padding: 10px; */
-  height: 200px;
+  height: 60%;
   overflow-y: auto;
   border: 1px solid #555;
   

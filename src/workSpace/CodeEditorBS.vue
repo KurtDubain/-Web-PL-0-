@@ -81,5 +81,10 @@ export default {
   height: 100%;
   width: 100%;
 }
+
+.code-editor .monaco-editor {
+  height: 100% !important;
+  width: 100% !important;
+}
 </style>
   

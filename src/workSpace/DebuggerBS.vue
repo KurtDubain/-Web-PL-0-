@@ -15,6 +15,7 @@
     <div class="debugger-output">
       <div>调试结果：</div>
       <pre>
+        {{ debuggerOutput.join() }}
         <!-- 这里显示调试结果 -->
       </pre>
     </div>
@@ -22,9 +23,16 @@
 </template>
   
 <script>
+import { ref } from "vue";
 export default {
   name: 'DebuggerBS',
+  setup() {
+    const debuggerOutput = ref([]);
 
+    return {
+      debuggerOutput
+    }
+  }
 };
 </script>
   
@@ -32,10 +40,11 @@ export default {
 .debugger-styles {
   display: flex;
   flex-direction: column;
+  flex: 1;
   padding: 15px;
   background-color: #444;
   color: #fff;
-  /* width: 100%; */
+  overflow: visible !important;
   height: 100%;
 }
 
@@ -59,16 +68,13 @@ export default {
   display: flex;
   flex-direction: column;
   flex: 1;
-  margin-top: 10px;
-  /* width: 100%; */
+  height: 100%;
 }
 
 .debugger-output pre {
-  flex: 1;
   white-space: pre-wrap;
   background-color: #333;
-  padding: 10px;
-  /* height: 200px; */
+  height: 60%;
   overflow-y: auto;
   border: 1px solid #555;
 }
