@@ -43,10 +43,13 @@ export default {
 
 .footer-links {
   margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .footer-link {
-  margin-right: 10px;
+  margin: 0 10px;
   text-decoration: none;
   color: #888;
 }
