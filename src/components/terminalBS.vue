@@ -1,7 +1,13 @@
 <template>
-  <div class="terminal-window"
-    :style="{ width: width + 'px', height: height + 'px', transform: `translate(${x}px, ${y}px)` }"
-    @mousedown="onMouseDown">
+  <div
+    class="terminal-window"
+    :style="{
+      width: width + 'px',
+      height: height + 'px',
+      transform: `translate(${x}px, ${y}px)`,
+    }"
+    @mousedown="onMouseDown"
+  >
     <div class="terminal-header" @mousedown="startDrag">
       <!-- 可以放置一些控制按钮 -->
       <div>Terminal</div>
@@ -9,17 +15,23 @@
     </div>
     <div class="terminal-body">
       <!-- 终端内容 -->
+      {{ terminalOutput }}
     </div>
     <div class="resize-handle" @mousedown="startResize"></div>
   </div>
 </template>
-  
+
 <script>
-import { ref } from 'vue';
-import { useStore } from 'vuex';
+import { ref, watch } from "vue";
+import { useStore } from "vuex";
 export default {
-  name: 'terminalBS',
-  setup() {
+  name: "terminalBS",
+  props: {
+    runResult: {
+      type: String,
+    },
+  },
+  setup(props) {
     const width = ref(600);
     const height = ref(400);
     const x = ref(0);
@@ -33,8 +45,8 @@ export default {
       event.preventDefault();
       startX = event.clientX - x.value;
       startY = event.clientY - y.value;
-      document.addEventListener('mousemove', doDrag);
-      document.addEventListener('mouseup', stopDrag);
+      document.addEventListener("mousemove", doDrag);
+      document.addEventListener("mouseup", stopDrag);
     };
 
     const doDrag = (event) => {
@@ -43,8 +55,8 @@ export default {
     };
 
     const stopDrag = () => {
-      document.removeEventListener('mousemove', doDrag);
-      document.removeEventListener('mouseup', stopDrag);
+      document.removeEventListener("mousemove", doDrag);
+      document.removeEventListener("mouseup", stopDrag);
     };
 
     const startResize = (event) => {
@@ -53,8 +65,8 @@ export default {
       startHeight = height.value;
       startX = event.clientX;
       startY = event.clientY;
-      document.addEventListener('mousemove', doResize);
-      document.addEventListener('mouseup', stopResize);
+      document.addEventListener("mousemove", doResize);
+      document.addEventListener("mouseup", stopResize);
     };
 
     const doResize = (event) => {
@@ -63,14 +75,41 @@ export default {
     };
 
     const stopResize = () => {
-      document.removeEventListener('mousemove', doResize);
-      document.removeEventListener('mouseup', stopResize);
+      document.removeEventListener("mousemove", doResize);
+      document.removeEventListener("mouseup", stopResize);
     };
-    const store = useStore()
+    //
+    const store = useStore();
     const handleIsShowTerminal = () => {
-      store.commit('global/changeIsShowTerminal')
-    }
-
+      store.commit("global/changeIsShowTerminal");
+    };
+    const terminalOutput = ref("");
+    const compileAndRunWAT = async () => {
+      if (!props.runResult) {
+        return;
+      }
+      try {
+        const wasmModule = await WebAssembly.compile(
+          new TextEncoder().encode(props.runResult)
+        );
+        const instance = await WebAssembly.instantiate(wasmModule, {
+          js: {
+            log: (arg) => {
+              terminalOutput.value += `输出了：${arg}\n`;
+            },
+            read: () => {
+              return 2;
+            },
+          },
+        });
+        if (instance.exports.main) {
+          instance.exports.main();
+        }
+      } catch (error) {
+        console.error("执行输出异常", error);
+      }
+    };
+    watch(() => props.runResult, compileAndRunWAT, { immediate: true });
     return {
       width,
       height,
@@ -78,13 +117,13 @@ export default {
       y,
       startDrag,
       startResize,
-      handleIsShowTerminal
+      handleIsShowTerminal,
+      terminalOutput,
     };
-  }
-}
+  },
+};
 </script>
 
-  
 <style scoped>
 .terminal-window {
   position: absolute;
@@ -134,4 +173,3 @@ export default {
   cursor: se-resize;
 }
 </style>
-  

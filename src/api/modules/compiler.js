@@ -8,3 +8,6 @@ export const getCompilerErrors = () => {
 export const resetCompiler = () => {
   return api.post("/compiler/reset");
 };
+export const runCode = (data) => {
+  return api.post("/compiler/compile/run", { data });
+};

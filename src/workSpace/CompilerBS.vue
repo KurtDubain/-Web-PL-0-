@@ -20,66 +20,112 @@
     </div>
   </div>
   <div v-show="showRun">
-    <terminalBS />
+    <terminalBS :runResult="runResult"/>
   </div>
 </template>
 
 <script>
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
-import { compileCode } from "../api/modules/compiler";
+import { compileCode,runCode } from "../api/modules/compiler";
 import terminalBS from "@/components/terminalBS.vue";
 export default {
   name: "CompilerBS",
   components: {
-    terminalBS
+    terminalBS,
   },
   setup() {
     const store = useStore();
     const options = ref({
-      'LexicalAnalysis': false,
-      'SyntaxAnalysis': false,
-      'SemanticAnalysis': false,
-      'IntermediateCodeGeneration': false,
-      'TargetCodeGeneration': false
+      LexicalAnalysis: false,
+      SyntaxAnalysis: false,
+      SemanticAnalysis: false,
+      IntermediateCodeGeneration: false,
+      TargetCodeGeneration: false,
     });
     // const code = ref('')
-    const compilerOutput = ref(['']);
+    const compilerOutput = ref([""]);
     const showRun = computed(() => {
-      return store.getters['global/isShowTerminal']
-    })
+      return store.getters["global/isShowTerminal"];
+    });
+    let code = computed(() => store.getters["files/selectedFile"]);
+    const runResult = ref()
     const compileIt = async () => {
-      let code = computed(() => store.getters['files/selectedFile']);
       try {
-        const res = await compileCode({ code: code.value.content, options: options.value });
+        const res = await compileCode({
+          code: code.value.content,
+          options: options.value,
+        });
         // console.log(res.data)
         // 更新编译结果的显示
         compilerOutput.value.push(`编译结果示例：\n...\n`);
-        compilerOutput.value.push(`${options.value.LexicalAnalysis ? `词法分析结果:\n${JSON.stringify(res.result.LexicalAnalysis)}` : '\n'}`);
-        compilerOutput.value.push(`${options.value.SyntaxAnalysis ? `语法分析结果:\n${JSON.stringify(res.result.SyntaxAnalysis)}` : '\n'}`);
-        compilerOutput.value.push(`${options.value.SemanticAnalysis ? `语义分析结果:\n${JSON.stringify(res.result.SemanticAnalysis)}` : '\n'}`);
-        compilerOutput.value.push(`${options.value.IntermediateCodeGeneration ? `中间代码生成结果:\n${JSON.stringify(res.result.IntermediateCodeGeneration)}` : '\n'}`);
-        compilerOutput.value.push(`${options.value.TargetCodeGeneration ? `目标代码生成结果:\n${(res.result.TargetCodeGeneration)}` : '\n'}`);
-      }
-      catch (error) {
-        console.error('编译异常', error);
+        compilerOutput.value.push(
+          `${options.value.LexicalAnalysis
+            ? `词法分析结果:\n${JSON.stringify(res.result.LexicalAnalysis)}`
+            : "\n"
+          }`
+        );
+        compilerOutput.value.push(
+          `${options.value.SyntaxAnalysis
+            ? `语法分析结果:\n${JSON.stringify(res.result.SyntaxAnalysis)}`
+            : "\n"
+          }`
+        );
+        compilerOutput.value.push(
+          `${options.value.SemanticAnalysis
+            ? `语义分析结果:\n${JSON.stringify(res.result.SemanticAnalysis)}`
+            : "\n"
+          }`
+        );
+        compilerOutput.value.push(
+          `${options.value.IntermediateCodeGeneration
+            ? `中间代码生成结果:\n${JSON.stringify(
+              res.result.IntermediateCodeGeneration
+            )}`
+            : "\n"
+          }`
+        );
+        compilerOutput.value.push(
+          `${options.value.TargetCodeGeneration
+            ? `目标代码生成结果:\n${res.result.TargetCodeGeneration}`
+            : "\n"
+          }`
+        );
+      } catch (error) {
+        console.error("编译异常", error);
       }
     };
-    const runIt = () => {
-      store.commit('global/changeIsShowTerminal')
-    }
+    const runIt = async () => {
+      store.commit("global/changeIsShowTerminal");
+      try {
+        const res = await runCode({
+          code: code.value.content,
+          options: {
+            LexicalAnalysis: false,
+            SyntaxAnalysis: false,
+            SemanticAnalysis: false,
+            IntermediateCodeGeneration: false,
+            TargetCodeGeneration: true,
+          },
+        });
+        runResult.value = res.result.TargetCodeGeneration
+      } catch (error) {
+        console.error("代码执行失败", error);
+      }
+    };
 
     return {
       options,
       compilerOutput,
       compileIt,
       runIt,
-      showRun
+      showRun,
+      runResult
     };
   },
 };
 </script>
-  
+
 <style>
 .compiler-styles {
   display: flex;
@@ -133,4 +179,3 @@ export default {
   color: rgba(240, 248, 255, 0.695);
 }
 </style>
-  
