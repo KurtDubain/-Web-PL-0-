@@ -49,7 +49,7 @@ export default {
         compilerOutput.value.push(`${options.value.SyntaxAnalysis ? `语法分析结果:\n${JSON.stringify(res.result.SyntaxAnalysis)}` : '\n'}`)
         compilerOutput.value.push(`${options.value.SemanticAnalysis ? `语义分析结果:\n${JSON.stringify(res.result.SemanticAnalysis)}` : '\n'}`)
         compilerOutput.value.push(`${options.value.IntermediateCodeGeneration ? `中间代码生成结果:\n${JSON.stringify(res.result.IntermediateCodeGeneration)}` : '\n'}`)
-        compilerOutput.value.push(`${options.value.TargetCodeGeneration ? `目标代码生成结果:\n${JSON.stringify(res.result.TargetCodeGeneration)}` : '\n'}`)
+        compilerOutput.value.push(`${options.value.TargetCodeGeneration ? `目标代码生成结果:\n${(res.result.TargetCodeGeneration)}` : '\n'}`)
       } catch (error) {
         console.error('编译异常', error)
       }
