@@ -4,13 +4,40 @@
     <div class="compiler-options">
       <el-form>
         <el-form-item color="#fff" label="编译选项">
-          <el-checkbox v-model="options['LexicalAnalysis']" label="词法分析"></el-checkbox>
-          <el-checkbox v-model="options['SyntaxAnalysis']" label="语法分析"></el-checkbox>
-          <el-checkbox v-model="options['SemanticAnalysis']" label="语义分析"></el-checkbox>
-          <el-checkbox v-model="options['IntermediateCodeGeneration']" label="中间代码生成"></el-checkbox>
-          <el-checkbox v-model="options['TargetCodeGeneration']" label="目标代码生成"></el-checkbox>
-          <el-button class="compile-button" @click="compileIt" type="primary" size="small">编译</el-button>
-          <el-button class="compile-button" @click="runIt" type="success" size="small">运行</el-button>
+          <el-checkbox
+            v-model="options['LexicalAnalysis']"
+            label="词法分析"
+          ></el-checkbox>
+          <el-checkbox
+            v-model="options['SyntaxAnalysis']"
+            label="语法分析"
+          ></el-checkbox>
+          <el-checkbox
+            v-model="options['SemanticAnalysis']"
+            label="语义分析"
+          ></el-checkbox>
+          <el-checkbox
+            v-model="options['IntermediateCodeGeneration']"
+            label="中间代码生成"
+          ></el-checkbox>
+          <el-checkbox
+            v-model="options['TargetCodeGeneration']"
+            label="目标代码生成"
+          ></el-checkbox>
+          <el-button
+            class="compile-button"
+            @click="compileIt"
+            type="primary"
+            size="small"
+            >编译</el-button
+          >
+          <el-button
+            class="compile-button"
+            @click="runIt"
+            type="success"
+            size="small"
+            >运行</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -20,14 +47,14 @@
     </div>
   </div>
   <div v-show="showRun">
-    <terminalBS :runResult="runResult"/>
+    <terminalBS :runResult="runRes" />
   </div>
 </template>
 
 <script>
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
-import { compileCode,runCode } from "../api/modules/compiler";
+import { compileCode, runCode } from "../api/modules/compiler";
 import terminalBS from "@/components/terminalBS.vue";
 export default {
   name: "CompilerBS",
@@ -49,7 +76,7 @@ export default {
       return store.getters["global/isShowTerminal"];
     });
     let code = computed(() => store.getters["files/selectedFile"]);
-    const runResult = ref()
+    const runRes = ref("");
     const compileIt = async () => {
       try {
         const res = await compileCode({
@@ -60,35 +87,40 @@ export default {
         // 更新编译结果的显示
         compilerOutput.value.push(`编译结果示例：\n...\n`);
         compilerOutput.value.push(
-          `${options.value.LexicalAnalysis
-            ? `词法分析结果:\n${JSON.stringify(res.result.LexicalAnalysis)}`
-            : "\n"
+          `${
+            options.value.LexicalAnalysis
+              ? `词法分析结果:\n${JSON.stringify(res.result.LexicalAnalysis)}`
+              : "\n"
           }`
         );
         compilerOutput.value.push(
-          `${options.value.SyntaxAnalysis
-            ? `语法分析结果:\n${JSON.stringify(res.result.SyntaxAnalysis)}`
-            : "\n"
+          `${
+            options.value.SyntaxAnalysis
+              ? `语法分析结果:\n${JSON.stringify(res.result.SyntaxAnalysis)}`
+              : "\n"
           }`
         );
         compilerOutput.value.push(
-          `${options.value.SemanticAnalysis
-            ? `语义分析结果:\n${JSON.stringify(res.result.SemanticAnalysis)}`
-            : "\n"
+          `${
+            options.value.SemanticAnalysis
+              ? `语义分析结果:\n${JSON.stringify(res.result.SemanticAnalysis)}`
+              : "\n"
           }`
         );
         compilerOutput.value.push(
-          `${options.value.IntermediateCodeGeneration
-            ? `中间代码生成结果:\n${JSON.stringify(
-              res.result.IntermediateCodeGeneration
-            )}`
-            : "\n"
+          `${
+            options.value.IntermediateCodeGeneration
+              ? `中间代码生成结果:\n${JSON.stringify(
+                  res.result.IntermediateCodeGeneration
+                )}`
+              : "\n"
           }`
         );
         compilerOutput.value.push(
-          `${options.value.TargetCodeGeneration
-            ? `目标代码生成结果:\n${res.result.TargetCodeGeneration}`
-            : "\n"
+          `${
+            options.value.TargetCodeGeneration
+              ? `目标代码生成结果:\n${res.result.TargetCodeGeneration}`
+              : "\n"
           }`
         );
       } catch (error) {
@@ -108,7 +140,7 @@ export default {
             TargetCodeGeneration: true,
           },
         });
-        runResult.value = res.result.TargetCodeGeneration
+        runRes.value = res.result;
       } catch (error) {
         console.error("代码执行失败", error);
       }
@@ -120,7 +152,7 @@ export default {
       compileIt,
       runIt,
       showRun,
-      runResult
+      runRes,
     };
   },
 };

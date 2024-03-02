@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { ref, watchEffect } from "vue";
 import { useStore } from "vuex";
 export default {
   name: "terminalBS",
@@ -32,6 +32,7 @@ export default {
     },
   },
   setup(props) {
+    console.log(props.runResult);
     const width = ref(600);
     const height = ref(400);
     const x = ref(0);
@@ -85,7 +86,7 @@ export default {
     };
     const terminalOutput = ref("");
     const compileAndRunWAT = async () => {
-      if (!props.runResult) {   
+      if (!props.runResult) {
         return;
       }
       try {
@@ -96,6 +97,7 @@ export default {
         const instance = await WebAssembly.instantiate(wasmModule, {
           js: {
             log: (arg) => {
+              console.log(arg);
               terminalOutput.value += `输出了：${arg}\n`;
             },
             read: () => {
@@ -110,7 +112,9 @@ export default {
         console.error("执行输出异常", error);
       }
     };
-    watch(() => props.runResult, compileAndRunWAT, { immediate: true });
+    watchEffect(() => {
+      compileAndRunWAT();
+    });
     return {
       width,
       height,
@@ -161,7 +165,7 @@ export default {
 
 .terminal-body {
   flex-grow: 1;
-  background: #ddd;
+  background: #222222;
 }
 
 .resize-handle {
