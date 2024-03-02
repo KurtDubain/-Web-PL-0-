@@ -85,13 +85,14 @@ export default {
     };
     const terminalOutput = ref("");
     const compileAndRunWAT = async () => {
-      if (!props.runResult) {
+      if (!props.runResult) {   
         return;
       }
       try {
-        const wasmModule = await WebAssembly.compile(
-          new TextEncoder().encode(props.runResult)
-        );
+        const wasmBytes = Object.values(props.runResult).map((val) => val);
+        // 创建Uint8Array
+        const wasmArray = new Uint8Array(wasmBytes);
+        const wasmModule = await WebAssembly.compile(wasmArray);
         const instance = await WebAssembly.instantiate(wasmModule, {
           js: {
             log: (arg) => {
