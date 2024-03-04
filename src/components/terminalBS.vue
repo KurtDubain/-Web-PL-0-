@@ -16,6 +16,11 @@
     <div class="terminal-body">
       <!-- 终端内容 -->
       {{ terminalOutput }}
+      <input
+        v-model="userInput"
+        @keyup.enter="onEnter"
+        placeholder="请输入你要输入的内容"
+      />
     </div>
     <div class="resize-handle" @mousedown="startResize"></div>
   </div>
@@ -85,6 +90,17 @@ export default {
       store.commit("global/changeIsShowTerminal");
     };
     const terminalOutput = ref("");
+    const userInput = ref("");
+    const waitingForInput = ref(false); // 用于标记是否正在等待用户输入
+    // const inputPromise = ref(null); // 用于暂存等待输入的Promise
+    const inputResolve = ref(null);
+    const onEnter = () => {
+      if (waitingForInput.value && inputResolve.value) {
+        inputResolve.value(userInput.value); // 解决Promise，传递用户输入
+        userInput.value = ""; // 清空输入框
+        waitingForInput.value = false; // 标记不再等待输入
+      }
+    };
     const compileAndRunWAT = async () => {
       if (!props.runResult) {
         return;
@@ -101,7 +117,18 @@ export default {
               terminalOutput.value += `输出了：${arg}\n`;
             },
             read: () => {
-              return 2;
+              // waitingForInput.value = true; // 标记开始等待输入
+              // // 创建一个新的Promise，并保存resolve函数
+              // inputPromise.value = new Promise((resolve) => {
+              //   inputResolve.value = resolve;
+              // });
+              // // 返回Promise，这样就可以在Promise解决后继续执行WebAssembly代码
+              // return inputPromise.value.then((input) => {
+              //   console.log(input);
+              //   // 将字符串转换为数字返回给WebAssembly，这里根据实际需要进行调整
+              //   return 100;
+              // });
+              return 6;
             },
           },
         });
@@ -124,6 +151,7 @@ export default {
       startResize,
       handleIsShowTerminal,
       terminalOutput,
+      onEnter,
     };
   },
 };
