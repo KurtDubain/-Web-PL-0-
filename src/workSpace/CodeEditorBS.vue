@@ -42,8 +42,9 @@ export default {
         code.value.content = toRaw(editorCodeContent).getValue()
       })
       editorCodeContent.onMouseDown(e => {
+        console.log(e);
         if (!code.value) return
-        if (![2, 3].includes(e.target.type)) return
+        if (![2, 3, 4].includes(e.target.type)) return
         const position = e.target.position;
         const lineDecoration = editorCodeContent.getModel().getLineDecorations(position.lineNumber);
         let flagId = "";
@@ -82,6 +83,37 @@ export default {
           decorationIds.splice(index, 1);
           store.commit('debug/deleteRowId', position.lineNumber);
           console.log(debugRowIds.value);
+        }
+      })
+      editorCodeContent.onMouseMove(e => {
+        if (!code.value) return
+        if (![2, 3, 4].includes(e.target.type)) return
+        const position = e.target.position;
+        const lineDecoration = editorCodeContent.getModel().getLineDecorations(position.lineNumber);
+        lineDecoration.forEach((decoration) => {
+          if (decoration.options.marginClassName === "myGlyphMarginHoverClass") {
+            return
+          }
+        });
+        if (decorationIds.length === 0) {
+          //新增样式
+          const range = {
+            startLineNumber: position.lineNumber,
+            startColumn: 1,
+            endLineNumber: position.lineNumber,
+            endColumn: 1,
+          };
+          const breakPointDec = {
+            range,
+            options: {
+              isWholeLine: true,
+              className: "contentClass",
+              marginClassName: "myGlyphMarginHoverClass",
+              stickiness:
+                monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
+            },
+          };
+          editorCodeContent.getModel().deltaDecorations([], [breakPointDec]);
         }
       })
 
@@ -151,6 +183,15 @@ export default {
   width: 10px !important;
   height: 10px !important;
   background: red !important;
+  border-radius: 50%;
+}
+
+.myGlyphMarginHoverClass:hover {
+  top: 4px !important;
+  left: 10px !important;
+  width: 10px !important;
+  height: 10px !important;
+  background: rgba(255, 0, 0, .5) !important;
   border-radius: 50%;
 }
 </style>
