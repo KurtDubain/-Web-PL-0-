@@ -14,10 +14,13 @@
 
     <div class="debugger-output">
       <div>调试结果：</div>
-      <pre>
-        {{ debuggerOutput.join() }}
-        <!-- 这里显示调试结果 -->
-      </pre>
+      <div class="pre">
+        <el-table height="100%" :data="tableData" border style="width: 100%">
+          <el-table-column prop="name" label="Name" />
+          <el-table-column prop="value" label="Value" />
+        </el-table>
+      </div>
+
     </div>
   </div>
 </template>
@@ -28,9 +31,19 @@ export default {
   name: 'DebuggerBS',
   setup() {
     const debuggerOutput = ref(['']);
-
+    const tableData = ref([
+      {
+        name: 'x',
+        value: '12'
+      },
+      {
+        name: 'y',
+        value: '11'
+      }
+    ])
     return {
-      debuggerOutput
+      debuggerOutput,
+      tableData
     }
   }
 };
@@ -71,7 +84,7 @@ export default {
   height: 100%;
 }
 
-.debugger-output pre {
+.debugger-output .pre {
   white-space: pre-wrap;
   background-color: #333;
   height: 60%;
