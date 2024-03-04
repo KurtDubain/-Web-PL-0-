@@ -2,11 +2,12 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost:3000", // 你的API基本URL
+  baseURL: "api", // 你的API基本URL
   timeout: 5000, // 请求超时时间
   headers: {
+    Accept: "application/json, text/plain, */*",
     "Content-Type": "application/json",
-    // 其他通用的请求头可以在这里添加
+    "X-Requested-With": "XMLHttpRequest"
   },
 });
 
