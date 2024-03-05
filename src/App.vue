@@ -24,12 +24,13 @@
 
 
 <script>
+import { useDark, useToggle } from '@vueuse/core'
 import footerBS from './components/footerBS.vue'
 import navBS from './components/navBS.vue'
 import asideBS from './components/asideBS.vue'
 import homeBS from './page/homeBS.vue'
 import { useStore } from 'vuex'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 
 export default {
   name: 'App',
@@ -44,6 +45,11 @@ export default {
     let isShow = computed(() => {
       return store.getters['global/isShowAside']
     })
+    const isDark = useDark()
+    onMounted(() => {
+      useToggle(isDark)
+      localStorage.setItem('vueuse-color-scheme', 'dark')
+    })
     return {
       isShow
     }
@@ -52,8 +58,6 @@ export default {
 </script>
 
 <style>
-
-
 .el-main {
   padding: 0;
 }
@@ -66,5 +70,14 @@ export default {
 
 .el-footer {
   padding: 0;
+}
+
+html.dark {
+  /* 多选框边框 */
+  --el-border-color: #babdc3 !important;
+  /* table的背景颜色 */
+  --el-bg-color: #333333 !important;
+  /* table的表格线条颜色 */
+  --el-border-color-lighter: #444 !important;
 }
 </style>
