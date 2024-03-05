@@ -15,9 +15,9 @@ export const continueExecution = () => {
 export const init = (data) => {
   return api.post("/debugger/init", { data });
 };
-// 逐句执行
-export const stepInto = () => {
-  return api.post("/debugger/step-into");
+// 执行到该行
+export const stepInto = (data) => {
+  return api.post("/debugger/debug2point", { data });
 };
 // 跳出当前函数
 export const stepOut = () => {

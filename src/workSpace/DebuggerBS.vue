@@ -7,9 +7,10 @@
           <el-checkbox v-model="debugOption1">选项1</el-checkbox>
           <el-checkbox v-model="debugOption2">选项2</el-checkbox>
           <el-button class="debug-button" @click="startInit" type="primary" size="small">初始化</el-button>
-          <el-button class="debug-button" @click="startDebug" type="primary" size="small">单步执行</el-button>
-          <el-button class="debug-button" @click="startDebug" type="primary" size="small">执行到下一个断点</el-button>
-          <el-button class="debug-button" @click="startDebug" type="primary" size="small">清空</el-button>
+          <el-button class="debug-button" @click="startByType('nextLine')" type="primary" size="small">单步执行</el-button>
+          <el-button class="debug-button" @click="startByType('nextBreak')" type="primary"
+            size="small">执行到下一个断点</el-button>
+          <el-button class="debug-button" @click="clearIt" type="primary" size="small">清空</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -31,15 +32,29 @@
 <script>
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
-import { init } from "../api/modules/debugger";
+import eventBus from '@/utils/eventBus';
+import { init, stepInto } from "../api/modules/debugger";
 export default {
   name: "DebuggerBS",
   setup() {
     const store = useStore();
-    let code = computed(() => store.getters["files/selectedFile"]);
-    const debuggerOutput = ref([""]);
+    const code = computed(() => store.getters["files/selectedFile"]);
+    const debugRowIds = computed(() => store.getters['debug/rowIds'])//断点行号
+    let currentLine = 0;
     const tableData = ref([]);
+    const checkCode = () => {
+      let result;
+      if (code.value) {
+        console.log(debugRowIds.value);
+        result = true;
+      } else {
+        result = false;
+        window.alert('没有可执行文件')
+      }
+      return result;
+    };
     const startInit = async () => {
+      if (!checkCode()) return
       let data = {
         code: code.value,
       };
@@ -48,10 +63,56 @@ export default {
         tableData.value = res.result;
       }
     };
+    const startByType = type => {
+      if (!checkCode()) return
+      let line;
+      if (type == 'nextLine') {
+        let totalLine = code.value.content.split('\n').length;
+        line = currentLine + 1;
+        if (line > totalLine) {
+          window.alert('没有下一行了')
+          currentLine = 0;
+          return
+        }
+      }
+      if (type == 'nextBreak') {
+        line = debugRowIds.value.map(item => {
+          if (item > currentLine) {
+            return item
+          }
+        }).filter(item => item)[0]
+        if (!line) {
+          window.alert('没有下一个断点')
+          currentLine = 0;
+          return //没有下一个断点        
+        }
+      }
+      stepIntoTheNext(line);
+      currentLine = line;
+    }
+    const stepIntoTheNext = async (line) => {
+      console.log(line);
+      let data = {
+        code: code.value,
+        line
+      };
+      let res = await stepInto(data);
+      if (res.success) {
+        tableData.value = res.result;
+      }
+    };
+    const clearIt = () => {
+      tableData.value = [""];
+      currentLine = 0;
+    };
+    eventBus.on('changeFile', () => {
+      currentLine = 0;
+    })
     return {
-      debuggerOutput,
       tableData,
       startInit,
+      startByType,
+      clearIt
     };
   },
 };
