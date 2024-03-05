@@ -173,7 +173,7 @@ export default {
   background-color: #333;
   height: 60%;
   overflow-y: auto;
-  border: 1px solid #555;
+  border: 2px solid #555;
 }
 
 .el-form-item__label {
