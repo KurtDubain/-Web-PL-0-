@@ -6,8 +6,10 @@
         <el-form-item color="#fff" label="调试选项">
           <el-checkbox v-model="debugOption1">选项1</el-checkbox>
           <el-checkbox v-model="debugOption2">选项2</el-checkbox>
-          <el-button class="debug-button" @click="startDebug" type="primary" size="small">初始化</el-button>
-          <el-button class="debug-button" @click="startInit" type="primary" size="small">开始调试</el-button>
+          <el-button class="debug-button" @click="startInit" type="primary" size="small">初始化</el-button>
+          <el-button class="debug-button" @click="startDebug" type="primary" size="small">单步执行</el-button>
+          <el-button class="debug-button" @click="startDebug" type="primary" size="small">执行到下一个断点</el-button>
+          <el-button class="debug-button" @click="startDebug" type="primary" size="small">清空</el-button>
           <!-- 其他调试选项... -->
         </el-form-item>
       </el-form>
@@ -19,6 +21,8 @@
         <el-table height="100%" :data="tableData" border style="width: 100%">
           <el-table-column prop="name" label="变量名" />
           <el-table-column prop="value" label="变量值" />
+          <el-table-column prop="type" label="类型" />
+          <el-table-column prop="scope" label="作用域" />
         </el-table>
       </div>
 
