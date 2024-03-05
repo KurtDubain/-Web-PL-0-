@@ -6,8 +6,20 @@
         <el-form-item color="#fff" label="调试选项">
           <el-checkbox v-model="debugOption1">选项1</el-checkbox>
           <el-checkbox v-model="debugOption2">选项2</el-checkbox>
-          <el-button class="debug-button" @click="startDebug" type="primary" size="small">初始化</el-button>
-          <el-button class="debug-button" @click="startInit" type="primary" size="small">开始调试</el-button>
+          <el-button
+            class="debug-button"
+            @click="startDebug"
+            type="primary"
+            size="small"
+            >初始化</el-button
+          >
+          <el-button
+            class="debug-button"
+            @click="startInit"
+            type="primary"
+            size="small"
+            >开始调试</el-button
+          >
           <!-- 其他调试选项... -->
         </el-form-item>
       </el-form>
@@ -21,37 +33,36 @@
           <el-table-column prop="value" label="变量值" />
         </el-table>
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
 import { ref, computed } from "vue";
-import { useStore } from 'vuex'
+import { useStore } from "vuex";
 import { init } from "../api/modules/debugger";
 export default {
-  name: 'DebuggerBS',
+  name: "DebuggerBS",
   setup() {
-    const store = useStore()
-    let code = computed(() => store.getters['files/selectedFile'])
-    const debuggerOutput = ref(['']);
-    const tableData = ref([])
+    const store = useStore();
+    let code = computed(() => store.getters["files/selectedFile"]);
+    const debuggerOutput = ref([""]);
+    const tableData = ref([]);
     const startInit = async () => {
       let data = {
-        code
-      }
+        code: code.value,
+      };
       let res = await init(data);
       if (res.success) {
-        tableData.value = res.result
+        tableData.value = res.result;
       }
-    }
+    };
     return {
       debuggerOutput,
       tableData,
-      startInit
-    }
-  }
+      startInit,
+    };
+  },
 };
 </script>
 
