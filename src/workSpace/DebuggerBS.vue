@@ -10,7 +10,6 @@
           <el-button class="debug-button" @click="startDebug" type="primary" size="small">单步执行</el-button>
           <el-button class="debug-button" @click="startDebug" type="primary" size="small">执行到下一个断点</el-button>
           <el-button class="debug-button" @click="startDebug" type="primary" size="small">清空</el-button>
-          <!-- 其他调试选项... -->
         </el-form-item>
       </el-form>
     </div>
@@ -25,37 +24,36 @@
           <el-table-column prop="scope" label="作用域" />
         </el-table>
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
 import { ref, computed } from "vue";
-import { useStore } from 'vuex'
+import { useStore } from "vuex";
 import { init } from "../api/modules/debugger";
 export default {
-  name: 'DebuggerBS',
+  name: "DebuggerBS",
   setup() {
-    const store = useStore()
-    let code = computed(() => store.getters['files/selectedFile'])
-    const debuggerOutput = ref(['']);
-    const tableData = ref([])
+    const store = useStore();
+    let code = computed(() => store.getters["files/selectedFile"]);
+    const debuggerOutput = ref([""]);
+    const tableData = ref([]);
     const startInit = async () => {
       let data = {
-        code
-      }
+        code: code.value,
+      };
       let res = await init(data);
       if (res.success) {
-        tableData.value = res.result
+        tableData.value = res.result;
       }
-    }
+    };
     return {
       debuggerOutput,
       tableData,
-      startInit
-    }
-  }
+      startInit,
+    };
+  },
 };
 </script>
 
