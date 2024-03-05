@@ -1,6 +1,6 @@
 <template>
   <div class="compiler-styles">
-    <h3>编译器样式</h3>
+    <h3>编译器</h3>
     <div class="compiler-options">
       <el-form>
         <el-form-item color="#fff" label="编译选项">
