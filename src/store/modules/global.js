@@ -2,6 +2,7 @@ const state = {
     isShowAside: true,//是否展示侧边栏
     isShowDebugger: true,//是否展示调试器
     isShowTerminal: false,//是否展示终端
+    isWasm: true,//是否是wasm
 }
 const mutations = {
     // 切换侧边栏
@@ -15,6 +16,10 @@ const mutations = {
     // 切换终端
     changeIsShowTerminal(state) {
         state.isShowTerminal = !state.isShowTerminal
+    },
+    // 切换wasm
+    changeIsWasm(state) {
+        state.isWasm = !state.isWasm
     }
 }
 const actions = {
@@ -32,6 +37,10 @@ const getters = {
     // 获取终端状态
     isShowTerminal(state) {
         return state.isShowTerminal;
+    },
+    // 获取wasm状态
+    isWasm(state) {
+        return state.isWasm;
     }
 }
 export default {
