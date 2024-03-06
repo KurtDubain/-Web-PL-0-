@@ -12,6 +12,9 @@
           <el-button class="compile-button" @click="compileIt" type="primary" size="small">编译</el-button>
           <el-button class="compile-button" @click="runIt" type="success" size="small">运行</el-button>
           <el-button class="compile-button" @click="clearIt" type="success" size="small">清空</el-button>
+          <el-switch v-model="isWasm"
+            style="margin-left: 10px;--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949" width="60"
+            inline-prompt active-text="Wasm" inactive-text="Js" @change="changeIsWasm" />
         </el-form-item>
       </el-form>
     </div>
@@ -44,7 +47,9 @@ export default {
       IntermediateCodeGeneration: false,
       TargetCodeGeneration: false,
     });
-    // const code = ref('')
+    const isWasm = computed(() => {
+      return store.getters["global/isWasm"];
+    });
     const compilerOutput = ref([""]);
     const showRun = computed(() => {
       return store.getters["global/isShowTerminal"];
@@ -56,6 +61,7 @@ export default {
         const res = await compileCode({
           code: code.value.content,
           options: options.value,
+          language: isWasm.value ? "wasm" : "js",
         });
         // console.log(res.data)
         // 更新编译结果的显示
@@ -108,6 +114,7 @@ export default {
             IntermediateCodeGeneration: false,
             TargetCodeGeneration: true,
           },
+          language: isWasm.value ? "wasm" : "js",
         });
         runRes.value = res.result;
       } catch (error) {
@@ -117,8 +124,11 @@ export default {
     const clearIt = () => {
       compilerOutput.value = ['']
     }
-
+    const changeIsWasm = () => {
+      store.commit("global/changeIsWasm");
+    };
     return {
+      isWasm,
       options,
       compilerOutput,
       compileIt,
@@ -126,6 +136,7 @@ export default {
       clearIt,
       showRun,
       runRes,
+      changeIsWasm
     };
   },
 };

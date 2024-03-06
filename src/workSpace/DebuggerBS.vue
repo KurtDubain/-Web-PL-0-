@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useStore } from "vuex";
 import eventBus from '@/utils/eventBus';
 import { init, stepInto } from "../api/modules/debugger";
@@ -42,6 +42,9 @@ export default {
     const store = useStore();
     const code = computed(() => store.getters["files/selectedFile"]);
     const debugRowIds = computed(() => store.getters['debug/rowIds'])//断点行号
+    const isWasm = computed(() => {
+      return store.getters["global/isWasm"];
+    });
     let currentLine = ref(0);
     const tableData = ref([]);
     const checkCode = () => {
@@ -59,6 +62,7 @@ export default {
       if (!checkCode()) return
       let data = {
         code: code.value,
+        language: isWasm.value ? "wasm" : "js",
       };
       let res = await init(data);
       if (res.success) {
@@ -96,7 +100,8 @@ export default {
       console.log(line);
       let data = {
         code: code.value,
-        line
+        line,
+        language: isWasm.value ? "wasm" : "js",
       };
       let res = await stepInto(data);
       if (res.success) {
@@ -110,6 +115,10 @@ export default {
     eventBus.on('changeFile', () => {
       currentLine.value = 0;
       tableData.value = [];
+    })
+    watch(currentLine, (newVal, oldVal) => {
+      console.log(newVal, oldVal);
+      eventBus.emit("changeLine", newVal);
     })
     return {
       currentLine,

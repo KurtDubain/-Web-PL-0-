@@ -3,7 +3,7 @@
     <div id="code-textarea" ref="editorCode" @input="handleInput"></div>
   </div>
 </template>
-  
+
 <script>
 
 import { ref, computed, onMounted, nextTick, toRaw } from 'vue'
@@ -143,6 +143,15 @@ export default {
         });
       }
     })
+    eventBus.on('changeLine', (line) => {
+      console.log(line);
+      let postion = {
+        lineNumber: line,
+        column: 1
+      }
+      console.log(editorCodeContent.setPosition, postion);
+      editorCodeContent.setPosition(postion);
+    })
 
     return {
       // handleInput,
@@ -153,7 +162,7 @@ export default {
 
 };
 </script>
-  
+
 <style>
 .code-editor {
   width: 100%;
@@ -195,4 +204,3 @@ export default {
   border-radius: 50%;
 }
 </style>
-  
