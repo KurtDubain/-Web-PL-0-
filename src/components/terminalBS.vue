@@ -15,12 +15,17 @@
     </div>
     <div class="terminal-body">
       <!-- 终端内容 -->
-      {{ terminalOutput }}
-      <input
-        v-model="userInput"
-        @keyup.enter="onEnter"
-        placeholder="请输入你要输入的内容"
-      />
+      <div v-for="(line, index) in terminalOutput" :key="index">
+        {{ line }}
+      </div>
+      <!-- {{ terminalOutput }} -->
+      <div v-show="waitingForInput">
+        请输入一个值:<input
+          v-model="userInput"
+          @keyup.enter="onEnter"
+          placeholder="请输入你要输入的内容"
+        />（必须是数字）
+      </div>
     </div>
     <div class="resize-handle" @mousedown="startResize"></div>
   </div>
@@ -33,11 +38,11 @@ export default {
   name: "terminalBS",
   props: {
     runResult: {
-      type: String,
+      type: Object,
     },
   },
   setup(props) {
-    console.log(props.runResult);
+    // console.log(props.runResult);
     const width = ref(600);
     const height = ref(400);
     const x = ref(0);
@@ -89,46 +94,66 @@ export default {
     const handleIsShowTerminal = () => {
       store.commit("global/changeIsShowTerminal");
     };
-    const terminalOutput = ref("");
-    const userInput = ref("");
+    const terminalOutput = ref([]); //输出内容
+    const userInput = ref(""); //输入内容
     const waitingForInput = ref(false); // 用于标记是否正在等待用户输入
-    // const inputPromise = ref(null); // 用于暂存等待输入的Promise
-    const inputResolve = ref(null);
+    let resolveInput; //resolve暂存
+    // 回车触发事件
     const onEnter = () => {
-      if (waitingForInput.value && inputResolve.value) {
-        inputResolve.value(userInput.value); // 解决Promise，传递用户输入
-        userInput.value = ""; // 清空输入框
-        waitingForInput.value = false; // 标记不再等待输入
+      if (waitingForInput.value && resolveInput) {
+        resolveInput(Number(userInput.value));
+        userInput.value = "";
+        waitingForInput.value = false;
       }
     };
-    const compileAndRunWAT = async () => {
+    // 读取操作
+    const read = () => {
+      waitingForInput.value = true;
+      return new Promise((resolve) => {
+        resolveInput = resolve;
+      });
+    };
+    const write = (output) => {
+      terminalOutput.value.push(`输出了：${output}`);
+    };
+    // JS模式
+    const executeJS = async () => {
       if (!props.runResult) {
         return;
       }
       try {
-        const wasmBytes = Object.values(props.runResult).map((val) => val);
+        // 定义自定义函数并执行JS代码
+        const func = new Function(
+          "read",
+          "write",
+          `return (async()=>{${props.runResult.compiledResult.TargetCodeGeneration}})()`
+        );
+        await func(read, write);
+      } catch (error) {
+        console.error("执行输出异常", error);
+        terminalOutput.value.push(`Error: ${error.message}`);
+      }
+    };
+    // wasm模式
+    const compileAndRunWAT = async () => {
+      if (!props.runResult.runResult) {
+        return;
+      }
+      try {
+        const wasmBytes = Object.values(props.runResult.runResult).map(
+          (val) => val
+        );
         // 创建Uint8Array
         const wasmArray = new Uint8Array(wasmBytes);
         const wasmModule = await WebAssembly.compile(wasmArray);
         const instance = await WebAssembly.instantiate(wasmModule, {
           js: {
             log: (arg) => {
-              console.log(arg);
-              terminalOutput.value += `输出了：${arg}\n`;
+              terminalOutput.value.push(`输出了：${arg}`);
             },
             read: () => {
-              // waitingForInput.value = true; // 标记开始等待输入
-              // // 创建一个新的Promise，并保存resolve函数
-              // inputPromise.value = new Promise((resolve) => {
-              //   inputResolve.value = resolve;
-              // });
-              // // 返回Promise，这样就可以在Promise解决后继续执行WebAssembly代码
-              // return inputPromise.value.then((input) => {
-              //   console.log(input);
-              //   // 将字符串转换为数字返回给WebAssembly，这里根据实际需要进行调整
-              //   return 100;
-              // });
-              return 6;
+              terminalOutput.value.push(`wasm模式下，read自动赋值为2`);
+              return 2;
             },
           },
         });
@@ -139,8 +164,14 @@ export default {
         console.error("执行输出异常", error);
       }
     };
+    // 监听控制模式
     watchEffect(() => {
-      compileAndRunWAT();
+      console.log(props);
+      if (props.runResult.language == "js") {
+        executeJS();
+      } else if (props.runResult.language == "wasm") {
+        compileAndRunWAT();
+      }
     });
     return {
       width,
@@ -152,6 +183,8 @@ export default {
       handleIsShowTerminal,
       terminalOutput,
       onEnter,
+      waitingForInput,
+      userInput,
     };
   },
 };
