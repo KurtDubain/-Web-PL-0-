@@ -7,12 +7,41 @@
           <div class="input">
             <el-input v-model.number="currentLine" size="small" disabled />
           </div>
-          <el-button class="debug-button" @click="startInit" type="primary" size="small">初始化</el-button>
-          <el-button class="debug-button" @click="startByType('nextLine')" type="primary"
-            size="small">执行到下一行</el-button>
-          <el-button class="debug-button" @click="startByType('nextBreak')" type="primary"
-            size="small">执行到下一个断点</el-button>
-          <el-button class="debug-button" @click="clearIt" type="primary" size="small">清空</el-button>
+          <el-button
+            class="debug-button"
+            @click="startInit"
+            type="primary"
+            size="small"
+            >初始化</el-button
+          >
+          <el-button
+            class="debug-button"
+            @click="startByType('nextLine')"
+            type="primary"
+            size="small"
+            >执行到下一行</el-button
+          >
+          <el-button
+            class="debug-button"
+            @click="startByType('nextBreak')"
+            type="primary"
+            size="small"
+            >执行到下一个断点</el-button
+          >
+          <el-button
+            class="debug-button"
+            @click="clearIt"
+            type="primary"
+            size="small"
+            >清空</el-button
+          >
+          <el-button
+            class="debug-button"
+            @click="endDebugSession"
+            type="primary"
+            size="small"
+            >取消调试</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -34,19 +63,24 @@
 <script>
 import { ref, computed, watch } from "vue";
 import { useStore } from "vuex";
-import eventBus from '@/utils/eventBus';
+import eventBus from "@/utils/eventBus";
 import { init, stepInto } from "../api/modules/debugger";
+import io from "socket.io-client";
 export default {
   name: "DebuggerBS",
   setup() {
     const store = useStore();
-    const code = computed(() => store.getters["files/selectedFile"]);
-    const debugRowIds = computed(() => store.getters['debug/rowIds'])//断点行号
+    const code = computed(() => store.getters["files/selectedFile"]); //代码文件
+    const debugRowIds = computed(() => store.getters["debug/rowIds"]); //断点行号
     const isWasm = computed(() => {
       return store.getters["global/isWasm"];
     });
+    let socket = null;
+    // 当前行号
     let currentLine = ref(0);
+    // 调试数据
     const tableData = ref([]);
+    // 预检功能
     const checkCode = () => {
       let result;
       if (code.value) {
@@ -54,48 +88,81 @@ export default {
         result = true;
       } else {
         result = false;
-        window.alert('没有可执行文件')
+        window.alert("没有可执行文件");
       }
       return result;
     };
+    // 初始化
     const startInit = async () => {
-      if (!checkCode()) return
-      let data = {
-        code: code.value,
-        language: isWasm.value ? "wasm" : "js",
-      };
-      let res = await init(data);
-      if (res.success) {
-        tableData.value = res.result;
+      if (!checkCode()) return;
+      if (isWasm.value) {
+        let data = {
+          code: code.value,
+          language: isWasm.value ? "wasm" : "js",
+        };
+        let res = await init(data);
+        if (res.success) {
+          tableData.value = res.result;
+        }
+      } else {
+        if (!socket) {
+          socket = io("http://localhost:3001");
+          socket.on("initialized", () => {
+            console.log("链接成功");
+          });
+          socket.on("paused", (args) => {
+            console.log("curLine is", args);
+          });
+        }
+        socket.emit("init", {
+          code: code.value,
+          breakPoints: debugRowIds.value,
+        });
       }
     };
-    const startByType = type => {
-      if (!checkCode()) return
-      let line;
-      if (type == 'nextLine') {
-        let totalLine = code.value.content.split('\n').length;
-        line = currentLine.value + 1;
-        if (line > totalLine) {
-          window.alert('没有下一行了')
-          currentLine.value = 0;
-          return
-        }
-      }
-      if (type == 'nextBreak') {
-        line = debugRowIds.value.map(item => {
-          if (item > currentLine.value) {
-            return item
+    // 单步执行
+    const startByType = (type) => {
+      if (!checkCode()) return;
+      if (isWasm.value) {
+        let line;
+        if (type == "nextLine") {
+          let totalLine = code.value.content.split("\n").length;
+          line = currentLine.value + 1;
+          if (line > totalLine) {
+            window.alert("没有下一行了");
+            currentLine.value = 0;
+            return;
           }
-        }).filter(item => item)[0]
-        if (!line) {
-          window.alert('没有下一个断点')
-          currentLine.value = 0;
-          return //没有下一个断点        
+        }
+        if (type == "nextBreak") {
+          line = debugRowIds.value
+            .map((item) => {
+              if (item > currentLine.value) {
+                return item;
+              }
+            })
+            .filter((item) => item)[0];
+          if (!line) {
+            window.alert("没有下一个断点");
+            currentLine.value = 0;
+            return; //没有下一个断点
+          }
+        }
+        stepIntoTheNext(line);
+        currentLine.value = line;
+      } else {
+        if (socket) {
+          if (type == "nextLine") {
+            socket.emit("debugCommand", { command: "stepOver" });
+          } else if (type == "nextBreak") {
+            socket.emit("debugCommand", { command: "continue" });
+          }
+        } else {
+          console.log("请先链接");
         }
       }
-      stepIntoTheNext(line);
-      currentLine.value = line;
-    }
+    };
+    // 执行到下一个断点
     const stepIntoTheNext = async (line) => {
       console.log(line);
       let data = {
@@ -108,24 +175,34 @@ export default {
         tableData.value = res.result;
       }
     };
+    // 清空变量数据
     const clearIt = () => {
       tableData.value = [""];
       currentLine.value = 0;
     };
-    eventBus.on('changeFile', () => {
+    const endDebugSession = () => {
+      if (socket) {
+        socket.disconnect();
+        socket = null;
+      }
+    };
+    // 监听到文件更新，则重新初始化一些数据
+    eventBus.on("changeFile", () => {
       currentLine.value = 0;
       tableData.value = [];
-    })
+    });
+    // 更新高亮行
     watch(currentLine, (newVal, oldVal) => {
       console.log(newVal, oldVal);
       eventBus.emit("changeLine", newVal);
-    })
+    });
     return {
       currentLine,
       tableData,
       startInit,
       startByType,
-      clearIt
+      clearIt,
+      endDebugSession,
     };
   },
 };
