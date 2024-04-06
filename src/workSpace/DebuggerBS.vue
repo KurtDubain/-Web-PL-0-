@@ -116,7 +116,7 @@ export default {
         }
         socket.emit("init", {
           code: code.value,
-          breakPoints: debugRowIds.value,
+          breakpoints: debugRowIds.value,
         });
       }
     };
@@ -182,6 +182,7 @@ export default {
     };
     const endDebugSession = () => {
       if (socket) {
+        // socket.emit("disconnectSocket");
         socket.disconnect();
         socket = null;
       }
