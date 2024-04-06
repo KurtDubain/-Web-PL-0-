@@ -106,20 +106,38 @@ export default {
         }
       } else {
         if (!socket) {
+          // 建立 WebSocket 连接
           socket = io("http://localhost:3001");
-          socket.on("initialized", () => {
+
+          // 注册一次性的事件监听器
+          socket.once("initialized", () => {
             console.log("链接成功");
           });
+
+          // 只注册一次 paused 事件的监听器
           socket.on("paused", (args) => {
-            console.log("curLine is", args);
+            console.log("暂停信息", args);
+            // currentLine.value = args.pl0Line; // 假设后端发送的 args 包含 pl0Line
+            // 更新调试数据表格
+            // tableData.value = args.variables.map((varInfo) => ({
+            //   name: varInfo.name,
+            //   value: varInfo.value,
+            //   type: varInfo.type, // 假设这是变量的类型
+            //   scope: "Local", // 假设所有变量都是局部的，根据需要调整
+            // }));
           });
         }
+
+        // 向服务器发送初始化指令，包括代码和断点信息
         socket.emit("init", {
           code: code.value,
-          breakpoints: debugRowIds.value,
+          breakpoints: debugRowIds.value.map((breakpoint) =>
+            Number(breakpoint)
+          ),
         });
       }
     };
+
     // 单步执行
     const startByType = (type) => {
       if (!checkCode()) return;
