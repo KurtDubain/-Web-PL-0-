@@ -57,7 +57,13 @@
             active-text="Wasm"
             inactive-text="Js"
             @change="changeIsWasm"
-          />
+          /><el-tooltip
+            class="box-item"
+            effect="dark"
+            content="控制编译模式和调试模式，wasm效率更高，js功能更丰富"
+            placement="right-start"
+            ><el-icon><Warning /></el-icon
+          ></el-tooltip>
         </el-form-item>
       </el-form>
     </div>

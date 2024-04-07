@@ -1,6 +1,15 @@
 <template>
   <div class="debugger-styles">
-    <h3>调试器</h3>
+    <h3 style="display: flex; align-items: center">
+      调试器<el-tooltip
+        class="box-item"
+        effect="dark"
+        content="在编辑器设置断点，可以用于调试，但是对于一些没有意义的代码段，可能会自动略过断点"
+        placement="right"
+        ><el-icon><QuestionFilled /></el-icon
+      ></el-tooltip>
+    </h3>
+
     <div class="debugger-options">
       <el-form :inline="true">
         <el-form-item color="#fff" label="目前所在行">
@@ -12,13 +21,29 @@
             @click="startInit"
             type="primary"
             size="small"
+            v-if="showBtn == 0"
             >初始化</el-button
           >
+          <el-checkbox
+            v-if="showBtn == 0"
+            v-model="isStepOver"
+            label="单步调试"
+            size="small"
+          ></el-checkbox
+          ><el-tooltip
+            class="box-item"
+            effect="dark"
+            content="如果设置了断点，并且没有选择单步执行，则断点生效；若选中了单步执行，则断点不生效"
+            placement="right-start"
+          >
+            <el-icon><QuestionFilled /></el-icon
+          ></el-tooltip>
           <el-button
             class="debug-button"
             @click="startByType('nextLine')"
             type="primary"
             size="small"
+            v-if="showBtn == 2"
             >执行到下一行</el-button
           >
           <el-button
@@ -26,6 +51,7 @@
             @click="startByType('nextBreak')"
             type="primary"
             size="small"
+            v-if="showBtn == 1"
             >执行到下一个断点</el-button
           >
           <el-button
@@ -33,6 +59,7 @@
             @click="clearIt"
             type="primary"
             size="small"
+            v-if="showBtn == 1 || showBtn == 2"
             >清空</el-button
           >
           <el-button
@@ -40,6 +67,7 @@
             @click="endDebugSession"
             type="primary"
             size="small"
+            v-if="showBtn == 1 || showBtn == 2"
             >取消调试</el-button
           >
         </el-form-item>
@@ -66,6 +94,7 @@ import { useStore } from "vuex";
 import eventBus from "@/utils/eventBus";
 import { init, stepInto } from "../api/modules/debugger";
 import io from "socket.io-client";
+import { ElMessage } from "element-plus";
 export default {
   name: "DebuggerBS",
   setup() {
@@ -76,6 +105,8 @@ export default {
       return store.getters["global/isWasm"];
     });
     let socket = null;
+    const isStepOver = ref(false);
+    const showBtn = ref(0);
     // 当前行号
     let currentLine = ref(0);
     // 调试数据
@@ -120,14 +151,27 @@ export default {
             store.dispatch("debug/processPaused", args);
           });
         }
-
+        if (showBtn.value == 0 && isStepOver.value == false) {
+          socket.emit("init", {
+            code: code.value,
+            breakpoints: debugRowIds.value.map((breakpoint) =>
+              Number(breakpoint)
+            ),
+          });
+          showBtn.value = 1;
+        } else if (showBtn.value == 0 && isStepOver.value == true) {
+          const breakpoints = [];
+          for (let i = 1; i <= code.value.content.split("\n").length; i++) {
+            breakpoints.push(i);
+          }
+          socket.emit("init", {
+            code: code.value,
+            breakpoints: breakpoints,
+          });
+          console.log(code.value.content.split("\n"));
+          showBtn.value = 2;
+        }
         // 向服务器发送初始化指令，包括代码和断点信息
-        socket.emit("init", {
-          code: code.value,
-          breakpoints: debugRowIds.value.map((breakpoint) =>
-            Number(breakpoint)
-          ),
-        });
       }
     };
 
@@ -164,7 +208,15 @@ export default {
       } else {
         if (socket) {
           if (type == "nextLine") {
-            socket.emit("debugCommand", { command: "stepOver" });
+            // socket.emit("debugCommand", { command: "stepOver" });
+            const debugMsg = store.getters["debug/getCurDebugMsg"];
+            store.dispatch("debug/processContinue");
+            if (debugMsg) {
+              currentLine.value = Number(debugMsg.pl0Line);
+              tableData.value = debugMsg.variables;
+            } else {
+              console.log("没有更多断点信息");
+            }
           } else if (type == "nextBreak") {
             const debugMsg = store.getters["debug/getCurDebugMsg"];
             store.dispatch("debug/processContinue");
@@ -173,10 +225,15 @@ export default {
               currentLine.value = Number(debugMsg.pl0Line);
               tableData.value = debugMsg.variables;
             } else {
+              ElMessage({
+                message: "所有断点执行完毕，请断开重新调试",
+                type: "warning",
+              });
               console.log("没有更多断点信息");
             }
           }
         } else {
+          ElMessage.error("请先进入调试模式");
           console.log("请先链接");
         }
       }
@@ -206,6 +263,8 @@ export default {
         socket.disconnect();
         socket = null;
       }
+      clearIt();
+      showBtn.value = 0;
     };
     // 监听到文件更新，则重新初始化一些数据
     eventBus.on("changeFile", () => {
@@ -224,6 +283,8 @@ export default {
       startByType,
       clearIt,
       endDebugSession,
+      showBtn,
+      isStepOver,
     };
   },
 };
