@@ -117,14 +117,7 @@ export default {
           // 只注册一次 paused 事件的监听器
           socket.on("paused", (args) => {
             console.log("暂停信息", args);
-            // currentLine.value = args.pl0Line; // 假设后端发送的 args 包含 pl0Line
-            // 更新调试数据表格
-            // tableData.value = args.variables.map((varInfo) => ({
-            //   name: varInfo.name,
-            //   value: varInfo.value,
-            //   type: varInfo.type, // 假设这是变量的类型
-            //   scope: "Local", // 假设所有变量都是局部的，根据需要调整
-            // }));
+            store.dispatch("debug/processPaused", args);
           });
         }
 
@@ -173,7 +166,15 @@ export default {
           if (type == "nextLine") {
             socket.emit("debugCommand", { command: "stepOver" });
           } else if (type == "nextBreak") {
-            socket.emit("debugCommand", { command: "continue" });
+            const debugMsg = store.getters["debug/getCurDebugMsg"];
+            store.dispatch("debug/processContinue");
+            if (debugMsg) {
+              // 更新当前行号和表格数据
+              currentLine.value = Number(debugMsg.pl0Line);
+              tableData.value = debugMsg.variables;
+            } else {
+              console.log("没有更多断点信息");
+            }
           }
         } else {
           console.log("请先链接");
@@ -195,6 +196,7 @@ export default {
     };
     // 清空变量数据
     const clearIt = () => {
+      store.commit("debug/clearDebugMsgQueue");
       tableData.value = [""];
       currentLine.value = 0;
     };
