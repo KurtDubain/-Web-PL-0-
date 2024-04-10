@@ -19,16 +19,12 @@
         <router-link to="/" style="text-decoration: none">
           <el-menu-item index="1-1"> 启动工作台 </el-menu-item>
         </router-link>
-        <router-link to="/pyhcials" style="text-decoration: none">
-          <el-menu-item @click="handleIsShowAside">
-            打开/隐藏侧边栏
-          </el-menu-item>
-        </router-link>
-        <router-link to="/technology" style="text-decoration: none">
-          <el-menu-item @click="handleIsShowDebugger">
-            打开/隐藏调试器
-          </el-menu-item>
-        </router-link>
+        <el-menu-item @click="handleIsShowAside">
+          打开/隐藏侧边栏
+        </el-menu-item>
+        <el-menu-item @click="handleIsShowDebugger">
+          打开/隐藏调试器
+        </el-menu-item>
       </el-sub-menu>
       <router-link to="/chatMaker" style="text-decoration: none">
         <el-menu-item index="2">查找</el-menu-item>

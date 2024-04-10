@@ -5,7 +5,7 @@
         <navBS></navBS>
       </el-header>
       <el-container>
-        <el-aside :width="isShow ? '200px' : '0'">
+        <el-aside :width="isShow ? '180px' : '0'">
           <asideBS></asideBS>
         </el-aside>
         <el-container>
@@ -68,9 +68,9 @@ export default {
 .el-footer {
   padding: 0;
 }
-.el-aside {
+/* .el-aside {
   width: auto;
-}
+} */
 html.dark {
   /* 多选框边框 */
   --el-border-color: #babdc3 !important;
