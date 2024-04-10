@@ -1,111 +1,82 @@
-<!-- 工作台组件 -->
 <template>
-  <div class="workheader">
-    {{ pageTitle }}
+  <div class="flex flex-wrap justify-between">
+    <!-- 卡片1 -->
+    <div
+      @click="showDialog(1)"
+      class="w-1/2 p-4 hover:shadow-lg transition-shadow cursor-pointer"
+    >
+      <el-card class="box-card">
+        <!-- <div slot="header" class="clearfix">
+          <span>卡片1</span>
+        </div> -->
+        <template #header>
+          <div class="clearfix">卡片1</div>
+        </template>
+        <div class="text-gray-700">这是一些关于卡片1的简介信息。</div>
+      </el-card>
+    </div>
+    <!-- 卡片2 -->
+    <div
+      @click="showDialog(2)"
+      class="w-1/2 p-4 hover:shadow-lg transition-shadow cursor-pointer"
+    >
+      <el-card class="box-card">
+        <template #header>
+          <div class="clearfix">卡片2</div>
+        </template>
+        <div class="text-gray-700">这是一些关于卡片2的简介信息。</div>
+      </el-card>
+    </div>
+    <!-- 卡片3 -->
+    <div
+      @click="showDialog(3)"
+      class="w-full p-4 hover:shadow-lg transition-shadow cursor-pointer"
+    >
+      <el-card class="box-card">
+        <template #header>
+          <div class="clearfix">卡片3</div>
+        </template>
+        <div class="text-gray-700">这是一些关于卡片3的简介信息。</div>
+      </el-card>
+    </div>
   </div>
 
-  <el-divider />
-
-  <div class="workspace">
-    <div class="left-panel">
-      <CodeEditorBS></CodeEditorBS>
-    </div>
-
-    <div class="right-panel">
-      <div>
-        <CompilerBS></CompilerBS>
-      </div>
-      <div v-if="isShow">
-        <DebuggerBS></DebuggerBS>
-      </div>
-    </div>
-  </div>
+  <!-- 详细信息对话框 -->
+  <el-dialog v-model="dialogVisible" :title="`卡片${activeCard}详细信息`">
+    <div>这里展示卡片的详细信息...</div>
+  </el-dialog>
 </template>
 
 <script>
-import CodeEditorBS from "@/workSpace/CodeEditorBS.vue";
-import CompilerBS from "@/workSpace/CompilerBS.vue";
-import DebuggerBS from "@/workSpace/DebuggerBS.vue";
-import { useStore } from "vuex";
-import { computed } from "vue";
+import { ref } from "vue";
+import { ElCard, ElDialog } from "element-plus";
 
 export default {
-  name: "homeBS",
+  name: "AboutPage",
   components: {
-    CodeEditorBS,
-    CompilerBS,
-    DebuggerBS,
+    ElCard,
+    ElDialog,
   },
   setup() {
-    const store = useStore();
-    let pageTitle = computed(() => {
-      const selectedFile = store.getters["files/selectedFile"];
-      return selectedFile ? selectedFile.name : "未选中文件";
-    });
-    let isShow = computed(() => {
-      return store.getters["global/isShowDebugger"];
-    });
+    const dialogVisible = ref(false);
+    const activeCard = ref(0);
+
+    const showDialog = (cardNumber) => {
+      activeCard.value = cardNumber;
+      dialogVisible.value = true;
+    };
+
     return {
-      pageTitle,
-      isShow,
+      dialogVisible,
+      activeCard,
+      showDialog,
     };
   },
 };
 </script>
 
 <style scoped>
-* {
-  overflow: hidden;
-}
-
-.workspace {
-  flex: 1;
-  background-color: #333;
-  /* 设置为暗色背景，可以根据需要调整颜色 */
-  color: #fff;
-  /* 设置文本颜色为白色，以适应暗色背景 */
-  padding: 10px;
-  overflow-y: auto;
-  /* 添加滚动条，以适应内容溢出时的滚动 */
-  height: 95vh;
-  display: flex;
-}
-
-.workheader {
-  /* padding: 0px; */
-  height: 5vh;
-  background-color: rgba(51, 51, 51, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 1.5rem;
-  border-bottom: 2px solid #333;
-  /* 添加底部边框 */
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.el-divider--horizontal {
-  margin: 0;
-  height: 0;
-  /* color: rgb(108, 37, 37); */
-  border-top: rgba(51, 51, 51, 0.687);
-}
-
-.left-panel {
-  flex: 1;
-}
-
-.right-panel {
-  display: flex;
-  flex: 1;
+.box-card {
   width: 100%;
-  height: 100%;
-  flex-direction: column;
-  overflow: visible;
-}
-
-.right-panel div {
-  flex: 1;
 }
 </style>

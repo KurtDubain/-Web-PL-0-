@@ -10,9 +10,9 @@
         </el-aside>
         <el-container>
           <el-main>
-            <homeBS></homeBS>
+            <!-- <homeBS></homeBS> -->
+            <router-view></router-view>
           </el-main>
-
         </el-container>
       </el-container>
       <el-footer>
@@ -22,39 +22,38 @@
   </div>
 </template>
 
-
 <script>
-import { useDark, useToggle } from '@vueuse/core'
-import footerBS from './components/footerBS.vue'
-import navBS from './components/navBS.vue'
-import asideBS from './components/asideBS.vue'
-import homeBS from './page/homeBS.vue'
-import { useStore } from 'vuex'
-import { computed, onMounted } from 'vue'
+import { useDark, useToggle } from "@vueuse/core";
+import footerBS from "./components/footerBS.vue";
+import navBS from "./components/navBS.vue";
+import asideBS from "./components/asideBS.vue";
+// import homeBS from "./page/homeBS.vue";
+import { useStore } from "vuex";
+import { computed, onMounted } from "vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     footerBS,
     navBS,
     asideBS,
-    homeBS
+    // homeBS,
   },
   setup() {
-    const store = useStore()
+    const store = useStore();
     let isShow = computed(() => {
-      return store.getters['global/isShowAside']
-    })
-    const isDark = useDark()
+      return store.getters["global/isShowAside"];
+    });
+    const isDark = useDark();
     onMounted(() => {
-      useToggle(isDark)
-      localStorage.setItem('vueuse-color-scheme', 'dark')
-    })
+      useToggle(isDark);
+      localStorage.setItem("vueuse-color-scheme", "dark");
+    });
     return {
-      isShow
-    }
-  }
-}
+      isShow,
+    };
+  },
+};
 </script>
 
 <style>
@@ -62,16 +61,16 @@ export default {
   padding: 0;
 }
 
-
 .el-header {
   padding: 0;
 }
 
-
 .el-footer {
   padding: 0;
 }
-
+.el-aside {
+  width: auto;
+}
 html.dark {
   /* 多选框边框 */
   --el-border-color: #babdc3 !important;

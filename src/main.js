@@ -6,7 +6,7 @@ import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import App from "./App.vue";
 import store from "./store";
 import router from "./router";
-
+import "./tailwnd.css";
 const app = createApp(App);
 // createApp(App).mount('#app')
 app.use(ElementPlus);
