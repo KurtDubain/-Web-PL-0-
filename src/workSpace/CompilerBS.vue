@@ -82,6 +82,7 @@ import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import { compileCode, runCode } from "../api/modules/compiler";
 import terminalBS from "@/components/terminalBS.vue";
+import formatAST from "@/utils/astGenerator";
 export default {
   name: "CompilerBS",
   components: {
@@ -118,14 +119,18 @@ export default {
         compilerOutput.value.push(
           `${
             options.value.LexicalAnalysis
-              ? `词法分析结果:\n${JSON.stringify(res.result.LexicalAnalysis)}`
+              ? `词法分析结果:\n${JSON.stringify(
+                  res.result.LexicalAnalysis,
+                  null,
+                  2
+                )}`
               : "\n"
           }`
         );
         compilerOutput.value.push(
           `${
             options.value.SyntaxAnalysis
-              ? `语法分析结果:\n${JSON.stringify(res.result.SyntaxAnalysis)}`
+              ? `语法分析结果:\n${formatAST(res.result.SyntaxAnalysis)}`
               : "\n"
           }`
         );
@@ -139,8 +144,8 @@ export default {
         compilerOutput.value.push(
           `${
             options.value.IntermediateCodeGeneration
-              ? `中间代码生成结果:\n${JSON.stringify(
-                  res.result.IntermediateCodeGeneration
+              ? `中间代码生成结果:\n${res.result.IntermediateCodeGeneration.join(
+                  "\n"
                 )}`
               : "\n"
           }`
@@ -239,6 +244,7 @@ export default {
   height: 60%;
   overflow-y: auto;
   border: 2px solid #555;
+  padding: 5px;
 }
 
 .el-form-item__label {

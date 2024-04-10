@@ -309,6 +309,17 @@ export default {
 .debugger-options label {
   margin-right: 10px;
 }
+.input,
+.el-input,
+.el-button,
+.el-checkbox {
+  margin: 0 5px 5px 0; /* 优化间距 */
+}
+
+.el-tooltip .el-icon {
+  color: #bbb; /* 提示图标颜色 */
+  cursor: help;
+}
 
 .debug-button {
   background-color: #007bff;

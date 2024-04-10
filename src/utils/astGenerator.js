@@ -54,6 +54,7 @@ function formatAST(node, depth = 0) {
 
   return output;
 }
+export default formatAST;
 
 // 使用示例
 const ast = {
