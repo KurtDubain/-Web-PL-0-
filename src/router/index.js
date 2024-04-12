@@ -6,7 +6,7 @@ import AboutRoutes from "./modules/about";
 const routes = [...HomeRoutes, ...AboutRoutes];
 
 const router = createRouter({
-  history: createWebHistory("/web-pl0"),
+  history: createWebHistory(""),
   routes,
 });
 
