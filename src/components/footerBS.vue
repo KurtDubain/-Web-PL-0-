@@ -3,12 +3,14 @@
   <footer class="footer-container">
     <div class="footer-content">
       <div class="footer-links">
-        <router-link to="/" class="footer-link">首页</router-link>
+        <router-link to="/" class="footer-link">工作台</router-link>
         <el-divider direction="vertical" />
         <router-link to="/about" class="footer-link">关于</router-link>
         <el-divider direction="vertical" />
 
-        <router-link to="/subscription" class="footer-link">联系我们</router-link>
+        <router-link to="/subscription" class="footer-link"
+          >联系我们</router-link
+        >
       </div>
       <div class="footer-info">
         <p>版权所有 &copy; 雪碧</p>
@@ -19,12 +21,11 @@
     </div>
   </footer>
 </template>
-  
+
 <script>
 export default {
-  name: "footBS"
-}
-
+  name: "footBS",
+};
 </script>
 
 <style lang="scss" scoped>
@@ -59,4 +60,3 @@ export default {
   text-align: center;
 }
 </style>
-  

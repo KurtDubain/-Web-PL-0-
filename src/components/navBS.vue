@@ -15,7 +15,7 @@
         <el-menu-item index="0"> 关于 </el-menu-item>
       </router-link>
       <el-sub-menu index="1">
-        <template #title>工具栏</template>
+        <template #title>工作台</template>
         <router-link to="/" style="text-decoration: none">
           <el-menu-item index="1-1"> 启动工作台 </el-menu-item>
         </router-link>
@@ -29,6 +29,14 @@
       <router-link to="/chatMaker" style="text-decoration: none">
         <el-menu-item index="2">查找</el-menu-item>
       </router-link>
+      <el-menu-item index="3" @click="handleIsShowAside"
+        >侧边栏控制</el-menu-item
+      >
+      <el-menu-item index="4" @click="handleIsShowDebugger"
+        >调试器控制</el-menu-item
+      >
+      <el-menu-item index="5" @click="handleIsShowRun">运行终端</el-menu-item>
+      <el-menu-item index="6">帮助</el-menu-item>
       <div class="flex-grow" />
 
       <!-- <router-link>
@@ -75,9 +83,13 @@ export default {
     const handleIsShowDebugger = () => {
       store.commit("global/changeIsShowDebugger");
     };
+    const handleIsShowRun = () => {
+      store.commit("global/changeIsShowTerminal");
+    };
     return {
       handleIsShowAside,
       handleIsShowDebugger,
+      handleIsShowRun,
     };
   },
 };
