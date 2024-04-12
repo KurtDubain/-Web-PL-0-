@@ -241,7 +241,7 @@ export default {
 .compiler-output pre {
   white-space: pre-wrap;
   background-color: #333;
-  height: 60%;
+  height: 90%;
   overflow-y: auto;
   border: 2px solid #555;
   padding: 5px;
