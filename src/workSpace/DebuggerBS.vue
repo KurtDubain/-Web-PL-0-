@@ -1,13 +1,10 @@
 <template>
   <div class="debugger-styles">
     <h3 style="display: flex; align-items: center">
-      调试器<el-tooltip
-        class="box-item"
-        effect="dark"
-        content="在编辑器设置断点，可以用于调试，但是对于一些没有意义的代码段，可能会自动略过断点"
-        placement="right"
-        ><el-icon><QuestionFilled /></el-icon
-      ></el-tooltip>
+      调试器<el-tooltip class="box-item" effect="dark" content="在编辑器设置断点，可以用于调试，但是对于一些没有意义的代码段，可能会自动略过断点"
+        placement="right"><el-icon>
+          <QuestionFilled />
+        </el-icon></el-tooltip>
     </h3>
 
     <div class="debugger-options">
@@ -16,60 +13,21 @@
           <div class="input">
             <el-input v-model.number="currentLine" size="small" disabled />
           </div>
-          <el-button
-            class="debug-button"
-            @click="startInit"
-            type="primary"
-            size="small"
-            v-if="showBtn == 0"
-            >初始化</el-button
-          >
-          <el-checkbox
-            v-if="showBtn == 0"
-            v-model="isStepOver"
-            label="单步调试"
-            size="small"
-          ></el-checkbox
-          ><el-tooltip
-            class="box-item"
-            effect="dark"
-            content="如果设置了断点，并且没有选择单步执行，则断点生效；若选中了单步执行，则断点不生效"
-            placement="right-start"
-          >
-            <el-icon><QuestionFilled /></el-icon
-          ></el-tooltip>
-          <el-button
-            class="debug-button"
-            @click="startByType('nextLine')"
-            type="primary"
-            size="small"
-            v-if="showBtn == 2"
-            >执行到下一行</el-button
-          >
-          <el-button
-            class="debug-button"
-            @click="startByType('nextBreak')"
-            type="primary"
-            size="small"
-            v-if="showBtn == 1"
-            >执行到下一个断点</el-button
-          >
-          <el-button
-            class="debug-button"
-            @click="clearIt"
-            type="primary"
-            size="small"
-            v-if="showBtn == 1 || showBtn == 2"
-            >清空</el-button
-          >
-          <el-button
-            class="debug-button"
-            @click="endDebugSession"
-            type="primary"
-            size="small"
-            v-if="showBtn == 1 || showBtn == 2"
-            >取消调试</el-button
-          >
+          <el-button class="debug-button" @click="startInit" type="primary" size="small"
+            v-if="showBtn == 0">初始化</el-button>
+          <el-checkbox v-if="showBtn == 0" v-model="isStepOver" label="单步调试" size="small"></el-checkbox><el-tooltip
+            class="box-item" effect="dark" content="如果设置了断点，并且没有选择单步执行，则断点生效；若选中了单步执行，则断点不生效" placement="right-start">
+            <el-icon>
+              <QuestionFilled />
+            </el-icon></el-tooltip>
+          <el-button class="debug-button" @click="startByType('nextLine')" type="primary" size="small"
+            v-if="showBtn == 2">执行到下一行</el-button>
+          <el-button class="debug-button" @click="startByType('nextBreak')" type="primary" size="small"
+            v-if="showBtn == 1">执行到下一个断点</el-button>
+          <el-button class="debug-button" @click="clearIt" type="primary" size="small"
+            v-if="showBtn == 1 || showBtn == 2">清空</el-button>
+          <el-button class="debug-button" @click="endDebugSession" type="primary" size="small"
+            v-if="showBtn == 1 || showBtn == 2">取消调试</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -215,6 +173,10 @@ export default {
               currentLine.value = Number(debugMsg.pl0Line);
               tableData.value = debugMsg.variables;
             } else {
+              ElMessage({
+                message: "所有断点执行完毕，请断开重新调试",
+                type: "warning",
+              });
               console.log("没有更多断点信息");
             }
           } else if (type == "nextBreak") {
@@ -309,15 +271,18 @@ export default {
 .debugger-options label {
   margin-right: 10px;
 }
+
 .input,
 .el-input,
 .el-button,
 .el-checkbox {
-  margin: 0 5px 5px 0; /* 优化间距 */
+  margin: 0 5px 5px 0;
+  /* 优化间距 */
 }
 
 .el-tooltip .el-icon {
-  color: #bbb; /* 提示图标颜色 */
+  color: #bbb;
+  /* 提示图标颜色 */
   cursor: help;
 }
 
