@@ -1,4 +1,7 @@
 function formatAST(node, depth = 0) {
+  if (typeof node === "string") {
+    return node;
+  }
   let output = "";
   const indent = "|  ".repeat(depth);
   output += `${indent}${node.type}`;

@@ -30,11 +30,25 @@ export default {
       monaco.languages.register({ id: 'pascal' })
       monaco.languages.setMonarchTokensProvider('pascal', pascalLanguageConfig)
       monaco.languages.registerCompletionItemProvider('pascal', pascalCompletionProvider)
+      monaco.editor.defineTheme('customDarkTheme', {
+        base: 'vs-dark', // 继承vs-dark主题
+        inherit: true,
+        rules: [
+          // 可以根据需要添加更多规则
+        ],
+        colors: {
+          'editor.lineHighlightBackground': '#2a2d2e',
+          'editor.lineHighlightBorder': '#8f908a'
+        }
+      });
+      monaco.editor.setTheme('customDarkTheme');
+
+      // 创建编辑器实例
       editorCodeContent = monaco.editor.create(editorCode.value, {
         value: code.value ? code.value.content : '请先新建文件~',
         language: 'pascal',
-        theme: 'vs-dark',
-        readOnly: true,
+        theme: 'customDarkTheme',
+        readOnly: !code.value || code.value === "请先新建文件~",
         glyphMargin: true,
       });
 
@@ -206,7 +220,8 @@ export default {
   border-radius: 50%;
 }
 
-.monaco-editor .token.operator {
-  color: red;
-}
+/* .lineHighlight {
+  background-color: #666666 !important;
+  border: 2px solid #888888 !important;
+} */
 </style>
