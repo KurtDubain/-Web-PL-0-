@@ -23,7 +23,6 @@ export const pascalLanguageConfig = {
     "downto",
     "endif",
     "endfor",
-    "call",
     "endwhile",
   ],
 
@@ -124,7 +123,6 @@ export const pascalCompletionProvider = {
       "endfor",
       "endwhile",
       "endif",
-      "call",
     ];
     keywords.forEach((keyword) => {
       suggestions.push({
