@@ -39,6 +39,7 @@ import { useStore } from "vuex";
 import { compileCode, runCode } from "../api/modules/compiler";
 import terminalBS from "@/components/terminalBS.vue";
 import formatAST from "@/utils/astGenerator";
+import { ElMessage } from "element-plus";
 export default {
   name: "CompilerBS",
   components: {
@@ -114,7 +115,7 @@ export default {
       }
     };
     const runIt = async () => {
-      store.commit("global/changeIsShowTerminal");
+
       try {
         const res = await runCode({
           code: code.value.content,
@@ -127,7 +128,16 @@ export default {
           },
           language: isWasm.value ? "wasm" : "js",
         });
-        runRes.value = res.result;
+        if (res.result.compiledResult.TargetCodeGeneration != '') {
+          store.commit("global/changeIsShowTerminal");
+          runRes.value = res.result
+        } else {
+          ElMessage({
+            message: "编译异常，请详细编译调试之后重试",
+            type: "warning",
+          });
+        }
+
       } catch (error) {
         console.error("代码执行失败", error);
       }
