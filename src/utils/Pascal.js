@@ -1,4 +1,5 @@
 import * as monaco from "monaco-editor";
+
 export const pascalLanguageConfig = {
   defaultToken: "",
   tokenPostfix: ".pascal",
@@ -22,6 +23,7 @@ export const pascalLanguageConfig = {
     "downto",
     "endif",
     "endfor",
+    "call",
     "endwhile",
   ],
 
@@ -29,12 +31,13 @@ export const pascalLanguageConfig = {
 
   // we include these common regular expressions
   // symbols: /[=><:*+\-\/\^%&|!#]/,
-  symbols: /[=><:*+\-\\^%&|!#]/,
+  symbols: /[=><:*+\-\\^%&|!#]+/,
 
   // The main tokenizer for our languages
   tokenizer: {
     root: [
       // identifiers and keywords
+
       [
         /[a-zA-Z_]\w*/,
         {
@@ -52,10 +55,11 @@ export const pascalLanguageConfig = {
       // [/[{}()\[\]]/, '@brackets'],
       [/[{}()[\]]/, "@brackets"],
       [
-        /@symbols/,
+        // /@symbols/,
+        /[=><:*+\-\\^%&|!#]+/,
         {
           cases: {
-            "@operators": "operator",
+            "@operators": "operator", // 这里将识别为操作符的样式
             "@default": "",
           },
         },
@@ -120,6 +124,7 @@ export const pascalCompletionProvider = {
       "endfor",
       "endwhile",
       "endif",
+      "call",
     ];
     keywords.forEach((keyword) => {
       suggestions.push({

@@ -14,6 +14,7 @@ import { pascalLanguageConfig, pascalCompletionProvider } from '@/utils/Pascal'
 export default {
   name: "CodeEditorBS",
   setup() {
+
     // 初始化Vuex
     const store = useStore()
     // PL0语言配置
@@ -202,5 +203,9 @@ export default {
   height: 10px !important;
   background: rgba(255, 0, 0, .5) !important;
   border-radius: 50%;
+}
+
+.monaco-editor .token.operator {
+  color: red;
 }
 </style>
