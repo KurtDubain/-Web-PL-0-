@@ -4,66 +4,22 @@
     <div class="compiler-options">
       <el-form>
         <el-form-item color="#fff" label="编译选项">
-          <el-checkbox
-            v-model="options['LexicalAnalysis']"
-            label="词法分析"
-          ></el-checkbox>
-          <el-checkbox
-            v-model="options['SyntaxAnalysis']"
-            label="语法分析"
-          ></el-checkbox>
-          <el-checkbox
-            v-model="options['SemanticAnalysis']"
-            label="语义分析"
-          ></el-checkbox>
-          <el-checkbox
-            v-model="options['IntermediateCodeGeneration']"
-            label="中间代码生成"
-          ></el-checkbox>
-          <el-checkbox
-            v-model="options['TargetCodeGeneration']"
-            label="目标代码生成"
-          ></el-checkbox>
-          <el-button
-            class="compile-button"
-            @click="compileIt"
-            type="primary"
-            size="small"
-            >编译</el-button
-          >
-          <el-button
-            class="compile-button"
-            @click="runIt"
-            type="success"
-            size="small"
-            >运行</el-button
-          >
-          <el-button
-            class="compile-button"
-            @click="clearIt"
-            type="success"
-            size="small"
-            >清空</el-button
-          >
-          <el-switch
-            v-model="isWasm"
-            style="
+          <el-checkbox v-model="options['LexicalAnalysis']" label="词法分析"></el-checkbox>
+          <el-checkbox v-model="options['SyntaxAnalysis']" label="语法分析"></el-checkbox>
+          <el-checkbox v-model="options['SemanticAnalysis']" label="语义分析"></el-checkbox>
+          <el-checkbox v-model="options['IntermediateCodeGeneration']" label="中间代码生成"></el-checkbox>
+          <el-checkbox v-model="options['TargetCodeGeneration']" label="目标代码生成"></el-checkbox>
+          <el-button class="compile-button" @click="compileIt" type="primary" size="small">编译</el-button>
+          <el-button class="compile-button" @click="runIt" type="success" size="small">运行</el-button>
+          <el-button class="compile-button" @click="clearIt" type="success" size="small">清空</el-button>
+          <el-switch v-model="isWasm" style="
               margin-left: 10px;
               --el-switch-on-color: #13ce66;
               --el-switch-off-color: #ff4949;
-            "
-            width="60"
-            inline-prompt
-            active-text="Wasm"
-            inactive-text="Js"
-            @change="changeIsWasm"
-          /><el-tooltip
-            class="box-item"
-            effect="dark"
-            content="控制编译模式和调试模式，wasm效率更高，js功能更丰富"
-            placement="right-start"
-            ><el-icon><Warning /></el-icon
-          ></el-tooltip>
+            " width="60" inline-prompt active-text="Wasm" inactive-text="Js" @change="changeIsWasm" /><el-tooltip
+            class="box-item" effect="dark" content="控制编译模式和调试模式，wasm效率更高，js功能更丰富" placement="right-start"><el-icon>
+              <Warning />
+            </el-icon></el-tooltip>
         </el-form-item>
       </el-form>
     </div>
@@ -117,46 +73,42 @@ export default {
         // 更新编译结果的显示
         compilerOutput.value.push(`编译结果示例：\n...\n`);
         compilerOutput.value.push(
-          `${
-            options.value.LexicalAnalysis
-              ? `词法分析结果:\n${JSON.stringify(
-                  res.result.LexicalAnalysis,
-                  null,
-                  2
-                )}`
-              : "\n"
+          `${options.value.LexicalAnalysis
+            ? `词法分析结果:\n${JSON.stringify(
+              res.result.LexicalAnalysis,
+              null,
+              2
+            )}\n`
+            : ''
           }`
         );
         compilerOutput.value.push(
-          `${
-            options.value.SyntaxAnalysis
-              ? `语法分析结果:\n${formatAST(res.result.SyntaxAnalysis)}`
-              : "\n"
+          `${options.value.SyntaxAnalysis
+            ? `语法分析结果:\n${formatAST(res.result.SyntaxAnalysis)}\n`
+            : ''
           }`
         );
         compilerOutput.value.push(
-          `${
-            options.value.SemanticAnalysis
-              ? `语义分析结果:\n${JSON.stringify(res.result.SemanticAnalysis)}`
-              : "\n"
+          `${options.value.SemanticAnalysis
+            ? `语义分析结果:\n${typeof res.result.SemanticAnalysis == "string" ? res.result.SemanticAnalysis : JSON.stringify(res.result.SemanticAnalysis)}\n`
+            : ''
           }`
         );
         compilerOutput.value.push(
-          `${
-            options.value.IntermediateCodeGeneration
-              ? `中间代码生成结果:\n${res.result.IntermediateCodeGeneration.join(
-                  "\n"
-                )}`
-              : "\n"
+          `${options.value.IntermediateCodeGeneration
+            ? `中间代码生成结果:\n${res.result.IntermediateCodeGeneration.join(
+              "\n"
+            )}\n`
+            : ''
           }`
         );
         compilerOutput.value.push(
-          `${
-            options.value.TargetCodeGeneration
-              ? `目标代码生成结果:\n${res.result.TargetCodeGeneration}`
-              : "\n"
+          `${options.value.TargetCodeGeneration
+            ? `目标代码生成结果:\n${res.result.TargetCodeGeneration}\n`
+            : ''
           }`
         );
+        compilerOutput.value.push('\n')
       } catch (error) {
         console.error("编译异常", error);
       }
@@ -241,7 +193,7 @@ export default {
 .compiler-output pre {
   white-space: pre-wrap;
   background-color: #333;
-  height: 90%;
+  height: 60%;
   overflow-y: auto;
   border: 2px solid #555;
   padding: 5px;
