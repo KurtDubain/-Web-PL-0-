@@ -27,6 +27,9 @@ export default {
     const decorationIds = [];
     const initEditor = async () => {
       await nextTick(); // Wait for the next DOM update
+      monaco.languages.register({ id: 'pascal' })
+      monaco.languages.setMonarchTokensProvider('pascal', pascalLanguageConfig)
+      monaco.languages.registerCompletionItemProvider('pascal', pascalCompletionProvider)
       editorCodeContent = monaco.editor.create(editorCode.value, {
         value: code.value ? code.value.content : '请先新建文件~',
         language: 'pascal',
@@ -34,9 +37,7 @@ export default {
         readOnly: true,
         glyphMargin: true,
       });
-      monaco.languages.register({ id: 'pascal' })
-      monaco.languages.setMonarchTokensProvider('pascal', pascalLanguageConfig)
-      monaco.languages.registerCompletionItemProvider('pascal', pascalCompletionProvider)
+
       //编辑代码的时候，同步修改所选中文件的内容
       editorCodeContent.onDidChangeModelContent(() => {
         if (!code.value) return

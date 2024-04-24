@@ -24,13 +24,16 @@ export const pascalLanguageConfig = {
     "endif",
     "endfor",
     "endwhile",
+    "procedure",
+    "call",
+    "write",
   ],
 
   operators: ["+", "-", "*", "/", "=", "<", ">", "<=", ">=", "<>", ":=", ":"],
 
   // we include these common regular expressions
   // symbols: /[=><:*+\-\/\^%&|!#]/,
-  symbols: /[=><:*+\-\\^%&|!#]+/,
+  symbols: /[+\-*/=<>]|[<>]=?|:=|:/,
 
   // The main tokenizer for our languages
   tokenizer: {
@@ -54,12 +57,12 @@ export const pascalLanguageConfig = {
       // [/[{}()\[\]]/, '@brackets'],
       [/[{}()[\]]/, "@brackets"],
       [
-        // /@symbols/,
-        /[=><:*+\-\\^%&|!#]+/,
+        /@symbols/,
+        // /[=><:*+\-\\^%&|!#]+/,
         {
           cases: {
             "@operators": "operator", // 这里将识别为操作符的样式
-            "@default": "",
+            "@default": "operator",
           },
         },
       ],
@@ -123,6 +126,9 @@ export const pascalCompletionProvider = {
       "endfor",
       "endwhile",
       "endif",
+      "write",
+      "read",
+      "procedure",
     ];
     keywords.forEach((keyword) => {
       suggestions.push({
