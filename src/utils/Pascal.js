@@ -20,6 +20,9 @@ export const pascalLanguageConfig = {
     "for",
     "to",
     "downto",
+    "endif",
+    "endfor",
+    "endwhile",
   ],
 
   operators: ["+", "-", "*", "/", "=", "<", ">", "<=", ">=", "<>", ":=", ":"],
@@ -114,6 +117,9 @@ export const pascalCompletionProvider = {
       "for",
       "to",
       "downto",
+      "endfor",
+      "endwhile",
+      "endif",
     ];
     keywords.forEach((keyword) => {
       suggestions.push({
