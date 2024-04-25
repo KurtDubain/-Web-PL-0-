@@ -25,7 +25,9 @@
       <el-menu-item index="2" @click="handleIsShowAside">侧边栏控制</el-menu-item>
       <el-menu-item index="3" @click="handleIsShowDebugger">调试器控制</el-menu-item>
       <el-menu-item index="4" @click="handleIsShowRun">运行终端</el-menu-item>
-      <el-menu-item index="5">帮助</el-menu-item>
+      <router-link to="/help" style="text-decoration: none">
+        <el-menu-item index="5">帮助</el-menu-item>
+      </router-link>
       <div class="flex-grow" />
 
       <!-- <router-link>
