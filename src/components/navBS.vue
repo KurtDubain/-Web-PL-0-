@@ -2,15 +2,8 @@
 
 <template>
   <div>
-    <el-menu
-      :default-active="activeIndex"
-      class="el-menu-demo"
-      mode="horizontal"
-      :ellipsis="false"
-      @select="handleSelect"
-      background-color="#333"
-      text-color="#fff"
-    >
+    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" :ellipsis="false"
+      @select="handleSelect" background-color="#333" text-color="#fff">
       <router-link to="/about" style="text-decoration: none">
         <el-menu-item index="0"> 关于 </el-menu-item>
       </router-link>
@@ -26,17 +19,13 @@
           打开/隐藏调试器
         </el-menu-item>
       </el-sub-menu>
-      <router-link to="/chatMaker" style="text-decoration: none">
+      <!-- <router-link to="/chatMaker" style="text-decoration: none">
         <el-menu-item index="2">查找</el-menu-item>
-      </router-link>
-      <el-menu-item index="3" @click="handleIsShowAside"
-        >侧边栏控制</el-menu-item
-      >
-      <el-menu-item index="4" @click="handleIsShowDebugger"
-        >调试器控制</el-menu-item
-      >
-      <el-menu-item index="5" @click="handleIsShowRun">运行终端</el-menu-item>
-      <el-menu-item index="6">帮助</el-menu-item>
+      </router-link> -->
+      <el-menu-item index="2" @click="handleIsShowAside">侧边栏控制</el-menu-item>
+      <el-menu-item index="3" @click="handleIsShowDebugger">调试器控制</el-menu-item>
+      <el-menu-item index="4" @click="handleIsShowRun">运行终端</el-menu-item>
+      <el-menu-item index="5">帮助</el-menu-item>
       <div class="flex-grow" />
 
       <!-- <router-link>
@@ -49,23 +38,21 @@
         </div>
         </el-sub-item> -->
 
-      <el-sub-menu index="3">
+      <el-sub-menu index="6">
         <template #title>更多</template>
         <router-link to="/write" style="text-decoration: none">
-          <el-menu-item index="3-1">待开发</el-menu-item>
+          <el-menu-item index="6-1">待开发</el-menu-item>
         </router-link>
         <router-link to="/subscription" style="text-decoration: none">
-          <el-menu-item index="3-2">待开发</el-menu-item>
+          <el-menu-item index="6-2">待开发</el-menu-item>
         </router-link>
         <router-link to="/write" style="text-decoration: none">
-          <el-menu-item index="3-3">待开发</el-menu-item>
+          <el-menu-item index="6-3">待开发</el-menu-item>
         </router-link>
         <router-link to="/weather" style="text-decoration: none">
-          <el-menu-item index="3-4">待开发</el-menu-item>
+          <el-menu-item index="6-4">待开发</el-menu-item>
         </router-link>
-        <el-menu-item index="3-5" @click="showAnnouncement"
-          >待开发</el-menu-item
-        >
+        <el-menu-item index="6-5" @click="showAnnouncement">待开发</el-menu-item>
       </el-sub-menu>
     </el-menu>
   </div>

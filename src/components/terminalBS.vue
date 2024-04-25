@@ -1,16 +1,13 @@
 <template>
-  <div
-    class="terminal-window"
-    :style="{
-      width: width + 'px',
-      height: height + 'px',
-      transform: `translate(${x}px, ${y}px)`,
-    }"
-    @mousedown="onMouseDown"
-  >
+  <div class="terminal-window" :style="{
+    width: width + 'px',
+    height: height + 'px',
+    transform: `translate(${x}px, ${y}px)`,
+  }" @mousedown="onMouseDown">
     <div class="terminal-header" @mousedown="startDrag">
       <!-- 可以放置一些控制按钮 -->
-      <div>Terminal</div>
+      <div class="title">终端</div>
+      <div class="btn clear" @click="clearTerminal">清空历史</div> <!-- 新的清空按钮 -->
       <div class="btn close" @click="handleIsShowTerminal">×</div>
     </div>
     <div class="terminal-body">
@@ -20,11 +17,7 @@
       </div>
       <!-- {{ terminalOutput }} -->
       <div v-show="waitingForInput">
-        请输入一个值:<input
-          v-model="userInput"
-          @keyup.enter="onEnter"
-          placeholder="请输入你要输入的内容"
-        />（必须是数字）
+        请输入一个值:<input v-model="userInput" @keyup.enter="onEnter" placeholder="请输入你要输入的内容" />（必须是数字）
       </div>
     </div>
     <div class="resize-handle" @mousedown="startResize"></div>
@@ -94,6 +87,7 @@ export default {
     const handleIsShowTerminal = () => {
       store.commit("global/changeIsShowTerminal");
     };
+
     const terminalOutput = ref([]); //输出内容
     const userInput = ref(""); //输入内容
     const waitingForInput = ref(false); // 用于标记是否正在等待用户输入
@@ -173,6 +167,19 @@ export default {
         compileAndRunWAT();
       }
     });
+    // watch(
+    //   () => props.runResult.language,
+    //   (newValue, oldValue) => {
+    //     if (newValue === "js") {
+    //       executeJS();
+    //     } else if (newValue === "wasm") {
+    //       compileAndRunWAT();
+    //     }
+    //   }
+    // );
+    const clearTerminal = () => {
+      terminalOutput.value = [];
+    };
     return {
       width,
       height,
@@ -185,6 +192,7 @@ export default {
       onEnter,
       waitingForInput,
       userInput,
+      clearTerminal
     };
   },
 };
@@ -202,6 +210,9 @@ export default {
   z-index: 9999;
   overflow-y: auto;
   overflow-x: hidden;
+  background-color: #f9f9f9;
+  /* 更改背景颜色 */
+  border-radius: 8px;
 }
 
 .terminal-header {
@@ -213,14 +224,26 @@ export default {
   color: black;
   font-weight: bold;
   border-bottom: 1px solid #333;
+  border-top-left-radius: 8px;
+  /* 标题栏左上角圆角 */
+  border-top-right-radius: 8px;
+  /* 标题栏右上角圆角 */
+  /* padding: 8px; */
+  /* 调整内边距 */
 }
 
 .terminal-header div {
   padding: 5px 10px;
 }
 
+.title {
+  font-size: 18px;
+}
+
 .btn {
   cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 8px;
   text-align: center;
 }
 
@@ -232,10 +255,26 @@ export default {
 .resize-handle {
   width: 20px;
   height: 20px;
-  background: red;
+  background: rgb(65, 148, 134);
   position: absolute;
   right: 0;
   bottom: 0;
   cursor: se-resize;
+}
+
+.clear {
+  cursor: pointer;
+  padding: 5px 10px;
+  background-color: #727272;
+  /* 清除按钮的红色背景 */
+  border: none;
+  color: white;
+  margin-right: 5px;
+  /* 添加一些间距以分隔按钮 */
+}
+
+.clear:hover {
+  background-color: #3f3f3f;
+  /* 鼠标悬停时的深红色背景 */
 }
 </style>
