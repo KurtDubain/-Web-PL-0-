@@ -19,6 +19,7 @@
         <footerBS></footerBS>
       </el-footer>
     </el-container>
+    <blogerBS></blogerBS>
   </div>
 </template>
 
@@ -27,9 +28,11 @@ import { useDark, useToggle } from "@vueuse/core";
 import footerBS from "./components/footerBS.vue";
 import navBS from "./components/navBS.vue";
 import asideBS from "./components/asideBS.vue";
+// import blogerBSVue
 // import homeBS from "./page/homeBS.vue";
 import { useStore } from "vuex";
 import { computed, onMounted } from "vue";
+import blogerBS from './components/blogerBS.vue';
 
 export default {
   name: "App",
@@ -37,6 +40,7 @@ export default {
     footerBS,
     navBS,
     asideBS,
+    blogerBS
     // homeBS,
   },
   setup() {
@@ -68,6 +72,7 @@ export default {
 .el-footer {
   padding: 0;
 }
+
 /* .el-aside {
   width: auto;
 } */

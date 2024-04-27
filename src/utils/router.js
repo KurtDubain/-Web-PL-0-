@@ -15,7 +15,6 @@ import writer from "../pages/writeDu.vue";
 import chatReader from "../pages/chatReaderDu.vue";
 import subscription from "../pages/subscriptionDu.vue";
 import weather from "../pages/weatherDu.vue";
-import help from "../";
 
 import axios from "../utils/axios";
 

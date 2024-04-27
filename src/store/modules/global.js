@@ -3,7 +3,10 @@ const state = {
   isShowDebugger: true, //是否展示调试器
   isShowTerminal: false, //是否展示终端
   isWasm: false, //是否是wasm
+
+  isShowBlogerMsg: false, //是否展示博主信息
 };
+
 const mutations = {
   // 切换侧边栏
   changeIsShowAside(state) {
@@ -20,6 +23,9 @@ const mutations = {
   // 切换wasm
   changeIsWasm(state) {
     state.isWasm = !state.isWasm;
+  },
+  changeIsShowBlogerMsg(state) {
+    state.isShowBlogerMsg = !state.isShowBlogerMsg;
   },
 };
 const actions = {};
@@ -39,6 +45,9 @@ const getters = {
   // 获取wasm状态
   isWasm(state) {
     return state.isWasm;
+  },
+  isShowBlogerMsg(state) {
+    return state.isShowBlogerMsg;
   },
 };
 export default {

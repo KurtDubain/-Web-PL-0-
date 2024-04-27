@@ -42,19 +42,12 @@
 
       <el-sub-menu index="6">
         <template #title>更多</template>
-        <router-link to="/write" style="text-decoration: none">
-          <el-menu-item index="6-1">个人博客</el-menu-item>
-        </router-link>
-        <router-link to="/subscription" style="text-decoration: none">
-          <el-menu-item index="6-2">联系博主</el-menu-item>
-        </router-link>
-        <router-link to="/write" style="text-decoration: none">
-          <el-menu-item index="6-3">前端仓库</el-menu-item>
-        </router-link>
-        <router-link to="/weather" style="text-decoration: none">
-          <el-menu-item index="6-4">服务端仓库</el-menu-item>
-        </router-link>
-        <el-menu-item index="6-5" @click="showAnnouncement">待开发</el-menu-item>
+        <el-menu-item index="6-1"><a href="https://www.dyp02.vip" target="_blank">个人博客</a></el-menu-item>
+        <el-menu-item index="6-2" @click="showBlogerMSG">联系博主</el-menu-item>
+        <el-menu-item index="6-3"><a href="https://github.com/KurtDubain/-Web-PL-0-"
+            target="_blank">前端仓库</a></el-menu-item>
+        <el-menu-item index="6-4"><a href="https://github.com/KurtDubain/-Web-PL-0--backend"
+            target="_blank">服务端仓库</a></el-menu-item>
       </el-sub-menu>
     </el-menu>
   </div>
@@ -75,10 +68,14 @@ export default {
     const handleIsShowRun = () => {
       store.commit("global/changeIsShowTerminal");
     };
+    const showBlogerMSG = () => {
+      store.commit('global/changeIsShowBlogerMsg')
+    }
     return {
       handleIsShowAside,
       handleIsShowDebugger,
       handleIsShowRun,
+      showBlogerMSG
     };
   },
 };
