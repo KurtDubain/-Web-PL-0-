@@ -9,7 +9,7 @@
         <template #header>
           <div class="clearfix"><strong>项目介绍</strong></div>
         </template>
-        <div class="text-gray-500 h-[30vh]">
+        <div class="text-gray-500 h-[30vh] overflow-auto">
           <strong>项目简介</strong><br>
           本项目是一个面向Web的PL/0语言集成开发环境，旨在提供便捷的PL/0调试开发工具。我们诚邀社区成员在issue中提出宝贵意见并参与项目改进。具体联系方式，可以点击“更多”来查看。<br><br>
 
@@ -29,7 +29,7 @@
         <template #header>
           <div class="clearfix"><strong>注意事项</strong></div>
         </template>
-        <div class="text-gray-500 h-[30vh]">
+        <div class="text-gray-500 h-[30vh] overflow-auto">
           <!-- <strong>项目简介</strong><br> -->
           <!-- 本项目是一个面向Web的PL/0语言集成开发环境，旨在提供便捷的PL/0调试开发工具。我们诚邀社区成员在issue中提出宝贵意见并参与项目改进。<br><br> -->
 
@@ -48,23 +48,31 @@
       </el-card>
     </div>
     <!-- 卡片3 -->
-    <div @click="showDialog(3)" class="w-full p-4 hover:shadow-lg transition-opactiy cursor-pointer">
+    <div @click="showDialog(3)" class="w-full p-4 hover:shadow-lg transition-opacity cursor-pointer">
       <el-card class="box-card">
         <template #header>
-          <div class="clearfix"><strong>语法规则</strong></div>
+          <div class="clearfix"><strong>PL/0 语法规则</strong></div>
         </template>
-        <div class="text-gray-500 h-[40vh]"><strong>项目简介</strong><br>
-          本项目是一个面向Web的PL/0语言集成开发环境，旨在提供便捷的PL/0调试开发工具。我们诚邀社区成员在issue中提出宝贵意见并参与项目改进。<br><br>
-
-          <strong>主要功能</strong><br>
-          - <em>代码编写：</em>直观的代码编辑器支持PL/0代码编写。<br>
-          - <em>编译与执行：</em>一键编译执行，查看代码执行结果和状态。<br>
-          - <em>调试工具：</em>集成调试工具，简化错误诊断和问题解决过程。<br>
-          - <em>UI控制：</em>通过导航栏轻松访问各种工具和功能。<br>
-          - <em>文件管理：</em>侧边栏支持文件的增删查改及导入导出管理。<br><br>
+        <div class="text-gray-500 h-[40vh] overflow-auto p-4">
+          <strong>声明：本编译器是由作者独立开发，所以一些语法规则可能和学术上的PL/0不完全相同，但是整体设计思路相差不大。</strong><br><br>
+          <p><strong>程序的基本结构：</strong>一个 PL/0 程序包含一个主程序块，以句点结束。</p>
+          <p><strong>程序块（BLOCK）的组成：</strong>程序块可以包含常量声明、变量声明、过程声明以及一条语句，通常由begin和end进行包裹。</p>
+          <ul>
+            <li><strong>常量声明：</strong>以 'const' 开头，后跟一个或多个常量定义，每个定义由标识符和数字组成，用等号（:=）连接，在顶部声明。</li>
+            <li><strong>变量声明：</strong>以 'var' 开头，后跟一个或多个标识符，用逗号分隔，在顶部声明。</li>
+            <li><strong>过程（函数）声明：</strong>以 'procedure' 开头，后跟一个标识符和一个程序块，用分号分隔。</li>
+            <li><strong>语句：</strong>可以是赋值、调用、复合语句、条件语句或循环语句。跳转到“帮助”页面，查看语句的具体使用样例</li>
+          </ul>
+          <p><strong>表达式和运算：</strong>表达式由项和操作符组成，可以包含加法、减法、乘法和除法。（支持多符号运算，但是不支持括号控制优先级，默认优先乘除法）</p>
+          <ul>
+            <li><strong>项：</strong>由因子组成，因子之间可以是乘法或除法。</li>
+            <li><strong>因子：</strong>可以是标识符、数字或括号中的表达式。</li>
+          </ul>
+          <p>通过以上结构，PL/0 提供了编程的基本功能，支持简单的算术和逻辑操作。点击卡片查看编译的文法规则。</p>
         </div>
       </el-card>
     </div>
+
   </div>
 
   <!-- 详细信息对话框 -->
@@ -105,5 +113,30 @@ export default {
 .box-card {
   width: 100%;
   /* height: 50%; */
+}
+
+.box-card ul {
+  padding-left: 20px;
+  /* 增加左内边距以显示项目符号 */
+  list-style-type: disc;
+  /* 使用圆点作为项目符号 */
+}
+
+.box-card li {
+  margin-bottom: 8px;
+  /* 每个列表项底部留白 */
+  line-height: 1.5;
+  /* 增加行高提高可读性 */
+  color: #636363;
+  /* 设置字体颜色，确保与卡片风格一致 */
+}
+
+.box-card p,
+.box-card ul,
+.box-card li {
+  color: #636363;
+  /* 统一文字颜色 */
+  font-size: 0.95em;
+  /* 统一字体大小 */
 }
 </style>
