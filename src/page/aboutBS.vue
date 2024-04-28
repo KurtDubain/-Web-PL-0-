@@ -76,8 +76,30 @@
   </div>
 
   <!-- 详细信息对话框 -->
-  <el-dialog v-model="dialogVisible" :title="`卡片${activeCard}详细信息`">
-    <div>这里展示卡片的详细信息...</div>
+  <el-dialog v-model="dialogVisible" :title="`文法规则详细信息`">
+    <div class="grammar-content">
+      <h3>PL/0 语法规则</h3>
+      <p><strong>程序的基本结构：</strong>一个 PL/0 程序包含一个主程序块，以句点结束。</p>
+      <h4>声明：</h4>
+      <ul>
+        <li><code>const</code> Identifier = Number;</li>
+        <li><code>var</code> Identifier [= Number];</li>
+        <li><code>procedure</code> Identifier {Block};</li>
+      </ul>
+      <h4>语句：</h4>
+      <ul>
+        <li>赋值: Identifier := Expression;</li>
+        <li>条件: if Expression then Statement [else Statement];</li>
+        <li>循环: while Expression do Statement;</li>
+        <li>复合: begin Statement; [Statement;]... end;</li>
+      </ul>
+      <h4>表达式：</h4>
+      <p>表达式由项和操作符组成，可以包含加法、减法、乘法和除法。</p>
+      <ul>
+        <li>项: Term [(+|-) Term]</li>
+        <li>因子: Factor [(*|/) Factor]</li>
+      </ul>
+    </div>
   </el-dialog>
 </template>
 
@@ -138,5 +160,28 @@ export default {
   /* 统一文字颜色 */
   font-size: 0.95em;
   /* 统一字体大小 */
+}
+
+.grammar-content h3,
+.grammar-content h4 {
+  color: #d1d1d1;
+  font-weight: bold;
+}
+
+.grammar-content ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.grammar-content li {
+  margin-bottom: 10px;
+  background-color: #3a3a3a;
+  border-left: 3px solid #3498db;
+  padding: 10px;
+}
+
+.grammar-content code {
+  background-color: #6d6d6d;
+  padding: 2px 6px;
 }
 </style>
