@@ -32,13 +32,8 @@
     <el-divider />
 
     <div class="file-list">
-      <div
-        v-for="(file, index) in files"
-        :key="index"
-        @click="selectFile(index)"
-        class="list-item"
-        :class="{ selected: selectedIndex === index }"
-      >
+      <div v-for="(file, index) in files" :key="index" @click="selectFile(index)" class="list-item"
+        :class="{ selected: selectedIndex === index }">
         <!-- <img src='file-icon.png' alt="file Icon" class="file-icon" /> -->
         <el-icon :size="30">
           <Document />
@@ -52,12 +47,14 @@
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import eventBus from "@/utils/eventBus.js";
 
 export default {
   name: "asideBS",
   setup() {
     const store = useStore();
+    const router = useRouter()
     let files = computed(() => store.getters["files/allFiles"]);
     let selectedIndex = computed(() => store.getters["files/getIndex"]);
 
@@ -155,6 +152,7 @@ export default {
     const selectFile = (index) => {
       // selectedIndex.value = index
       // console.log(selectedIndex.value)
+      router.push({ name: 'Home' })
       store.commit("files/selectFile", index);
       eventBus.emit("changeFile");
     };

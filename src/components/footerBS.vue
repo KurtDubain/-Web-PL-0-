@@ -8,9 +8,10 @@
         <router-link to="/about" class="footer-link">关于</router-link>
         <el-divider direction="vertical" />
 
-        <router-link to="/subscription" class="footer-link"
+        <!-- <router-link to="/subscription" class="footer-link"
           >联系我们</router-link
-        >
+        > -->
+        <div class="footer-link cursor-pointer" @click="showBlogMSG">联系我们</div>
       </div>
       <div class="footer-info">
         <p>版权所有 &copy; 雪碧</p>
@@ -23,8 +24,18 @@
 </template>
 
 <script>
+import { useStore } from 'vuex';
 export default {
   name: "footBS",
+  setup() {
+    const store = useStore()
+    const showBlogMSG = () => {
+      store.commit('global/changeIsShowBlogerMsg')
+    }
+    return {
+      showBlogMSG
+    }
+  }
 };
 </script>
 
