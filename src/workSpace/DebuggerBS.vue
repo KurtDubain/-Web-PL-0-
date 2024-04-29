@@ -39,7 +39,7 @@
     <div class="debugger-output">
       <div>调试结果：</div>
       <div class="pre">
-        <el-table height="100%" :data="tableData" border style="width: 100%">
+        <el-table height="100%" :data="tableData" border style="width: 100%" empty-text="暂无调试数据">
           <el-table-column prop="name" label="变量名" />
           <el-table-column prop="value" label="变量值" />
           <el-table-column prop="type" label="类型" />
