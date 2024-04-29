@@ -15,11 +15,15 @@
           </div>
           <el-button class="debug-button" @click="startInit" type="primary" size="small"
             v-if="showBtn == 0">初始化</el-button>
-          <el-checkbox v-if="showBtn == 0" v-model="isStepOver" label="单步调试" size="small"></el-checkbox><el-tooltip
-            class="box-item" effect="dark" content="如果设置了断点，并且没有选择单步执行，则断点生效；若选中了单步执行，则断点不生效" placement="right-start">
-            <el-icon>
-              <QuestionFilled />
-            </el-icon></el-tooltip>
+          <div class="flex items-center justify-center">
+            <el-checkbox v-if="showBtn == 0" v-model="isStepOver" label="单步调试"></el-checkbox>
+            <el-tooltip class="box-item" effect="dark" content="如果设置了断点，并且没有选择单步执行，则断点生效；若选中了单步执行，则断点不生效"
+              placement="right-start">
+              <el-icon>
+                <QuestionFilled />
+              </el-icon>
+            </el-tooltip>
+          </div>
           <el-button class="debug-button" @click="startByType('nextLine')" type="primary" size="small"
             v-if="showBtn == 2">执行到下一行</el-button>
           <el-button class="debug-button" @click="startByType('nextBreak')" type="primary" size="small"
@@ -252,7 +256,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .debugger-styles {
   display: flex;
   flex-direction: column;
