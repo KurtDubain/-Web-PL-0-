@@ -79,25 +79,43 @@
   <el-dialog v-model="dialogVisible" :title="`文法规则详细信息`">
     <div class="grammar-content">
       <h3>PL/0 语法规则</h3>
-      <p><strong>程序的基本结构：</strong>一个 PL/0 程序包含一个主程序块，以句点结束。</p>
-      <h4>声明：</h4>
+      <p><strong>程序的基本结构：</strong>一个 PL/0 程序包含一个主程序块<code>Program</code>，以句点结束。</p>
+      <h4>程序块(Program)</h4>
       <ul>
-        <li><code>const</code> Identifier = Number;</li>
-        <li><code>var</code> Identifier [= Number];</li>
-        <li><code>procedure</code> Identifier {Block};</li>
+        <li><code>Program</code>-> Block "."</li>
+        <li><code>Block</code>-> [ Declaration ] { Statement }</li>
       </ul>
-      <h4>语句：</h4>
+      <h4>声明(Declaration)：</h4>
       <ul>
-        <li>赋值: Identifier := Expression;</li>
-        <li>条件: if Expression then Statement [else Statement];</li>
-        <li>循环: while Expression do Statement;</li>
-        <li>复合: begin Statement; [Statement;]... end;</li>
+        <li><code>Declaration</code>-> { Declaration_const | Declaration_var | Declaration_procedure }</li>
+        <li><code>Declaration_const</code>-> "const" Identifier ":=" Number { "," Identifier "=" Number } ";"</li>
+        <li><code>Declaration_var</code>-> "var" Identifier [ ":=" Number ] { "," Identifier ["=" Number ]} ";"</li>
+        <li><code>Declaration_procedure</code>-> "procedure" Identifier ";" { Block } ";"</li>
       </ul>
-      <h4>表达式：</h4>
+      <h4>语句(Statement)：</h4>
+      <ul>
+        <li><code>Statement</code>-> { Assignment | ProcedureCall | ifStatement | forStatement | whileStatement |
+          readStatement | writeStatement | beginEndStatement }</li>
+        <li><code>Assignment</code>-> Identifier ":=" Expression ";"</li>
+        <li><code>ProcedureCall</code>-> "call" Identifier ";"</li>
+        <li><code>ifStatement</code>-> "if" Expression "then" Statement { elseIfStatement } [ "else" Statement ] "endif"
+          ";"</li>
+        <li><code>elseIfStatement</code>-> "else" "if" Expression "then" Statement</li>
+        <li><code>whileStatement</code>-> "while" Expression "do" Statement "endwhile" ";"</li>
+        <li><code>beginEndStatement</code>-> "begin" { Statement } "end"</li>
+        <li><code>forStatement</code>-> "for" Identifier ":=" Expression "to" Expression "do" Statement "endfor" ";"
+        </li>
+        <li><code>readStatement</code>-> "read" Identifier ";"</li>
+        <li><code>writeStatement</code>-> "write" Expression ";"</li>
+      </ul>
+      <h4>表达式(Expression)：</h4>
       <p>表达式由项和操作符组成，可以包含加法、减法、乘法和除法。</p>
       <ul>
-        <li>项: Term [(+|-) Term]</li>
-        <li>因子: Factor [(*|/) Factor]</li>
+        <li><code>Expression</code>-> { Expression1 | Expression2 }</li>
+        <li><code>Expression1</code>(算术表达式) -> Term { ( "+" | "-" ) Term }</li>
+        <li><code>Expression2</code>(关系表达式) -> Expression ( "＜" | "＜=" | "=" | "＜＞" | "＞" | "＞=")</li>
+        <li><code>Term</code>(项) -> Factor { ("*" | "/") Factor }</li>
+        <li><code>Factor</code>(因子) -> Identifier | Number | "(" Expression ")"</li>
       </ul>
     </div>
   </el-dialog>
@@ -135,6 +153,11 @@ export default {
 .box-card {
   width: 100%;
   /* height: 50%; */
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.box-card :hover {
+  box-shadow: 0 10px 15px rgba(206, 206, 206, 0.3);
 }
 
 .box-card ul {
@@ -156,7 +179,7 @@ export default {
 .box-card p,
 .box-card ul,
 .box-card li {
-  color: #636363;
+  color: #808080;
   /* 统一文字颜色 */
   font-size: 0.95em;
   /* 统一字体大小 */
