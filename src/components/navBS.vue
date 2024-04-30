@@ -42,12 +42,10 @@
 
       <el-sub-menu index="6">
         <template #title>更多</template>
-        <el-menu-item index="6-1"><a href="https://www.dyp02.vip" target="_blank">个人博客</a></el-menu-item>
+        <el-menu-item index="6-1" @click="goToWeb(1)">个人博客</el-menu-item>
         <el-menu-item index="6-2" @click="showBlogerMSG">联系博主</el-menu-item>
-        <el-menu-item index="6-3"><a href="https://github.com/KurtDubain/-Web-PL-0-"
-            target="_blank">前端仓库</a></el-menu-item>
-        <el-menu-item index="6-4"><a href="https://github.com/KurtDubain/-Web-PL-0--backend"
-            target="_blank">服务端仓库</a></el-menu-item>
+        <el-menu-item index="6-3" @click="goToWeb(2)">前端仓库</el-menu-item>
+        <el-menu-item index="6-4" @click="goToWeb(3)">服务端仓库</el-menu-item>
       </el-sub-menu>
     </el-menu>
   </div>
@@ -71,11 +69,23 @@ export default {
     const showBlogerMSG = () => {
       store.commit('global/changeIsShowBlogerMsg')
     }
+    const goToWeb = (num) => {
+      let url
+      if (num == 1) {
+        url = 'https://www.dyp02.vip'
+      } else if (num == 2) {
+        url = 'https://github.com/KurtDubain/-Web-PL-0-'
+      } else if (num == 3) {
+        url = 'https://github.com/KurtDubain/-Web-PL-0--backend'
+      }
+      window.open(url, "_blank")
+    }
     return {
       handleIsShowAside,
       handleIsShowDebugger,
       handleIsShowRun,
-      showBlogerMSG
+      showBlogerMSG,
+      goToWeb
     };
   },
 };
