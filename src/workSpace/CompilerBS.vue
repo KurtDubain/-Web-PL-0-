@@ -97,7 +97,7 @@ export default {
         );
         compilerOutput.value.push(
           `${options.value.IntermediateCodeGeneration
-            ? `中间代码生成结果:\n${res.result.IntermediateCodeGeneration.join(
+            ? `中间代码生成结果:\n${typeof res.result.IntermediateCodeGeneration == 'string' ? res.result.IntermediateCodeGeneration : res.result.IntermediateCodeGeneration.join(
               "\n"
             )}\n`
             : ''

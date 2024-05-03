@@ -5,8 +5,6 @@ export const pascalLanguageConfig = {
   tokenPostfix: ".pascal",
 
   keywords: [
-    "function",
-    "int",
     "const",
     "var",
     "if",
@@ -16,11 +14,8 @@ export const pascalLanguageConfig = {
     "end",
     "while",
     "do",
-    "repeat",
-    "until",
     "for",
     "to",
-    "downto",
     "endif",
     "endfor",
     "endwhile",
@@ -107,8 +102,6 @@ export const pascalCompletionProvider = {
 
     // 添加关键字
     const keywords = [
-      "function",
-      "int",
       "const",
       "var",
       "if",
@@ -118,16 +111,11 @@ export const pascalCompletionProvider = {
       "end",
       "while",
       "do",
-      "repeat",
-      "until",
       "for",
       "to",
-      "downto",
       "endfor",
       "endwhile",
       "endif",
-      "write",
-      "read",
       "procedure",
     ];
     keywords.forEach((keyword) => {
@@ -146,7 +134,7 @@ export const pascalCompletionProvider = {
 
     // 添加函数或过程名
     // 示例：假设已有一个数组存储了已定义的函数和过程名
-    const functionNames = ["writeln", "readln", "max", "min"];
+    const functionNames = ["write", "read", "call"];
     functionNames.forEach((name) => {
       suggestions.push({
         label: name,

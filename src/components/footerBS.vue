@@ -18,6 +18,7 @@
         <!-- <p>地址：xxx市xxx区xxx街道xxx号</p> -->
         <p>冀ICP备2023028175号</p>
         <p>Email：kurt.du.cobain@gmail.com</p>
+        <p>特别鸣谢前端代码贡献者：<a href="https://github.com/shenzhiyuzhou" target="_blank">神之宇宙</a></p>
       </div>
     </div>
   </footer>
