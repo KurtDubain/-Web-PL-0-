@@ -3,6 +3,7 @@ const state = {
   isShowDebugger: true, //是否展示调试器
   isShowTerminal: false, //是否展示终端
   isWasm: false, //是否是wasm
+  isCreateEditor: false, //是否创建了编辑器实例
 
   isShowBlogerMsg: false, //是否展示博主信息
 };
@@ -27,6 +28,9 @@ const mutations = {
   changeIsShowBlogerMsg(state) {
     state.isShowBlogerMsg = !state.isShowBlogerMsg;
   },
+  changeIsCreateEditor(state) {
+    state.isCreateEditor = true;
+  },
 };
 const actions = {};
 const getters = {
@@ -48,6 +52,9 @@ const getters = {
   },
   isShowBlogerMsg(state) {
     return state.isShowBlogerMsg;
+  },
+  isCreateEditor(state) {
+    return state.isCreateEditor;
   },
 };
 export default {

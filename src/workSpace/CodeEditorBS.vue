@@ -21,15 +21,20 @@ export default {
     // Codemirror配置
     // 初始化所选中的文件的内容
     let code = computed(() => store.getters['files/selectedFile'])
+    let isCreate = computed(() => store.getters['global/isCreateEditor'])
     let editorCode = ref(null)//编辑器容器
     let editorCodeContent = null//编辑器实例
     let debugRowIds = computed(() => store.getters['debug/rowIds'])//断点行号
     const decorationIds = [];
     const initEditor = async () => {
       await nextTick(); // Wait for the next DOM update
-      monaco.languages.register({ id: 'pascal' })
-      monaco.languages.setMonarchTokensProvider('pascal', pascalLanguageConfig)
-      monaco.languages.registerCompletionItemProvider('pascal', pascalCompletionProvider)
+
+      if (!isCreate.value) {
+        monaco.languages.register({ id: 'pascal' })
+        monaco.languages.setMonarchTokensProvider('pascal', pascalLanguageConfig)
+        monaco.languages.registerCompletionItemProvider('pascal', pascalCompletionProvider)
+      }
+      store.commit('global/changeIsCreateEditor')
       monaco.editor.defineTheme('customDarkTheme', {
         base: 'vs-dark', // 继承vs-dark主题
         inherit: true,
@@ -136,9 +141,9 @@ export default {
     }
 
     onMounted(async () => {
-      await nextTick()
-      await initEditor()
-    })
+      await nextTick();
+      initEditor();
+    });
 
 
     // editorCode.value = code.value
