@@ -21,7 +21,7 @@ export default {
     // Codemirror配置
     // 初始化所选中的文件的内容
     let code = computed(() => store.getters['files/selectedFile'])
-    let isCreate = computed(() => store.getters['global/isCreateEditor'])
+    let isCreate = computed(() => store.getters['global/isCreateEditor'])//判断是否是第一次注册
     let editorCode = ref(null)//编辑器容器
     let editorCodeContent = null//编辑器实例
     let debugRowIds = computed(() => store.getters['debug/rowIds'])//断点行号

@@ -34,12 +34,13 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useStore } from "vuex";
 import { compileCode, runCode } from "../api/modules/compiler";
 import terminalBS from "@/components/terminalBS.vue";
 import formatAST from "@/utils/astGenerator";
 import { ElMessage } from "element-plus";
+import eventBus from "@/utils/eventBus";
 export default {
   name: "CompilerBS",
   components: {
@@ -142,12 +143,35 @@ export default {
         console.error("代码执行失败", error);
       }
     };
+
     const clearIt = () => {
       compilerOutput.value = [""];
     };
     const changeIsWasm = () => {
       store.commit("global/changeIsWasm");
     };
+    const extractLineNumber = (errorString) => {
+      // 正则表达式匹配 "line is " 后跟一个或多个数字
+      const lineMatch = errorString.match(/line is (\d+)/);
+      if (lineMatch && lineMatch.length > 1) {
+        // lineMatch[1] 包含匹配的数字部分，即行号
+        return parseInt(lineMatch[1], 10); // 将提取的字符串转换为整数
+      } else {
+        // 如果没有找到匹配，可以返回一个默认值或错误信息
+        return null;
+      }
+    }
+    watch(compilerOutput, (newValue) => {
+      // 检查最新的编译输出是否包含 SyntaxAnalysis 的结果
+      const syntaxAnalysis = newValue.find(part => part.includes('语法分析结果:'));
+      if (syntaxAnalysis && typeof syntaxAnalysis === 'string') {
+        let newLine = extractLineNumber(syntaxAnalysis)
+        console.log(newLine)
+        eventBus.emit("changeLine", typeof newLine == 'number' ? newLine : null);
+      }
+    }, {
+      deep: true // 设置深度监听
+    });
     return {
       isWasm,
       options,
