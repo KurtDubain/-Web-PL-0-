@@ -69,6 +69,7 @@ export default {
     const showBlogerMSG = () => {
       store.commit('global/changeIsShowBlogerMsg')
     }
+    // url跳转
     const goToWeb = (num) => {
       let url
       if (num == 1) {

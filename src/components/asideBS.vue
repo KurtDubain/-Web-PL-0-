@@ -1,5 +1,4 @@
 <!-- 侧边工具组件 -->
-
 <template>
   <div class="sidebar">
     <div class="toolbar">
@@ -30,7 +29,7 @@
     </div>
 
     <el-divider />
-
+    <!-- 文件管理 -->
     <div class="file-list">
       <div v-for="(file, index) in files" :key="index" @click="selectFile(index)" class="list-item"
         :class="{ selected: selectedIndex === index }">
@@ -57,7 +56,7 @@ export default {
     const router = useRouter()
     let files = computed(() => store.getters["files/allFiles"]);
     let selectedIndex = computed(() => store.getters["files/getIndex"]);
-
+    // 导入功能
     const importFile = async () => {
       const fileInput = document.createElement("input");
       fileInput.type = "file";
@@ -108,7 +107,7 @@ export default {
         fileInput.remove();
       }, 10000);
     };
-
+    // 导出文件
     const exportFile = () => {
       const selectedFile = files.value[selectedIndex.value];
       if (selectedFile) {
@@ -122,6 +121,7 @@ export default {
         a.click();
       }
     };
+    // 新建文件
     const newFile = () => {
       let newName = "newFile.pl0";
       let count = 1;
@@ -135,6 +135,7 @@ export default {
       });
       eventBus.emit("changeFile");
     };
+    // 删除文件
     const deleteFile = () => {
       const selectedFile = files.value[selectedIndex.value];
       if (selectedFile) {
@@ -148,7 +149,7 @@ export default {
         }
       }
     };
-
+    // 选中文件
     const selectFile = (index) => {
       // selectedIndex.value = index
       // console.log(selectedIndex.value)
@@ -156,7 +157,7 @@ export default {
       store.commit("files/selectFile", index);
       eventBus.emit("changeFile");
     };
-
+    // 读取文件，用于校验是否一致
     const readFile = (file) => {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();

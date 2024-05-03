@@ -1,3 +1,4 @@
+<!-- 编译器 -->
 <template>
   <div class="compiler-styles">
     <h3>编译器</h3>
@@ -84,6 +85,7 @@ export default {
             : ''
           }`
         );
+        // 语法分析要经过特殊处理
         compilerOutput.value.push(
           `${options.value.SyntaxAnalysis
             ? `语法分析结果:\n${formatAST(res.result.SyntaxAnalysis)}\n`
@@ -115,6 +117,7 @@ export default {
         console.error("编译异常", error);
       }
     };
+    // 执行
     const runIt = async () => {
 
       try {
@@ -147,20 +150,21 @@ export default {
     const clearIt = () => {
       compilerOutput.value = [""];
     };
+    // 切换模式
     const changeIsWasm = () => {
       store.commit("global/changeIsWasm");
     };
+    // 利用正则，获取错误信息中的数据
     const extractLineNumber = (errorString) => {
-      // 正则表达式匹配 "line is " 后跟一个或多个数字
       const lineMatch = errorString.match(/line is (\d+)/);
       if (lineMatch && lineMatch.length > 1) {
-        // lineMatch[1] 包含匹配的数字部分，即行号
         return parseInt(lineMatch[1], 10); // 将提取的字符串转换为整数
       } else {
-        // 如果没有找到匹配，可以返回一个默认值或错误信息
+        // 如果没有找到匹配，返回null
         return null;
       }
     }
+    // 深度监听错误信息
     watch(compilerOutput, (newValue) => {
       // 检查最新的编译输出是否包含 SyntaxAnalysis 的结果
       const syntaxAnalysis = newValue.find(part => part.includes('语法分析结果:'));
@@ -170,7 +174,7 @@ export default {
         eventBus.emit("changeLine", typeof newLine == 'number' ? newLine : null);
       }
     }, {
-      deep: true // 设置深度监听
+      deep: true
     });
     return {
       isWasm,

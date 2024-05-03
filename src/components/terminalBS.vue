@@ -1,3 +1,4 @@
+<!-- 终端组件 -->
 <template>
   <div class="terminal-window" :style="{
     width: width + 'px',
@@ -5,9 +6,8 @@
     transform: `translate(${x}px, ${y}px)`,
   }" @mousedown="onMouseDown">
     <div class="terminal-header" @mousedown="startDrag">
-      <!-- 可以放置一些控制按钮 -->
       <div class="title">终端</div>
-      <div class="btn clear" @click="clearTerminal">清空历史</div> <!-- 新的清空按钮 -->
+      <div class="btn clear" @click="clearTerminal">清空历史</div>
       <div class="btn close" @click="handleIsShowTerminal">×</div>
     </div>
     <div class="terminal-body">
@@ -36,6 +36,7 @@ export default {
   },
   setup(props) {
     // console.log(props.runResult);
+    // 拖拽和缩放功能
     const width = ref(600);
     const height = ref(400);
     const x = ref(0);
@@ -87,7 +88,7 @@ export default {
     const handleIsShowTerminal = () => {
       store.commit("global/changeIsShowTerminal");
     };
-
+    // 终端输出控制
     const terminalOutput = ref([]); //输出内容
     const userInput = ref(""); //输入内容
     const waitingForInput = ref(false); // 用于标记是否正在等待用户输入

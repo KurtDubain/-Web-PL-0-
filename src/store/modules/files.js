@@ -1,3 +1,4 @@
+// 文件管理
 const state = {
   files: [], //用于存储代码文件
   selectedFileIndex: null, //当前选中的文件

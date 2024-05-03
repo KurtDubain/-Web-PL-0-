@@ -1,5 +1,6 @@
+// PL/0语言配置
 import * as monaco from "monaco-editor";
-
+// 高亮配置
 export const pascalLanguageConfig = {
   defaultToken: "",
   tokenPostfix: ".pascal",
@@ -96,6 +97,7 @@ export const pascalLanguageConfig = {
     ],
   },
 };
+// 关键字提示配置
 export const pascalCompletionProvider = {
   provideCompletionItems: (model, position) => {
     const suggestions = [];
@@ -133,7 +135,6 @@ export const pascalCompletionProvider = {
     });
 
     // 添加函数或过程名
-    // 示例：假设已有一个数组存储了已定义的函数和过程名
     const functionNames = ["write", "read", "call"];
     functionNames.forEach((name) => {
       suggestions.push({
@@ -148,8 +149,6 @@ export const pascalCompletionProvider = {
         },
       });
     });
-
-    // 添加其他补全项...
 
     return {
       suggestions: suggestions,

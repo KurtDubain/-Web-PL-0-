@@ -1,3 +1,4 @@
+// 路由
 import { createRouter, createWebHistory } from "vue-router";
 import HomeRoutes from "./modules/home";
 import AboutRoutes from "./modules/about";

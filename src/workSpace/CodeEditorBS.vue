@@ -1,3 +1,4 @@
+<!-- 编辑器 -->
 <template>
   <div class="code-editor">
     <div id="code-textarea" ref="editorCode" @input="handleInput"></div>
@@ -27,7 +28,7 @@ export default {
     let debugRowIds = computed(() => store.getters['debug/rowIds'])//断点行号
     const decorationIds = [];
     const initEditor = async () => {
-      await nextTick(); // Wait for the next DOM update
+      await nextTick();
 
       if (!isCreate.value) {
         monaco.languages.register({ id: 'pascal' })

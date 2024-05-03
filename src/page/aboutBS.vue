@@ -1,3 +1,4 @@
+<!-- 关于页面 -->
 <template>
   <div class="flex flex-wrap justify-between">
     <!-- 卡片1 -->

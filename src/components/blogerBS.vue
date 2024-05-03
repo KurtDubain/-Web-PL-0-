@@ -1,3 +1,4 @@
+<!-- 博主联系方式弹窗组件 -->
 <template>
     <el-dialog v-model="dialogVisible" title="博主信息" width="30%" :before-close="dialogClose">
         <!-- 博主联系信息内容 -->

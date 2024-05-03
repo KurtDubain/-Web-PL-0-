@@ -1,4 +1,4 @@
-// vue-router的配置项
+// 废弃配置
 
 // 引入 Vue Router 和其他依赖
 import { createRouter, createWebHistory } from "vue-router";

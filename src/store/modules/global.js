@@ -1,3 +1,4 @@
+// 全局状态管理
 const state = {
   isShowAside: true, //是否展示侧边栏
   isShowDebugger: true, //是否展示调试器
@@ -25,9 +26,11 @@ const mutations = {
   changeIsWasm(state) {
     state.isWasm = !state.isWasm;
   },
+  // 切换博主联系方式
   changeIsShowBlogerMsg(state) {
     state.isShowBlogerMsg = !state.isShowBlogerMsg;
   },
+  // 是否已经被初始化（用于控制多次挂载实例的情况）
   changeIsCreateEditor(state) {
     state.isCreateEditor = true;
   },
@@ -50,9 +53,11 @@ const getters = {
   isWasm(state) {
     return state.isWasm;
   },
+  // 获取博客展示状态
   isShowBlogerMsg(state) {
     return state.isShowBlogerMsg;
   },
+  // 获取编辑器实例的挂碍情况
   isCreateEditor(state) {
     return state.isCreateEditor;
   },

@@ -1,3 +1,4 @@
+// 调试数据管理
 const state = {
   rowIds: [], //当前文件的断点list
   debugMsgQueue: [],
@@ -21,6 +22,7 @@ const mutations = {
   dequeueDebugMsg(state) {
     state.debugMsgQueue.shift(); // 移除并返回队列尾端的元素
   },
+  // 清除全部调试信息
   clearDebugMsgQueue(state) {
     state.debugMsgQueue = [];
   },

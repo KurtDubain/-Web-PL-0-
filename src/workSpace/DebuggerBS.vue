@@ -1,3 +1,4 @@
+<!-- 调试器 -->
 <template>
   <div class="debugger-styles">
     <h3 style="display: flex; align-items: center">
@@ -114,6 +115,7 @@ export default {
           });
         }
         if (showBtn.value == 0 && isStepOver.value == false) {
+          // 自定义断点处理
           socket.emit("init", {
             code: code.value,
             breakpoints: debugRowIds.value.map((breakpoint) =>
@@ -122,6 +124,7 @@ export default {
           });
           showBtn.value = 1;
         } else if (showBtn.value == 0 && isStepOver.value == true) {
+          // 单步执行的处理
           const breakpoints = [];
           for (let i = 1; i <= code.value.content.split("\n").length; i++) {
             breakpoints.push(i);
@@ -137,7 +140,7 @@ export default {
       }
     };
 
-    // 单步执行
+    // 单步执行（WASM的单步执行，JS的单步执行和执行到下一个断点）
     const startByType = (type) => {
       if (!checkCode()) return;
       if (isWasm.value) {
@@ -204,7 +207,7 @@ export default {
         }
       }
     };
-    // 执行到下一个断点
+    // 执行到下一个断点（仅限WASM模式）
     const stepIntoTheNext = async (line) => {
       console.log(line);
       let data = {

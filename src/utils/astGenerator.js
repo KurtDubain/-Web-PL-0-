@@ -1,3 +1,4 @@
+// AST的代码格式到前端显示的转换
 function formatAST(node, depth = 0) {
   if (typeof node === "string") {
     return node;
@@ -59,7 +60,7 @@ function formatAST(node, depth = 0) {
 }
 export default formatAST;
 
-// 使用示例
+// 测试
 const ast = {
   type: "Program",
   children: [

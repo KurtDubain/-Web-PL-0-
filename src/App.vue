@@ -50,6 +50,7 @@ export default {
     });
     const isDark = useDark();
     onMounted(() => {
+      // 使用ElementUI的暗黑模式
       useToggle(isDark);
       localStorage.setItem("vueuse-color-scheme", "dark");
     });
