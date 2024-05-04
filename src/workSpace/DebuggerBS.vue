@@ -101,8 +101,11 @@ export default {
       } else {
         if (!socket) {
           // 建立 WebSocket 连接
-          socket = io("http://localhost:3001");
-
+          // socket = io("http://localhost:3001");
+          socket = io("http://www.dyp02.vip:3001", {
+            path: '/sockent.io',
+            transports: ['websocket']
+          })
           // 注册一次性的事件监听器
           socket.once("initialized", () => {
             console.log("链接成功");
