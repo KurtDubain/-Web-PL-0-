@@ -11,32 +11,44 @@
         <!-- <router-link to="/subscription" class="footer-link"
           >联系我们</router-link
         > -->
-        <div class="footer-link cursor-pointer" @click="showBlogMSG">联系我们</div>
+        <div class="footer-link cursor-pointer" @click="showBlogMSG">
+          联系我们
+        </div>
       </div>
       <div class="footer-info">
         <p>版权所有 &copy; 雪碧</p>
         <!-- <p>地址：xxx市xxx区xxx街道xxx号</p> -->
-        <p>冀ICP备2023028175号</p>
+        <p>
+          <a href="https://beian.miit.gov.cn/" target="_blank"
+            >冀ICP备2023028175号</a
+          >
+        </p>
         <p>Email：kurt.du.cobain@gmail.com</p>
-        <p>特别鸣谢前端代码贡献者：<a href="https://github.com/shenzhiyuzhou" target="_blank">神之宇宙</a></p>
+        <p>
+          特别鸣谢前端代码贡献者：<a
+            href="https://github.com/shenzhiyuzhou"
+            target="_blank"
+            >神之宇宙</a
+          >
+        </p>
       </div>
     </div>
   </footer>
 </template>
 
 <script>
-import { useStore } from 'vuex';
+import { useStore } from "vuex";
 export default {
   name: "footBS",
   setup() {
-    const store = useStore()
+    const store = useStore();
     const showBlogMSG = () => {
-      store.commit('global/changeIsShowBlogerMsg')
-    }
+      store.commit("global/changeIsShowBlogerMsg");
+    };
     return {
-      showBlogMSG
-    }
-  }
+      showBlogMSG,
+    };
+  },
 };
 </script>
 
