@@ -2,10 +2,13 @@
 <template>
   <div class="debugger-styles">
     <h3 style="display: flex; align-items: center">
-      调试器<el-tooltip class="box-item" effect="dark" content="在编辑器设置断点，可以用于调试，但是对于一些没有意义的代码段，可能会自动略过断点"
-        placement="right"><el-icon>
-          <QuestionFilled />
-        </el-icon></el-tooltip>
+      调试器<el-tooltip
+        class="box-item"
+        effect="dark"
+        content="在编辑器设置断点，可以用于调试，但是对于一些没有意义的代码段，可能会自动略过断点"
+        placement="right"
+        ><el-icon> <QuestionFilled /> </el-icon
+      ></el-tooltip>
     </h3>
 
     <div class="debugger-options">
@@ -14,25 +17,71 @@
           <div class="input">
             <el-input v-model.number="currentLine" size="small" disabled />
           </div>
-          <el-button class="debug-button" @click="startInit" type="primary" size="small"
-            v-if="showBtn == 0">初始化</el-button>
+          <el-button
+            class="debug-button"
+            @click="startInit"
+            type="primary"
+            size="small"
+            v-if="showBtn == 0"
+            >初始化</el-button
+          >
           <div class="flex items-center justify-center">
-            <el-checkbox v-if="showBtn == 0" v-model="isStepOver" label="单步调试"></el-checkbox>
-            <el-tooltip class="box-item" effect="dark" content="如果设置了断点，并且没有选择单步执行，则断点生效；若选中了单步执行，则断点不生效"
-              placement="right-start">
+            <el-checkbox
+              v-if="showBtn == 0"
+              v-model="isStepOver"
+              label="单步调试"
+            ></el-checkbox>
+            <el-tooltip
+              class="box-item"
+              effect="dark"
+              content="如果设置了断点，并且没有选择单步执行，则断点生效；若选中了单步执行，则断点不生效"
+              placement="right-start"
+            >
               <el-icon>
                 <QuestionFilled />
               </el-icon>
             </el-tooltip>
+            <el-tooltip
+              class="box-item"
+              effect="dark"
+              content="第一行请勿空行或者注释单独占据一行，否则会调试异常"
+              placement="right-start"
+            >
+              <el-icon><InfoFilled /></el-icon>
+            </el-tooltip>
           </div>
-          <el-button class="debug-button" @click="startByType('nextLine')" type="primary" size="small"
-            v-if="showBtn == 2">执行到下一行</el-button>
-          <el-button class="debug-button" @click="startByType('nextBreak')" type="primary" size="small"
-            v-if="showBtn == 1">执行到下一个断点</el-button>
-          <el-button class="debug-button" @click="clearIt" type="primary" size="small"
-            v-if="showBtn == 1 || showBtn == 2">清空</el-button>
-          <el-button class="debug-button" @click="endDebugSession" type="primary" size="small"
-            v-if="showBtn == 1 || showBtn == 2">取消调试</el-button>
+          <el-button
+            class="debug-button"
+            @click="startByType('nextLine')"
+            type="primary"
+            size="small"
+            v-if="showBtn == 2"
+            >执行到下一行</el-button
+          >
+          <el-button
+            class="debug-button"
+            @click="startByType('nextBreak')"
+            type="primary"
+            size="small"
+            v-if="showBtn == 1"
+            >执行到下一个断点</el-button
+          >
+          <el-button
+            class="debug-button"
+            @click="clearIt"
+            type="primary"
+            size="small"
+            v-if="showBtn == 1 || showBtn == 2"
+            >清空</el-button
+          >
+          <el-button
+            class="debug-button"
+            @click="endDebugSession"
+            type="primary"
+            size="small"
+            v-if="showBtn == 1 || showBtn == 2"
+            >取消调试</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -40,7 +89,13 @@
     <div class="debugger-output">
       <div>调试结果：</div>
       <div class="pre">
-        <el-table height="100%" :data="tableData" border style="width: 100%" empty-text="暂无调试数据">
+        <el-table
+          height="100%"
+          :data="tableData"
+          border
+          style="width: 100%"
+          empty-text="暂无调试数据"
+        >
           <el-table-column prop="name" label="变量名" />
           <el-table-column prop="value" label="变量值" />
           <el-table-column prop="type" label="类型" />
@@ -102,6 +157,7 @@ export default {
         if (!socket) {
           // 建立 WebSocket 连接
           socket = io("http://localhost:3001");
+          // socket = io("https://www.dyp02.vip:8443");
 
           // 注册一次性的事件监听器
           socket.once("initialized", () => {
