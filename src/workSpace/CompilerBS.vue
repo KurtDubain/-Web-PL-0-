@@ -167,10 +167,11 @@ export default {
     // 深度监听错误信息
     watch(compilerOutput, (newValue) => {
       // 检查最新的编译输出是否包含 SyntaxAnalysis 的结果
-      const syntaxAnalysis = newValue.find(part => part.includes('语法分析结果:'));
+      const syntaxAnalysis = newValue.find(part => part.includes('语法分析错误:'));
       if (syntaxAnalysis && typeof syntaxAnalysis === 'string') {
+        console.log(11)
         let newLine = extractLineNumber(syntaxAnalysis)
-        console.log(newLine)
+        // console.log(newLine)
         eventBus.emit("changeLine", typeof newLine == 'number' ? newLine : null);
       }
     }, {

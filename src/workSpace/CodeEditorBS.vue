@@ -25,7 +25,7 @@ export default {
     let isCreate = computed(() => store.getters['global/isCreateEditor'])//判断是否是第一次注册
     let editorCode = ref(null)//编辑器容器
     let editorCodeContent = null//编辑器实例
-    let debugRowIds = computed(() => store.getters['debug/rowIds'])//断点行号
+    // let debugRowIds = computed(() => store.getters['debug/rowIds'])//断点行号
     const decorationIds = [];
     const initEditor = async () => {
       await nextTick();
@@ -64,7 +64,7 @@ export default {
         code.value.content = toRaw(editorCodeContent).getValue()
       })
       editorCodeContent.onMouseDown(e => {
-        console.log(e);
+        // console.log(e);
         if (!code.value) return
         if (![2, 3, 4].includes(e.target.type)) return
         const position = e.target.position;
@@ -95,8 +95,8 @@ export default {
             },
           };
           store.commit('debug/addRowId', position.lineNumber);
-          console.log(position.lineNumber);
-          console.log(debugRowIds.value);
+          // console.log(position.lineNumber);
+          // console.log(debugRowIds.value);
           editorCodeContent.getModel().deltaDecorations([], [breakPointDec]);
         } else {
           //删除
@@ -104,7 +104,7 @@ export default {
           editorCodeContent.getModel().deltaDecorations(decorationIds, []);
           decorationIds.splice(index, 1);
           store.commit('debug/deleteRowId', position.lineNumber);
-          console.log(debugRowIds.value);
+          // console.log(debugRowIds.value);
         }
       })
       editorCodeContent.onMouseMove(e => {
@@ -151,7 +151,7 @@ export default {
     // 当切换文件的时候，更新code内容
     eventBus.on('changeFile', () => {
       store.commit('debug/clearRowIds');
-      console.log(debugRowIds);
+      // console.log(debugRowIds);
       // editorCode.value = code.value.content
       editorCodeContent.updateOptions({
         readOnly: false
@@ -166,12 +166,13 @@ export default {
       }
     })
     eventBus.on('changeLine', (line) => {
-      console.log(line);
+      // console.log(line);
       let postion = {
         lineNumber: line,
         column: 1
       }
-      console.log(editorCodeContent.setPosition, postion);
+
+      // console.log(editorCodeContent.setPosition, postion);
       editorCodeContent.setPosition(postion);
     })
 

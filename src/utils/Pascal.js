@@ -118,7 +118,6 @@ export const pascalCompletionProvider = {
       "endfor",
       "endwhile",
       "endif",
-      "procedure",
     ];
     keywords.forEach((keyword) => {
       suggestions.push({
@@ -135,7 +134,7 @@ export const pascalCompletionProvider = {
     });
 
     // 添加函数或过程名
-    const functionNames = ["write", "read", "call"];
+    const functionNames = ["write", "read", "call", "procedure"];
     functionNames.forEach((name) => {
       suggestions.push({
         label: name,
