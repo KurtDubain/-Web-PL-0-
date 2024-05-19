@@ -102,9 +102,11 @@ export default {
         if (!socket) {
           // 建立 WebSocket 连接
           // socket = io("http://localhost:3001");
-          socket = io("http://www.dyp02.vip:3001", {
+          socket = io("https://www.dyp02.vip:8443", {
             path: '/sockent.io',
-            transports: ['websocket']
+            transports: ['websocket'],
+            secure: true,
+            rejectUnauthorized: false
           })
           // 注册一次性的事件监听器
           socket.once("initialized", () => {
