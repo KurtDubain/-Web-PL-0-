@@ -191,7 +191,7 @@ export default {
             ? res.result.compiledResult?.TargetCodeGeneration != ""
             : res.result?.runResult != ""
         ) {
-          store.commit("global/changeIsShowTerminal");
+          store.commit("global/ShowTerminal");
           runRes.value = res.result;
         } else {
           ElMessage({

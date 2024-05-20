@@ -22,6 +22,9 @@ const mutations = {
   changeIsShowTerminal(state) {
     state.isShowTerminal = !state.isShowTerminal;
   },
+  ShowTerminal(state) {
+    state.isShowTerminal = true;
+  },
   // 切换wasm
   changeIsWasm(state) {
     state.isWasm = !state.isWasm;
