@@ -187,8 +187,9 @@ export default {
           language: isWasm.value ? "wasm" : "js",
         });
         if (
-          res.result?.compiledResult?.TargetCodeGeneration != "" ||
-          res.result.runResult != ""
+          res.result.language == "js"
+            ? res.result.compiledResult?.TargetCodeGeneration != ""
+            : res.result?.runResult != ""
         ) {
           store.commit("global/changeIsShowTerminal");
           runRes.value = res.result;
