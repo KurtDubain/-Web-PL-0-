@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { ref, watchEffect } from "vue";
+import { ref, watch } from "vue";
 import { useStore } from "vuex";
 export default {
   name: "terminalBS",
@@ -135,6 +135,7 @@ export default {
           `return (async()=>{${props.runResult.compiledResult.TargetCodeGeneration}})()`
         );
         await func(read, write);
+        console.log("i am finished");
       } catch (error) {
         console.error("执行输出异常", error);
         terminalOutput.value.push(`Error: ${error.message}`);
@@ -171,23 +172,24 @@ export default {
       }
     };
     // 监听控制模式
-    watchEffect(() => {
-      if (props.runResult.language == "js") {
-        executeJS();
-      } else if (props.runResult.language == "wasm") {
-        compileAndRunWAT();
-      }
-    });
-    // watch(
-    //   () => props.runResult.language,
-    //   (newValue, oldValue) => {
-    //     if (newValue === "js") {
-    //       executeJS();
-    //     } else if (newValue === "wasm") {
-    //       compileAndRunWAT();
-    //     }
+    // watchEffect(() => {
+    //   if (props.runResult.language == "js") {
+    //     executeJS();
+    //   } else if (props.runResult.language == "wasm") {
+    //     compileAndRunWAT();
     //   }
-    // );
+    // });
+    watch(
+      () => props.runResult,
+      (newValue) => {
+        if (newValue.language === "js") {
+          executeJS();
+        } else if (newValue.language === "wasm") {
+          compileAndRunWAT();
+        }
+      },
+      { deep: true }
+    );
     const clearTerminal = () => {
       terminalOutput.value = [];
     };
