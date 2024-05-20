@@ -14,20 +14,23 @@
       <div class="btn clear" @click="clearTerminal">清空历史</div>
       <div class="btn close" @click="handleIsShowTerminal">×</div>
     </div>
-    <div class="terminal-body">
-      <!-- 终端内容 -->
-      <div v-for="(line, index) in terminalOutput" :key="index">
-        {{ line }}
-      </div>
-      <!-- {{ terminalOutput }} -->
-      <div v-show="waitingForInput">
-        请输入一个值:<input
-          v-model="userInput"
-          @keyup.enter="onEnter"
-          placeholder="请输入你要输入的内容"
-        />（必须是数字）
+    <div class="scroll-container">
+      <div class="terminal-body">
+        <!-- 终端内容 -->
+        <div v-for="(line, index) in terminalOutput" :key="index">
+          {{ line }}
+        </div>
+        <!-- {{ terminalOutput }} -->
+        <div v-show="waitingForInput">
+          请输入一个值:<input
+            v-model="userInput"
+            @keyup.enter="onEnter"
+            placeholder="请输入你要输入的内容"
+          />（必须是数字）
+        </div>
       </div>
     </div>
+
     <div class="resize-handle" @mousedown="startResize"></div>
   </div>
 </template>
@@ -259,12 +262,18 @@ export default {
   flex-grow: 1;
   background: #222222;
 }
+.scroll-container {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #222222;
+}
 
 .resize-handle {
   width: 20px;
   height: 20px;
   background: rgb(65, 148, 134);
-  position: absolute;
+  position: fixed;
   right: 0;
   bottom: 0;
   cursor: se-resize;

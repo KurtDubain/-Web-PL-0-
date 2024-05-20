@@ -15,9 +15,9 @@ module.exports = defineConfig({
         // target: "http://localhost:3001",
         target: "https://www.dyp02.vip:8443",
         changeOrigin: true,
-        pathRewrite: {
-          "^/api": "",
-        },
+        // pathRewrite: {
+        //   "^/api": "",
+        // },
       },
     },
   },
