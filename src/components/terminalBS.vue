@@ -1,10 +1,14 @@
 <!-- 终端组件 -->
 <template>
-  <div class="terminal-window" :style="{
-    width: width + 'px',
-    height: height + 'px',
-    transform: `translate(${x}px, ${y}px)`,
-  }" @mousedown="onMouseDown">
+  <div
+    class="terminal-window"
+    :style="{
+      width: width + 'px',
+      height: height + 'px',
+      transform: `translate(${x}px, ${y}px)`,
+    }"
+    @mousedown="onMouseDown"
+  >
     <div class="terminal-header" @mousedown="startDrag">
       <div class="title">终端</div>
       <div class="btn clear" @click="clearTerminal">清空历史</div>
@@ -17,7 +21,11 @@
       </div>
       <!-- {{ terminalOutput }} -->
       <div v-show="waitingForInput">
-        请输入一个值:<input v-model="userInput" @keyup.enter="onEnter" placeholder="请输入你要输入的内容" />（必须是数字）
+        请输入一个值:<input
+          v-model="userInput"
+          @keyup.enter="onEnter"
+          placeholder="请输入你要输入的内容"
+        />（必须是数字）
       </div>
     </div>
     <div class="resize-handle" @mousedown="startResize"></div>
@@ -161,7 +169,6 @@ export default {
     };
     // 监听控制模式
     watchEffect(() => {
-      console.log(props);
       if (props.runResult.language == "js") {
         executeJS();
       } else if (props.runResult.language == "wasm") {
@@ -193,7 +200,7 @@ export default {
       onEnter,
       waitingForInput,
       userInput,
-      clearTerminal
+      clearTerminal,
     };
   },
 };
