@@ -31,8 +31,13 @@
     <el-divider />
     <!-- 文件管理 -->
     <div class="file-list">
-      <div v-for="(file, index) in files" :key="index" @click="selectFile(index)" class="list-item"
-        :class="{ selected: selectedIndex === index }">
+      <div
+        v-for="(file, index) in files"
+        :key="index"
+        @click="selectFile(index)"
+        class="list-item"
+        :class="{ selected: selectedIndex === index }"
+      >
         <!-- <img src='file-icon.png' alt="file Icon" class="file-icon" /> -->
         <el-icon :size="30">
           <Document />
@@ -53,7 +58,7 @@ export default {
   name: "asideBS",
   setup() {
     const store = useStore();
-    const router = useRouter()
+    const router = useRouter();
     let files = computed(() => store.getters["files/allFiles"]);
     let selectedIndex = computed(() => store.getters["files/getIndex"]);
     // 导入功能
@@ -153,7 +158,7 @@ export default {
     const selectFile = (index) => {
       // selectedIndex.value = index
       // console.log(selectedIndex.value)
-      router.push({ name: 'Home' })
+      router.push({ name: "Home" });
       store.commit("files/selectFile", index);
       eventBus.emit("changeFile");
     };
@@ -246,6 +251,12 @@ export default {
   width: 20px;
   height: 20px;
   margin-right: 5px;
+}
+.list-item:not(.selected):hover {
+  background-color: #555;
+  border-radius: 10px;
+  color: #ffffff;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .selected {
