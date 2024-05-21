@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="footer-info">
-        <p>版权所有 &copy; 雪碧</p>
+        <p>版权所有 &copy; 2023-2024 雪碧</p>
         <!-- <p>地址：xxx市xxx区xxx街道xxx号</p> -->
         <p>
           <a href="https://beian.miit.gov.cn/" target="_blank"
