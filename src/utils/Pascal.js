@@ -23,6 +23,7 @@ export const pascalLanguageConfig = {
     "procedure",
     "call",
     "write",
+    "read"
   ],
 
   operators: ["+", "-", "*", "/", "=", "<", ">", "<=", ">=", "<>", ":=", ":"],
