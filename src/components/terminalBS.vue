@@ -31,7 +31,9 @@
       </div>
     </div>
 
-    <div class="resize-handle" @mousedown="startResize"></div>
+    <div class="resize-handle" @mousedown="startResize">
+      <el-icon><BottomRight /></el-icon>
+    </div>
   </div>
 </template>
 
@@ -66,8 +68,34 @@ export default {
     };
 
     const doDrag = (event) => {
-      x.value = event.clientX - startX;
-      y.value = event.clientY - startY;
+      // x.value = event.clientX - startX;
+      // y.value = event.clientY - startY;
+
+      const newX = event.clientX - startX;
+      const newY = event.clientY - startY;
+      // 确保窗口不会离开屏幕
+      const minX = -600;
+      const minY = -166;
+      const maxX = window.innerWidth - width.value + minX; // 最大X坐标
+      const maxY = window.innerHeight - height.value + minY; // 最大Y坐标
+
+      // 设置x坐标的限制
+      if (newX >= minX && newX <= maxX) {
+        x.value = newX;
+      } else if (newX < minX) {
+        x.value = minX; // 防止窗口左边超出屏幕
+      } else if (newX > maxX) {
+        x.value = maxX; // 防止窗口右边超出屏幕
+      }
+
+      // 设置y坐标的限制
+      if (newY >= minY && newY <= maxY) {
+        y.value = newY;
+      } else if (newY < minY) {
+        y.value = minY; // 防止窗口顶部超出屏幕
+      } else if (newY > maxY) {
+        y.value = maxY; // 防止窗口底部超出屏幕
+      }
     };
 
     const stopDrag = () => {
@@ -86,8 +114,17 @@ export default {
     };
 
     const doResize = (event) => {
-      width.value = startWidth + event.clientX - startX;
-      height.value = startHeight + event.clientY - startY;
+      // width.value = startWidth + event.clientX - startX;
+      // height.value = startHeight + event.clientY - startY;
+      const newWidth = startWidth + event.clientX - startX;
+      const newHeight = startHeight + event.clientY - startY;
+      // 设置最小和最大尺寸
+      if (newWidth >= 300 && newWidth <= window.innerWidth) {
+        width.value = newWidth;
+      }
+      if (newHeight >= 200 && newHeight <= window.innerHeight) {
+        height.value = newHeight;
+      }
     };
 
     const stopResize = () => {
