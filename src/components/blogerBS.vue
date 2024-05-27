@@ -7,18 +7,12 @@
     :before-close="dialogClose"
   >
     <!-- 博主联系信息内容 -->
-    <p>博主代号：<strong>雪碧</strong></p>
-    <p>
-      个人博客：<strong
-        ><a href="https:www.dyp02.vip" target="_blank">雪碧的小屋</a></strong
-      >
+    <p>博主：<strong>雪碧</strong></p>
+    <p class="cursor-pointer" @click="goToWeb(1)">
+      个人博客：<strong>雪碧的小屋</strong>
     </p>
-    <p>
-      Github：<strong
-        ><a href="https://github.com/KurtDubain" target="_blank"
-          >雪碧的Github</a
-        ></strong
-      >
+    <p class="cursor-pointer" @click="goToWeb(2)">
+      Github：<strong>雪碧的Github</strong>
     </p>
     <p>
       Google Mail：<strong><em>kurt.du.cobain@gmail.com</em></strong>
@@ -49,6 +43,15 @@ export default {
     const dialogClose = () => {
       store.commit("global/changeIsShowBlogerMsg");
     };
+    const goToWeb = (num) => {
+      let url;
+      if (num == 1) {
+        url = "https://www.dyp02.vip";
+      } else if (num == 2) {
+        url = "https://github.com/KurtDubain";
+      }
+      window.open(url, "_blank");
+    };
 
     // const showBlogerMSG = () => {
     //     dialogVisible.value = true;
@@ -57,6 +60,7 @@ export default {
     return {
       dialogVisible,
       dialogClose,
+      goToWeb,
     };
   },
 };
