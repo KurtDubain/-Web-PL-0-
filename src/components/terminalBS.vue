@@ -1,14 +1,10 @@
 <!-- 终端组件 -->
 <template>
-  <div
-    class="terminal-window"
-    :style="{
-      width: width + 'px',
-      height: height + 'px',
-      transform: `translate(${x}px, ${y}px)`,
-    }"
-    @mousedown="onMouseDown"
-  >
+  <div class="terminal-window" :style="{
+    width: width + 'px',
+    height: height + 'px',
+    transform: `translate(${x}px, ${y}px)`,
+  }" @mousedown="onMouseDown">
     <div class="terminal-header" @mousedown="startDrag">
       <div class="title">终端</div>
       <div class="btn clear" @click="clearTerminal">清空历史</div>
@@ -22,17 +18,15 @@
         </div>
         <!-- {{ terminalOutput }} -->
         <div v-show="waitingForInput">
-          请输入一个值:<input
-            v-model="userInput"
-            @keyup.enter="onEnter"
-            placeholder="请输入你要输入的内容"
-          />（必须是数字）
+          请输入一个值:<input v-model="userInput" @keyup.enter="onEnter" placeholder="请输入你要输入的内容" />（必须是数字）
         </div>
       </div>
     </div>
 
     <div class="resize-handle" @mousedown="startResize">
-      <el-icon><BottomRight /></el-icon>
+      <el-icon>
+        <BottomRight />
+      </el-icon>
     </div>
   </div>
 </template>
@@ -258,8 +252,9 @@ export default {
   display: flex;
   flex-direction: column;
   z-index: 9999;
-  overflow-y: auto;
-  overflow-x: hidden;
+  /* overflow-y: auto;
+  overflow-x: hidden; */
+  overflow: hidden;
   background-color: #f9f9f9;
   /* 更改背景颜色 */
   border-radius: 8px;
@@ -301,6 +296,7 @@ export default {
   flex-grow: 1;
   background: #222222;
 }
+
 .scroll-container {
   flex-grow: 1;
   overflow-y: auto;

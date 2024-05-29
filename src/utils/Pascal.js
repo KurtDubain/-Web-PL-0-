@@ -23,7 +23,7 @@ export const pascalLanguageConfig = {
     "procedure",
     "call",
     "write",
-    "read"
+    "read",
   ],
 
   operators: ["+", "-", "*", "/", "=", "<", ">", "<=", ">=", "<>", ":=", ":"],
@@ -140,7 +140,7 @@ export const pascalCompletionProvider = {
       suggestions.push({
         label: name,
         kind: monaco.languages.CompletionItemKind.Function,
-        insertText: `${name}()`,
+        insertText: `${name} `,
         range: {
           startLineNumber: position.lineNumber,
           endLineNumber: position.lineNumber,
